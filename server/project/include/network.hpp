@@ -1,20 +1,22 @@
-#include <SFML/Network.hpp>
-class ClientAction {
- private:
- 	int id;
- public:
- 	int get_id();
- 	void execute(GameObject* obj);
-};
+#ifndef SCAV_SERVER_NETWORK_HPP_
+#define SCAV_SERVER_NETWORK_HPP_
 
+#include <action_container.hpp>
+#include <SFML/Network.hpp>
+#include <thread>
 
 class Network {
  private:
- 	sf::TcpListener listener;
- 	std::list<sf::TcpSocket*> clients;
+	sf::TcpListener listener;
+	std::list<std::thread> sockets;
+
  public:
 	Network(int port);
 	~Network();
-	void send_packet(sf::packet& packet);
+	sf::Packet* get(sf::TcpSocket& socket);
+	void listen();
+	void send(sf::packet& packet);
 	get_actions();
-}
+};
+
+#endif

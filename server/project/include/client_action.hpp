@@ -1,9 +1,22 @@
-ActionContainer::~ActionContainer() {
-	for (auto i = actions.begin(); i != actions.end(); ++i) {
-		delete i->second;
-	}
-}
+#ifndef SCAV_SERVER_CLIENT_ACTION_HPP_
+#define SCAV_SERVER_CLIENT_ACTION_HPP_
 
-int ActionContainer::get_hash(int x, int y) {
-	return (y - 1) * (y - 2) / 2 + x;
-}
+#include <game_object.hpp>
+
+class ClientAction {
+ protected:
+	Player* player;
+ public:
+	int get_id();
+	virtual void execute() = 0;
+	Player* get_player();
+};
+
+class MoveAction : ClientAction {
+ private:
+	int direction;
+ public:
+	void execute();
+};
+
+#endif
