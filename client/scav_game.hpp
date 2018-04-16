@@ -29,6 +29,16 @@ class GameObject {
  	int get_id();
 };
 
+class Action {
+ protected:
+	int obj_id;
+public:
+	Action(int obj);
+	virtual ~Action();
+	virtual void execute(GameObject* obj, GameField* field);
+};
+
+
 class GameField {
  private:
  	std::map<int, DrawableObject*> map;
@@ -38,14 +48,6 @@ class GameField {
  	void execute(Action* act);
 };
 
-class Action {
- protected:
-	int obj_id;
-public:
-	Action(int obj);
-	virtual ~Action();
-	virtual void execute(GameObject* obj, GameField* field);
-};
 
 class MoveAction: public Action {
 protected:
