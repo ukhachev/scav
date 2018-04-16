@@ -1,6 +1,8 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Network.hpp>
-
+#include <list>
+#include <thread>
+#include <mutex>
 //Временно
 struct Position {
 	int x;
@@ -49,14 +51,41 @@ class MoveAction : ClientAction {
 	void execute();
 };
 
+class ActionContainer {
+ private:
+ 	std::map<int, ClientAction*> actions;
+ 	int get_hash(int x, int y);
+ public:
+ 	~ActionContainer();
+	std::map<int, ClientAction*>::iterator& begin();
+	std::map<int, ClientAction*>::iterator& end();
+
+ 	void add_action(int cl_id, ClientAction* action);
+};
+
+class SafeActionContainer {
+ private:
+ 	ActionContainer* actions;
+ 	std::mutex mtx;
+
+ public:
+ 	SafeActionContainer();
+ 	~SafeActionContainer();
+ 	ActionContainer* get_actions();
+ 	void add_action(int cl_id, ClientAction* action);
+};
+
 class Network {
  private:
 	sf::TcpListener listener;
-	std::list<sf::TcpSocket*> clients;
+	std::list<std::thread> sockets;
+
  public:
 	Network(int port);
 	~Network();
-	void send_packet(sf::packet& packet);
+	sf::Packet* get(sf::TcpSocket& socket);
+	void listen();
+	void send(sf::packet& packet);
 	get_actions();
 };
 

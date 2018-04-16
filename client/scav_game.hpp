@@ -1,8 +1,7 @@
 #ifndef SCAV_GAME_HPP_
 #define SCAV_GAME_HPP_
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include <SFML/Network.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
 #include <map>
@@ -36,7 +35,7 @@ class GameField {
  public:
  	void render();
  	void add(DrawableObject* obj);
- 	void execute(int id, Action* act);
+ 	void execute(Action* act);
 };
 
 class Action {
@@ -56,7 +55,7 @@ public:
 	void execute(GameObject* obj, GameField* field);
 };
 
-class ActionComstructor {
+class ActionConstructor {
 	static Action* get_action(sf::packet& packet);
 };
 
