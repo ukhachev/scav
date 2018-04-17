@@ -63,6 +63,7 @@ int main()
     player.setOrigin(player.getLocalBounds().width / 2, player.getLocalBounds().height / 2);
     player.setScale(0.05, 0.05);
 
+    int delay = 20;
 
     View camera;
 
@@ -86,6 +87,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
+
 
         //Update
         playerCenter = Vector2f(player.getPosition().x, player.getPosition().y);
@@ -117,7 +119,7 @@ int main()
         timer += time;
 
         //Shooting
-        if (Mouse::isButtonPressed(Mouse::Left)) {
+        if (Mouse::isButtonPressed(Mouse::Left) && delay == 0) {
             b1.shape.setPosition(playerCenter);
             b1.shape.setTexture(bullet_texture);
             b1.shape.setScale(0.05, 0.05);
@@ -127,16 +129,20 @@ int main()
             b1.currVelicity = aimDirNorm * b1.maxSpeed;
 
             bullets.push_back(Bullet(b1));
+
+            delay = 20;
         }
         for (size_t i = 0; i < bullets.size(); i++) {
 
             bullets[i].shape.move(bullets[i].currVelicity);
 
-            if (bullets[i].shape.getPosition().x < 0 || bullets[i].shape.getPosition().x > window.getSize().x
+            /*if (bullets[i].shape.getPosition().x < 0 || bullets[i].shape.getPosition().x > window.getSize().x
             || bullets[i].shape.getPosition().y < 0 || bullets[i].shape.getPosition().y > window.getSize().y) {
                 bullets.erase(bullets.begin() + i);
-            }
+            }*/
         }
+
+        delay--;
 
         cursor.setPosition(mousePosWindow);
 

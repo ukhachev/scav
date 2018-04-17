@@ -18,7 +18,7 @@ private:
 	float dy;
 public:
 	MoveAction(float x, y);
-	void execute();
+	void execute(GameObject* g);
 };
 
 
@@ -33,6 +33,7 @@ class GameObject {
 
 class GameField {
  private:
+    RenderWindow window;
  	std::map<int, DrawableObject*> map;
  public:
  	void render();
@@ -45,7 +46,7 @@ class DrawableObject {
  	sf::Vector2f pos;
  public:
  	const Vector2f& get_pos() const;
- 	virtual void draw();
+ 	virtual void draw(RenderWindow& window);
 };
 
 #endif
