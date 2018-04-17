@@ -1,22 +1,29 @@
 #ifndef SCAV_SERVER_NETWORK_HPP_
 #define SCAV_SERVER_NETWORK_HPP_
 
-#include <action_container.hpp>
+#include "action_container.hpp"
 #include <SFML/Network.hpp>
 #include <thread>
+#include <list>
+#include <map>
 
 class Network {
  private:
-	sf::TcpListener listener;
-	std::list<std::thread> sockets;
+ 	int port;
 
+	sf::TcpListener listener;
+	std::map<int, sf::TcpSocket*> sockets;
+	std::list<std::thread*> get_threads;
+	SafeActionContainer container;
+
+	void recieve(int cl_id, sf::TcpSocket* socket, SafeActionContainer& container);
+	void send_to_socket(sf::TcpSocket* socket, sf::Packet* packet);
  public:
-	Network(int port);
+	Network(int _port);
 	~Network();
-	sf::Packet* get(sf::TcpSocket& socket);
+	ActionContainer* get();
 	void listen();
-	void send(sf::packet& packet);
-	get_actions();
+	void translate(sf::Packet& packet);
 };
 
 #endif
