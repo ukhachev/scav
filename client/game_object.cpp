@@ -13,23 +13,30 @@ const Vector2f& DrawableObject::get_pos() const {
     return pos;
 }
 
-void Player::set_rotation(DrawableObject* cursor, GameField* window) {
-    playerCenter = Vector2f(player->skin.getPosition().x, player->skin.getPosition().y);
+void Player::set_rotation(/*DrawableObject* cursor,*/ GameField* window) {
+    Vector2f playerCenter = skin->get_pos();
     Vector2f prevPosition = Vector2f(Mouse::getPosition(*window));
-    aimDir = mousePosWindow - playerCenter;//privet
-    aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
+    Vector2f aimDir = mousePosWindow - playerCenter;//privet
+    Vector2f aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
     float rotation = (atan2(aimDir.y, aimDir.x)) * 180 / 3.14159265 + 90;
 }
 
 Player::Player() {
-    rotation = 0;
     pos = 0;
     id = 1;
-    Texture playertexture.loadFromFile("Solder clone.png");
-    skin.setTexture(playertexture);
 }
 
-void draw(RenderWindow* draw) {
-    skin
-    window.draw(skin)
+void Player::set_player_sprite(Texture player_texture) {
+    skin = new Sprite(player_texture);
+    skin->setOrigin(skin->getLocalBounds().width / 2, skin->getLocalBounds().height / 2);
+    skin->setScale(0.05, 0.05);
+}
+
+void Player::draw(RenderWindow* draw) {
+    window.draw(skin);
+}
+
+GameMap::GameMap(Texture map_texture) {
+    map_sprite = new Sprite(map_texture);
+
 }

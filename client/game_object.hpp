@@ -25,13 +25,21 @@ class DrawableObject {
 class Player: public DrawableObject, public GameObject {
  private:
     float rotation;
-    sf::Sprite skin;
+    sf::Sprite* skin;
  public:
     Player();
-    //void set_palyer_sprite(Texture& player_texture);
+    void set_palyer_sprite(Texture& player_texture);
     void set_rotation(DrawableObject* cursor, GameField* window);
     float get_rotation();
     void draw(RenderWindow* window);
+}
+
+class GameMap: public DrawableObject {
+ private:
+    sf::Sprite* map_sprite;
+ public:
+     GameMap(Texture map_texture);
+
 }
 
 
