@@ -16,9 +16,10 @@ void receive(sf::TcpSocket& socket) {
 			float x = 0, y = 0, z = 0;
 			if (id == 1) {
 				packet >> go_id >> x >> y >> z;
-				std::cout << go_id << " " << x << " " << y << " " << z<< std::endl;
+				std::cout << go_id << " "; //<< x << " " << y << " " << z<< std::endl;
 			}
 		}
+		std::cout << std::endl;
 	}
 }
 int main()
@@ -31,7 +32,7 @@ int main()
 	float x = 1, y = 1, z = 1;
 	for (int i = 0; i < 6000; ++i)
 	{
-		usleep(19000);
+		usleep(20000);
 		sf::Packet packet;
 		packet << 1 << x << y << z;
 		socket.send(packet);
@@ -44,4 +45,3 @@ int main()
 	socket.disconnect();
 	return 0;
 }
-
