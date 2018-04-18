@@ -9,29 +9,35 @@ void receive(sf::TcpSocket& socket) {
 	while (online) {
 		sf::Packet packet;
 		socket.receive(packet);
-		int id = 0;
-		packet >> id;
-		std::cout << id << std::endl;
+		while (!(packet.endOfPacket())) {
+			int id = 0;
+			packet >> id;
+			int go_id = 0;
+			float x = 0, y = 0, z = 0;
+			if (id == 1) {
+				packet >> go_id >> x >> y >> z;
+				std::cout << go_id << " " << x << " " << y << " " << z<< std::endl;
+			}
+		}
 	}
 }
-int main(int argc, char const *argv[])
+int main()
 {
 	sf::TcpSocket socket;
  	socket.connect("127.0.0.1", 55503);
 
 	std::thread receive_thread(receive, std::ref(socket));
 
-	float x = 0, y = 0, z = 0;
-	for (int i = 0; i < 600; ++i)
+	float x = 1, y = 1, z = 1;
+	for (int i = 0; i < 6000; ++i)
 	{
+		usleep(19000);
 		sf::Packet packet;
 		packet << 1 << x << y << z;
 		socket.send(packet);
-		x+=i;
+		x+=0.1f;
 		y++;
 		z--;
-		usleep(19000);
-
 	}
 	online = 0;
 	receive_thread.join();

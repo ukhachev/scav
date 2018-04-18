@@ -25,6 +25,7 @@ class SafeActionContainer {
  	std::mutex mtx;
 
  public:
+ 	SafeActionContainer(const SafeActionContainer&);
  	SafeActionContainer();
  	~SafeActionContainer();
  	ActionContainer* get_actions();

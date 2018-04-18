@@ -10,20 +10,22 @@
 class Network {
  private:
  	int port;
+ 	bool online;
 
-	sf::TcpListener listener;
 	std::map<int, sf::TcpSocket*> sockets;
 	std::list<std::thread*> get_threads;
 	SafeActionContainer container;
-
-	void recieve(int cl_id, sf::TcpSocket* socket, SafeActionContainer& container);
+	void delete_client(int cl_id);
+	static void receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& container, const bool* online, Network* net);
 	void send_to_socket(sf::TcpSocket* socket, sf::Packet* packet);
  public:
 	Network(int _port);
 	~Network();
-	ActionContainer* get();
+
+	ActionContainer* get_actions();
 	void listen();
-	void translate(sf::Packet& packet);
+	void translate(sf::Packet* packet);
+
 };
 
 #endif

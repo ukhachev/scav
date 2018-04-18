@@ -6,7 +6,7 @@
 
 class ClientActionConstructor {
  public:
-	ClientAction* construct(int cl_id, sf::Packet& packet);
+	static ClientAction* construct(int cl_id, sf::Packet& packet);
 };
 
 #endif

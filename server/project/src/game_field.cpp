@@ -50,8 +50,8 @@ Player* GameField::get_player(int cl_id) {
 	return nullptr;
 }
 
-sf::Packet& GameField::get_state_packet() {
-	return state_packet;
+sf::Packet* GameField::get_state_packet() {
+	return &state_packet;
 }
 
 void GameField::reset() {

@@ -26,7 +26,7 @@ class GameField {
 	std::map<int, sf::Packet*>::iterator p_packets_end();
 	PhysicsObject* get_object(int id);
 	Player* get_player(int cl_id);
-	sf::Packet& get_state_packet();
+	sf::Packet* get_state_packet();
 };
 
 #endif
