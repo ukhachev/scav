@@ -12,7 +12,7 @@ class GameField {
     GameField();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
- 	int render();
+ 	void render();
  	void add(DrawableObject* obj);
  	void execute(Action* act);
 };

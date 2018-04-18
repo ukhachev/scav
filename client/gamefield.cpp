@@ -18,11 +18,11 @@ bool GameField::get_action(sf::Pocket& packet) {
 }
 
 
-int GameField::render() {
-    if(mp.begin() == NULL) {
+void GameField::render() {
+    /*if(map.rbegin() == NULL) {
         std::cout << "Map is empty." << std::endl;
         return 1;
-    }
+    }*/
     for (auto iter = map.begin(); iter !=map.end(); iter++) {
         window.clear();
         iter->second->draw(window);
@@ -31,6 +31,10 @@ int GameField::render() {
 }
 
 void GameField::add(DrawableObject *obj) {
+    if(map.rbegin() == NULL) {
+        std::cout << "Map is empty." << std::endl;
+        return 1;
+    }
     auto iter = map.end();
     auto new_id = iter->first + 1;
     map.insert(new_id, obj);
