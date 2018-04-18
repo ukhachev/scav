@@ -1,5 +1,5 @@
-#include 'gmefield.hpp'
-#include 'game_object.hpp'
+#include "gmefield.hpp"
+#include "game_object.hpp"
 
 GameField* game_map = new GameField();
 

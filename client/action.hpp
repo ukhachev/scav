@@ -1,7 +1,8 @@
 #ifndef SCAV_ACTION_HPP_
 #define SCAV_ACTION_HPP_
 
-#include <game_field.hpp>
+#include <game_object.hpp>
+#include <gamefield.hpp>
 
 class Action {
  protected:
@@ -20,19 +21,19 @@ protected:
 	sf::Vector2f pos;
 public:
 	MoveAction(int id, float _x, float _y);
-	void execute(GameObject* obj, GameField* field);
+	void execute(DrawableObject* obj, GameField* field);
 };
 
 class ActionConstructor {
 	static Action* get_action(sf::packet& packet);
 };
 
-class RotateAction : public Action {
+/*class RotateAction : public Action {
  protected:
  	float angle;
  public:
  	RotateAction(int id, float _angle);
 	void execute(GameObject* obj, GameField* field);
-};
+};*/
 
 #endif

@@ -1,7 +1,8 @@
-#include 'game_object.hpp'
+#include "game_object.hpp"
 
 
-GameObject::GameObject(int _id): id(_id);
+
+GameObject::GameObject(int _id): id(_id) {};
 
 int GameObject::get_id() {
     return id;
@@ -13,18 +14,15 @@ const Vector2f& DrawableObject::get_pos() const {
     return pos;
 }
 
-void Player::set_rotation(/*DrawableObject* cursor,*/ GameField* window) {
-    Vector2f playerCenter = skin->get_pos();
-    Vector2f prevPosition = Vector2f(Mouse::getPosition(*window));
+void Player::set_rotation(RenderWindow* window) {
+    Vector2f playerCenter = skin->getPosition();
+    Vector2f mousePosWindow = Vector2f(Mouse::getPosition(*window));
     Vector2f aimDir = mousePosWindow - playerCenter;//privet
     Vector2f aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
     float rotation = (atan2(aimDir.y, aimDir.x)) * 180 / 3.14159265 + 90;
 }
 
-Player::Player() {
-    pos = 0;
-    id = 1;
-}
+Player::Player(int _id): DrawableObjec(int _id) {}
 
 void Player::set_player_sprite(Texture player_texture) {
     skin = new Sprite(player_texture);
@@ -32,8 +30,12 @@ void Player::set_player_sprite(Texture player_texture) {
     skin->setScale(0.05, 0.05);
 }
 
-void Player::draw(RenderWindow* draw) {
-    window.draw(skin);
+float Player::get_rotation() {
+    return rotation;
+}
+
+void Player::draw(RenderWindow* window) {
+    window->draw(*skin);
 }
 
 GameMap::GameMap(Texture map_texture) {

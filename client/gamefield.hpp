@@ -1,8 +1,15 @@
-#include <game_object.hpp>
+#ifndef SCAV_GAMEFIELD_HPP_
+#define SCAV_GAMEFIELD_HPP_
+
+#include "game_object.hpp"
 #include<iostream>
-//map содержит id объектов и указатели на них
-//добавление: id последнего + 1
-//execute: act->execute(<полученный из мапы указатель по id в act->get_object_id()>)
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Network.hpp>
+
+using namespace sf;
+
 class GameField {
  private:
     Player* player;
@@ -10,9 +17,12 @@ class GameField {
  	std::map<int, DrawableObject*> map;
  public:
     GameField();
+    DrawableObject* find(int obj_id);
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
  	void render();
- 	void add(DrawableObject* obj);
- 	void execute(Action* act);
+ 	int add(DrawableObject* obj, int new_id);
+ 	//void execute(Action* act);
 };
+
+#endif  // SCAV_GAME_OBJECT_HPP_
