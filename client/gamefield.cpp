@@ -25,7 +25,7 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::render() {
     if(Keyboard::isKeyPressed(Keyboard::A)) {
-    MoveAction move()
+    //MoveAction move()
     }
     if(Keyboard::isKeyPressed(Keyboard::D)) {
 

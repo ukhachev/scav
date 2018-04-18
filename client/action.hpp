@@ -11,7 +11,7 @@ public:
 	Action(int obj);
 	int get_object_id();
 	virtual ~Action();
-	virtual void execute(GameObject* obj, GameField* field);
+	virtual void execute(GameObject& obj, GameField& field);
 };
 
 
@@ -21,7 +21,7 @@ protected:
 	sf::Vector2f pos;
 public:
 	MoveAction(int id, float _x, float _y);
-	void execute(DrawableObject* obj, GameField* field);
+	void execute(DrawableObject& obj, GameField* field);
 };
 
 class ActionConstructor {
