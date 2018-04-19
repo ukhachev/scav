@@ -36,7 +36,7 @@ class Player: public DrawableObject {
     sf::Sprite* skin;
  public:
     Player(int _id);
-    void set_player_sprite(Texture player_texture);
+    void set_player_sprite(Texture* player_texture);
     void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);

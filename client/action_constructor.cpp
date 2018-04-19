@@ -35,8 +35,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 			int _cl_id = 0;
 			packet >> _cl_id;
 			Player* p = new Player(obj_id);
-			Texture playertexture;
-			playertexture.loadFromFile("Solder clone.png");
+			Texture* playertexture = new Texture();
+			playertexture->loadFromFile("Solder clone.png");
 			p->set_player_sprite(playertexture);
 			field->add(p, obj_id);
 
