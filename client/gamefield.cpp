@@ -13,19 +13,19 @@ GameField::GameField() {
 
 
 DrawableObject* GameField::find(int obj_id) {
-    
+
     auto iter = map.find(obj_id);
     if (iter != map.end()) {
         return iter->second;
     }
-    
+
     return nullptr;
 
 }
 
 
 bool GameField::get_action(sf::Packet& packet) {
-    
+
     if (player != nullptr) {
         packet << 1 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
         return true;
@@ -38,7 +38,7 @@ bool GameField::get_action(sf::Packet& packet) {
 void GameField::render() {
     while (window.isOpen())
     {
-       
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -47,7 +47,7 @@ void GameField::render() {
         }
 
         if (player != nullptr) {
-           
+
 	        Vector2f prev_position = player->get_pos();
             Vector2f pos;
 
@@ -66,13 +66,13 @@ void GameField::render() {
 	        player->set_pos(pos + prev_position);
 
             player->set_position();
-            
-            player->set_rotation(window);
+
+            player->mouse_rotation(window);
             std::cout << player->get_rotation() << std::endl;
             std::cout << "player" <<std::endl;
-            
+
         }
-        
+
         window.clear();
 
         for (auto iter = map.begin(); iter != map.end(); iter++) {
@@ -86,9 +86,9 @@ void GameField::render() {
 
 
 int GameField::add(DrawableObject* obj, int new_id) {
-    
+
     map.emplace(new_id, obj);
-   
+
     return 0;
 }
 

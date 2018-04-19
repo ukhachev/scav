@@ -21,6 +21,7 @@ class DrawableObject: public GameObject {
     int id;
  	sf::Vector2f pos;
  public:
+    virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
  	const sf::Vector2f& get_pos() const;
     void set_pos(Vector2f new_pos);
@@ -37,7 +38,8 @@ class Player: public DrawableObject {
     Player(int _id);
     void set_player_sprite(Texture player_texture);
     void set_position();
-    void set_rotation(RenderWindow &window);
+    void mouse_rotation(RenderWindow &window);
+    void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
     ~Player();

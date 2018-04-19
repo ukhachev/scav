@@ -30,13 +30,18 @@ void Player::set_position() {
     skin->setPosition(curr_position);
 }
 
-void Player::set_rotation(RenderWindow& window) {
+void Player::mouse_rotation(RenderWindow& window) {
     Vector2f playerCenter = skin->getPosition();
     Vector2f mousePosWindow = Vector2f(Mouse::getPosition(window));
     Vector2f aimDir = mousePosWindow - playerCenter;
     Vector2f aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
     player_rotation = (atan2(aimDir.y, aimDir.x)) * 180 / 3.14159265;
     skin->setRotation(player_rotation);
+}
+
+void Player::set_rotation(float new_rot) {
+    player_rotation = new_rot;
+    skin->setRotation(new_rot);
 }
 
 Player::Player(int _id): DrawableObject(_id) {}

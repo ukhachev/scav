@@ -27,7 +27,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 				if (p) {
 					p->set_position();
 				}
-				//obj->set_rotation(angle);
+				obj->set_rotation(angle);
 			}
 			return;
 		}
