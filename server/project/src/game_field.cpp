@@ -79,3 +79,11 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_begin() {
 std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 	return private_packets.end();
 }
+
+sf::Packet* GameField::get_objects() {
+	sf::Packet* res = new sf::Packet();
+	for (auto i = objects.begin(); i != objects.end(); ++i) {
+		*res << 100 << i->second->get_id();
+	}
+	return res;
+}

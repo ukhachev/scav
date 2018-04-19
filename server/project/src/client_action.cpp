@@ -28,7 +28,6 @@ void PlayerJoinedAction::execute(GameField& gf) {
 	gf.add_player(cl_id);
 	int id = gf.get_player(cl_id)->get_id();
 	*(gf.get_state_packet()) << 100 << id << cl_id;
-	
 	//sf::Packet* packet = gf.add_private_packet(cl_id);
 	//*packet << 101 << id;
 }

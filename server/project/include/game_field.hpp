@@ -18,10 +18,12 @@ class GameField {
 	void add_player(int cl_id);
 	void add_object(PhysicsObject* obj);
 	void delete_player(int cl_id);
+
 	void reset();
 
 	sf::Packet* add_private_packet(int cl_id);
-
+	sf::Packet* get_objects();
+	
 	std::map<int, sf::Packet*>::iterator p_packets_begin();
 	std::map<int, sf::Packet*>::iterator p_packets_end();
 	PhysicsObject* get_object(int id);

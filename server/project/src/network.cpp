@@ -3,7 +3,7 @@
 #include "client_action.hpp"
 #include <iostream>
 
-Network::Network(int _port): port(_port), online(false) {
+Network::Network(int _port, GameField* _field): port(_port), field(_field), online(false) {
 }
 
 Network::~Network() {
@@ -41,8 +41,12 @@ void Network::listen() {
 
 		sf::Packet player_set;
 		player_set << 101 << cl_id;
+
+		sf::Packet* obj_packet = field->get_objects();
 		
 		send_to_socket(socket, &player_set);
+		send_to_socket(socket, obj_packet);
+		delete obj_packet;
 
 		container.add_action(cl_id, new PlayerJoinedAction(cl_id));
 

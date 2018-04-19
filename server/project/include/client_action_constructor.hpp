@@ -2,6 +2,7 @@
 #define SCAV_SERVER_CLIENT_ACTION_CONSTRUCTOR_HPP_
 
 #include "client_action.hpp"
+#include "network.hpp"
 #include <SFML/Network.hpp>
 
 class ClientActionConstructor {

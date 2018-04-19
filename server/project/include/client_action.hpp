@@ -3,7 +3,6 @@
 
 #include "game_object.hpp"
 #include "game_field.hpp"
-
 #include <SFML/Network.hpp>
 #include <list>
 

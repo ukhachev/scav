@@ -17,9 +17,9 @@ void interact(Network& net, GameField& gf) {
 int main()
 {
 	int port = 55503;
-	Network net(port);
 	GameField gf;
-
+	Network net(port, &gf);
+	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));
 	net.listen();
 	
