@@ -1,5 +1,5 @@
-#include <scav_game.hpp>
-#include <dos.h>
+#include "scav_game.hpp"
+//#include <dos.h>
 
 extern GameField field;
 
@@ -11,14 +11,14 @@ Connector::~Connector() {
 	this->socket.disconnect();
 }
 
-Action* Connector::get() {
-	sf::Packet packet;
-	this->socket.receive(packet);
-	return ActionConstructor::get_action(packet);
+sf::Packet* Connector::get() {
+	sf::Packet* packet = new sf::Packet();
+	this->socket.receive(*packet);
+	return packet;
 }
 
-void Connector::send(sf::packet& packet) {
-	this->socket.send(packet);
+void Connector::send(sf::Packet* packet) {
+	this->socket.send(*packet);
 }
 
 

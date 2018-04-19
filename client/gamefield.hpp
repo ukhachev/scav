@@ -1,15 +1,30 @@
-#include <game_object.hpp>
+#ifndef SCAV_GAMEFIELD_HPP_
+#define SCAV_GAMEFIELD_HPP_
+
+#include "game_object.hpp"
+#include <mutex>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Network.hpp>
-//map содержит id объектов и указатели на них
-//добавление: id последнего + 1
-//execute: act->execute(<полученный из мапы указатель по id в act->get_object_id()>)
+
+using namespace sf;
+
 class GameField {
  private:
+    Player* player;
+    RenderWindow window;
  	std::map<int, DrawableObject*> map;
+ 	std::mutex mtx;
  public:
- 	void render();
- 	void add(DrawableObject* obj);
- 	void execute(Action* act);
- 	sf::Packet* get_action();
+    GameField();
+    DrawableObject* find(int obj_id);
+    void set_player(int player_id);
+    bool get_action(sf::Packet& packet);
+    void render();
+    Player* get_player();
+ 	int add(DrawableObject* obj, int new_id);
 };
 
+#endif  // SCAV_GAME_OBJECT_HPP_

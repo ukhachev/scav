@@ -5,7 +5,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <game_object.hpp>
+#include "game_object.hpp"
 
 class Connector {
 private:
@@ -15,8 +15,8 @@ private:
 public:
 	Connector(const std::string& address, int prt);
 	~Connector();
-	Action* get();
-	void send(packet& packet);
+	sf::Packet* get();
+	void send(sf::Packet* packet);
 };
 
 #endif
