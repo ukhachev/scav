@@ -1,18 +1,16 @@
 #ifndef SCAV_ACTION_HPP_
 #define SCAV_ACTION_HPP_
+#include <SFML/Network.hpp>
+#include "gamefield.hpp"
 
-#include "game_object.hpp"
-//#include "gamefield.hp.h
-#include<SFML/Network.hpp>
-
-class Action {
+/*class Action {
  protected:
 	int obj_id;
 public:
 	Action(int obj);
 	int get_object_id();
 	virtual ~Action();
-	virtual void execute(GameObject* obj/*, GameField& field*/);
+	virtual void execute(GameObject* obj, GameField* field);
 };
 
 
@@ -22,17 +20,12 @@ protected:
 	sf::Vector2f pos;
 public:
 	MoveAction(int id, float _x, float _y);
-	void execute(DrawableObject* obj/*, GameField& field*/);
-    //~MoveAction();
+	void execute(GameObject* obj, GameField* field);
 };
-
-/*class ActionConstructor {
- private:
-	static int cl_id;
+*/
+class ActionConstructor {
  public:
-	static void execute_action(GameField& field, sf::Packet& packet);
-};*/
-
-
+	static void execute_action(GameField* field, sf::Packet& packet);
+};
 
 #endif

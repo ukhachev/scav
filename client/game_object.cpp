@@ -1,6 +1,7 @@
 #include "game_object.hpp"
-#include<math.h>
-
+#include "gamefield.hpp"
+#include <math.h>
+#include <iostream>
 
 
 GameObject::GameObject(int _id): id(_id) {};
@@ -8,8 +9,6 @@ GameObject::GameObject(int _id): id(_id) {};
 int GameObject::get_id() {
     return id;
 }
-
-
 
 DrawableObject::DrawableObject(int _id): GameObject(_id) {}
 DrawableObject::~DrawableObject() {}
