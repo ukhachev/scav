@@ -12,15 +12,16 @@ class GameObject {
 	int id;
  public:
  	GameObject(int _id);
- 	virtual ~GameObject();
+ 	//virtual ~GameObject();
  	int get_id();
 };
 
-//Fix this: need rotation angle or transform draw - отрисовка
 class DrawableObject: public GameObject {
  private:
+    int id;
  	sf::Vector2f pos;
  public:
+    DrawableObject(int _id);
  	const sf::Vector2f& get_pos() const;
     void set_pos(Vector2f new_pos);
  	virtual void draw(RenderWindow &window);
@@ -28,13 +29,14 @@ class DrawableObject: public GameObject {
 };
 
 
-class Player: public DrawableObject{
+class Player: public DrawableObject {
  private:
-    float rotation;
+    float player_rotation;
     sf::Sprite* skin;
  public:
     Player(int _id);
     void set_player_sprite(Texture player_texture);
+    void set_position();
     void set_rotation(RenderWindow &window);
     float get_rotation();
     void draw(RenderWindow &window);
@@ -45,7 +47,7 @@ class GameMap: public DrawableObject {
  private:
     sf::Sprite* map_sprite;
  public:
-     GameMap(Texture map_texture);
+     GameMap(int id, Texture map_texture);
      ~GameMap();
 
 };
