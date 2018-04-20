@@ -25,10 +25,16 @@ void DrawableObject::set_pos(Vector2f new_pos) {
 void DrawableObject::draw(RenderWindow& window) {
 }
 
-void Player::set_position() {
+
+void Player::set_pos(Vector2f new_pos) {
+    pos = new_pos;
+    skin->setPosition(pos);
+}
+
+/*void Player::set_position() {
     Vector2f curr_position = get_pos();
     skin->setPosition(curr_position);
-}
+}*/
 
 void Player::mouse_rotation(RenderWindow& window) {
     Vector2f playerCenter = skin->getPosition();
@@ -71,3 +77,17 @@ GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {
 GameMap::~GameMap() {
     delete map_sprite;
 }
+
+/*class Bullet: public DrawableObject {
+ private:
+    Vector2f currVelicity;
+ public:
+    Bullet(float radius = 5.f)
+    : currVelicity(0.f, 0.f), maxSpeed(25.f) {
+        //this->shape.setRadius(radius);
+        //this->shape.setFillColor(Color::Red);
+    };
+    Sprite shape;
+    Vector2f currVelicity;
+    float maxSpeed;// сделать виртуальным
+};*/

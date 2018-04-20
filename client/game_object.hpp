@@ -1,6 +1,6 @@
 #ifndef SCAV_GAME_OBJECT_HPP_
 #define SCAV_GAME_OBJECT_HPP_
-
+//проверить течь памяти
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -17,14 +17,14 @@ class GameObject {
 };
 
 class DrawableObject: public GameObject {
- private:
+ protected:
     int id;
  	sf::Vector2f pos;
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
  	const sf::Vector2f& get_pos() const;
-    void set_pos(Vector2f new_pos);
+    void virtual set_pos(Vector2f new_pos);// сделать виртуальным
  	virtual void draw(RenderWindow &window);
     virtual ~DrawableObject();
 };
@@ -36,8 +36,9 @@ class Player: public DrawableObject {
     sf::Sprite* skin;
  public:
     Player(int _id);
+    void set_pos(Vector2f new_pos);
     void set_player_sprite(Texture* player_texture);
-    void set_position();
+    //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);
     float get_rotation();
@@ -54,5 +55,8 @@ class GameMap: public DrawableObject {
 
 };
 
+
+
+// Сделать класс для временных объектов с таймером, который изменяется при вызове метода draw.
 
 #endif

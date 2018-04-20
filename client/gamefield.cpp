@@ -49,23 +49,23 @@ void GameField::render() {
         if (player != nullptr) {
 
 	        Vector2f prev_position = player->get_pos();
-            Vector2f pos;
+            Vector2f pos(0, 0);
 
 	        if(Keyboard::isKeyPressed(Keyboard::A)) {
-	            pos = Vector2f(-10.f, 0.f);
+	            pos += Vector2f(-10.f, 0.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::D)) {
-	            pos = Vector2f(10.f, 0.f);
+	            pos += Vector2f(10.f, 0.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::W)) {
-	            pos = Vector2f(0.f, -10.f);
+	            pos += Vector2f(0.f, -10.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::S)) {
-	            pos = Vector2f(0.f, 10.f);
+	            pos += Vector2f(0.f, 10.f);
 	        }
 	        player->set_pos(pos + prev_position);
 
-            player->set_position();
+            //player->set_position();
 
             player->mouse_rotation(window);
             std::cout << player->get_rotation() << std::endl;

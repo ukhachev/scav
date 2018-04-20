@@ -22,11 +22,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 			if (obj!=nullptr)
 			if (obj != field->get_player()) {
 				Vector2f pos(x, y);
-				obj->set_pos(pos);
-				Player *p = dynamic_cast<Player*>(obj);
-				if (p) {
-					p->set_position();
-				}
+                obj->set_pos(pos);
 				obj->set_rotation(angle);
 			}
 			return;
