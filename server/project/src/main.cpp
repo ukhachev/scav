@@ -4,9 +4,14 @@
 void interact(Network& net, GameField& gf) {
 	while (true) {
 		ActionContainer* ac = net.get_actions();
-		for (auto i = ac->begin(); i != ac->end(); ++i) {
-			(*i)->execute(gf);
+		ClientAction* act = ac->pop();
+
+		while (act != nullptr) {
+			act->execute(gf);
+			delete act;
+			act = ac->pop();
 		}
+
 		net.translate(gf.get_state_packet());
 		gf.reset();
 		delete ac;

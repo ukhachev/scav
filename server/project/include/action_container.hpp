@@ -3,18 +3,15 @@
 
 #include "client_action.hpp"
 #include <mutex>
-#include <list>
+#include <stack>
 
 class ActionContainer {
  private:
- 	std::list<ClientAction*> actions;
+ 	std::stack<ClientAction*> actions;
  public:
 	ActionContainer();
 	~ActionContainer();
-
-	std::list<ClientAction*>::iterator begin();
-	std::list<ClientAction*>::iterator end();
-
+	ClientAction* pop();
 	void add_action(ClientAction* action);
 };
 

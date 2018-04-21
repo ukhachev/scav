@@ -4,21 +4,24 @@ ActionContainer::ActionContainer() {
 }
 
 ActionContainer::~ActionContainer() {
-	for (auto i = begin(); i != end(); ++i) {
-		delete *i;
+	ClientAction* act = pop();
+	while (act != nullptr) {
+		delete act;
+		act = pop();
 	}
 }
 
-std::list<ClientAction*>::iterator ActionContainer::begin() {
-	return actions.begin();
-}
-
-std::list<ClientAction*>::iterator ActionContainer::end() {
-	return actions.end();
+ClientAction* ActionContainer::pop() {
+	if (actions.size() == 0) {
+		return nullptr;
+	}
+	ClientAction* res = actions.top();
+	actions.pop();
+	return res;
 }
 
 void ActionContainer::add_action(ClientAction* action) {
-	actions.push_back(action);
+	actions.push(action);
 }
 
 SafeActionContainer::SafeActionContainer() {
