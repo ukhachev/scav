@@ -7,7 +7,7 @@
 #include <thread>
 #include <list>
 #include <map>
-
+#include <vector>
 class Network {
  private:
  	int port;
@@ -29,4 +29,16 @@ class Network {
 
 };
 
+/*class Client {
+ private:
+ 	int id;
+ 	sf:TcpSocket socket;
+ 	std::thread get_thread;
+ 	static void read();
+ public:
+ 	Client(const sf::TcpSocket& _socket);
+ 	~Client();
+ 	void send(sf::Packet& packet);
+ 	void receive();
+}*/
 #endif

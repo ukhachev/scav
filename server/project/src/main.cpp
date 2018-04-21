@@ -5,7 +5,7 @@ void interact(Network& net, GameField& gf) {
 	while (true) {
 		ActionContainer* ac = net.get_actions();
 		for (auto i = ac->begin(); i != ac->end(); ++i) {
-			i->second->execute(gf);
+			(*i)->execute(gf);
 		}
 		net.translate(gf.get_state_packet());
 		gf.reset();

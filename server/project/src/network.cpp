@@ -48,7 +48,7 @@ void Network::listen() {
 		send_to_socket(socket, obj_packet);
 		delete obj_packet;
 
-		container.add_action(cl_id, new PlayerJoinedAction(cl_id));
+		container.add_action(new PlayerJoinedAction(cl_id));
 
 		std::cout << "joined  " 
 		<< cl_id << " : " << socket->getRemoteAddress() << std::endl;
@@ -86,7 +86,7 @@ void Network::receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& con
 		while (!packet.endOfPacket()) {
 			ClientAction* act = 
 				ClientActionConstructor::construct(cl_id, packet);
-			container.add_action(cl_id, act);
+			container.add_action(act);
 		}
 	}
 }
