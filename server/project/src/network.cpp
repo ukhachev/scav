@@ -97,6 +97,7 @@ ActionContainer* Network::get_actions() {
 
 void Network::delete_client(int cl_id) {
 	auto i = sockets.find(cl_id);
+	field->delete_player(cl_id);
 	std::cout << "disconnect " << cl_id <<std::endl;
 	delete i->second;
 	sockets.erase(i);

@@ -83,7 +83,7 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		*res << 100 << i->second->get_id();
+		*res << 100 << i->first;
 	}
 	return res;
 }
