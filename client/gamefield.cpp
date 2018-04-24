@@ -81,6 +81,8 @@ void GameField::render() {
         }
         window.display();
     }
+    delete player;
+    delete map;
 }
 
 

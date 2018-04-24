@@ -7,6 +7,36 @@
 
 using namespace sf;
 
+
+
+/*class PhysicsObject {
+ protected:
+     Vector2f pos;
+ public:
+     PhysicsObject();
+     virtual Vector2f get_pos();
+     virtual void set_pos(float x, float y);
+     virtual ~PhysicsObject();
+};
+
+class DynamicObject: public PhysicsObject {
+ protected:
+     Vector2f velocity;
+ public:
+     DynamicObject();
+     void set_velocity(float vx, float vy);
+     virtual Vector2f get_pos();
+     virtual void set_pos(float x, float y);
+};
+
+
+class StaticObject: public PhysicsObject{
+ protected:
+
+}*/
+
+
+
 class GameObject {
  private:
 	int id;
@@ -54,6 +84,37 @@ class GameMap: public DrawableObject {
      ~GameMap();
 
 };
+
+/*class Bullet: public DrawableObject {
+ private:
+    Vector2f velicity;
+    Sprite* bullet_sprite;
+    float maxSpeed;
+ public:
+    Bullet();
+
+};*/
+
+/*class Wall: public DrawableObject {
+ private:
+     Sprite* wall_sprite;
+     int healf;
+ public:
+      Wall();
+      void set_pos(Vector2f new_pos);
+      void set_sprite();
+      void draw(RenderWindow& window);
+      void take_damage(int dmg);
+      void set_rotation(float new_rot);
+      float get_rotation();
+      ~Wall();
+}*/
+
+/*class Walls: public DrawableObject {
+ private:
+     std::list<>
+}*/
+
 
 
 
