@@ -68,7 +68,7 @@ void GameField::render() {
             //player->set_position();
 
             player->mouse_rotation(window);
-            std::cout << player->get_rotation() << std::endl;
+            //std::cout << player->get_rotation() << std::endl;
             std::cout << "player" <<std::endl;
 
         }
@@ -82,7 +82,7 @@ void GameField::render() {
         window.display();
     }
     delete player;
-    delete map;
+    //delete map;
 }
 
 
