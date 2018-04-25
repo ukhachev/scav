@@ -22,12 +22,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 			if (obj!=nullptr)
 			if (obj != field->get_player()) {
 				Vector2f pos(x, y);
-				obj->set_pos(pos);
-				Player *p = dynamic_cast<Player*>(obj);
-				if (p) {
-					p->set_position();
-				}
-				//obj->set_rotation(angle);
+                obj->set_pos(pos);
+				obj->set_rotation(angle);
 			}
 			return;
 		}
@@ -35,8 +31,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 			int _cl_id = 0;
 			packet >> _cl_id;
 			Player* p = new Player(obj_id);
-			Texture playertexture;
-			playertexture.loadFromFile("Solder clone.png");
+			Texture* playertexture = new Texture();
+			playertexture->loadFromFile("Solder clone.png");
 			p->set_player_sprite(playertexture);
 			field->add(p, obj_id);
 
