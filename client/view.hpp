@@ -12,7 +12,7 @@ class Camera {
      View* camera;
  public:
      Camera();
-     void set_center(Vector2f& center);
+     void set_center(Vector2f center);
      void draw(RenderWindow &window);
      ~Camera();
 };
