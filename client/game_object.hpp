@@ -8,35 +8,6 @@
 using namespace sf;
 
 
-
-/*class PhysicsObject {
- protected:
-     Vector2f pos;
- public:
-     PhysicsObject();
-     virtual Vector2f get_pos();
-     virtual void set_pos(float x, float y);
-     virtual ~PhysicsObject();
-};
-
-class DynamicObject: public PhysicsObject {
- protected:
-     Vector2f velocity;
- public:
-     DynamicObject();
-     void set_velocity(float vx, float vy);
-     virtual Vector2f get_pos();
-     virtual void set_pos(float x, float y);
-};
-
-
-class StaticObject: public PhysicsObject{
- protected:
-
-}*/
-
-
-
 class GameObject {
  private:
 	int id;
@@ -73,6 +44,7 @@ class Player: public DrawableObject {
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
+
     ~Player();
 };
 
@@ -84,6 +56,16 @@ class GameMap: public DrawableObject {
      ~GameMap();
 
 };
+
+/*class Camera: public DrawableObject {
+ private:
+     View camera;
+ public:
+     Camera();
+     void set_pos(Vector2f new_pos);
+     void draw(RenderWindow &window);
+     ~Camera();
+}/*
 
 /*class Bullet: public DrawableObject {
  private:

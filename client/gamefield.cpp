@@ -1,5 +1,5 @@
 
-
+//#include "view.hpp"
 #include "gamefield.hpp"
 #include <iostream>
 
@@ -36,6 +36,7 @@ bool GameField::get_action(sf::Packet& packet) {
 
 
 void GameField::render() {
+    //Camera player_cam;
     while (window.isOpen())
     {
 
@@ -75,10 +76,16 @@ void GameField::render() {
 
         window.clear();
 
+
+        //player_cam.set_center(player->get_pos());
+
         for (auto iter = map.begin(); iter != map.end(); iter++) {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
         }
+
+
+        //player_cam.draw(window);
         window.display();
     }
     delete player;
