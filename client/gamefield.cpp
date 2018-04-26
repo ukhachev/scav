@@ -1,5 +1,5 @@
 
-//#include "view.hpp"
+#include "view.hpp"
 #include "gamefield.hpp"
 #include <iostream>
 
@@ -38,7 +38,10 @@ bool GameField::get_action(sf::Packet& packet) {
 
 
 void GameField::render() {
+    Texture *map_text = new Texture();
+    map_text->loadFromFile("game_map.png");
     //Camera player_cam;
+    GameMap g_map = new GameMap(map_text);
     while (window.isOpen())
     {
 
@@ -78,7 +81,7 @@ void GameField::render() {
 
 
         //player_cam.set_center(player->get_pos());
-
+        g_map.draw(window);
         for (auto iter = map.begin(); iter != map.end(); iter++) {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
@@ -88,6 +91,7 @@ void GameField::render() {
         //player_cam.draw(window);
         window.display();
     }
+    delete map_text;
     delete player;
     //delete map;
 }

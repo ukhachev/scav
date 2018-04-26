@@ -41,7 +41,6 @@ class Player: public DrawableObject, public KinematicObject {
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
     void set_player_sprite(Texture* player_texture);
-    //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);
     float get_rotation();
@@ -50,11 +49,12 @@ class Player: public DrawableObject, public KinematicObject {
     ~Player();
 };
 
-class GameMap: public DrawableObject {
+class GameMap/*: public DrawableObject*/ {
  private:
     sf::Sprite* map_sprite;
  public:
-     GameMap(int id, Texture map_texture);
+     GameMap(Texture* map_texture);
+     void draw(RenderWindow &window);
      ~GameMap();
 
 };

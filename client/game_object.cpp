@@ -75,8 +75,16 @@ Player::~Player() {
     delete skin;
 }
 
-GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {
-    map_sprite = new Sprite(map_texture);
+GameMap::GameMap(Texture* map_texture)/*: DrawableObject(0)*/ {
+    map_sprite = new Sprite(*map_texture);
+    map_sprite->setScale(1.25, 1.25);
+}
+/*void GameMap::set_sprite(Texture map_text) {
+
+}*/
+
+void GameMap::draw(RenderWindow &window) {
+    window.draw(*map_sprite);
 }
 
 GameMap::~GameMap() {
