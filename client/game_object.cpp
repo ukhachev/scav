@@ -3,7 +3,6 @@
 #include <math.h>
 #include <iostream>
 
-
 GameObject::GameObject(int _id): id(_id) {};
 
 int GameObject::get_id() {
@@ -14,9 +13,9 @@ DrawableObject::DrawableObject(int _id): GameObject(_id) {}
 DrawableObject::~DrawableObject() {}
 
 
-const Vector2f& DrawableObject::get_pos() const {
+/*const Vector2f& DrawableObject::get_pos() const {
     return pos;
-}
+}*/
 
 void DrawableObject::set_pos(Vector2f new_pos) {
     pos = new_pos;
@@ -28,7 +27,11 @@ void DrawableObject::draw(RenderWindow& window) {
 
 void Player::set_pos(Vector2f new_pos) {
     pos = new_pos;
-    skin->setPosition(pos);
+    b2Vec2 cur_pos = get_pos();
+    b2Vec2 dpos = b2Vec2(new_pos.x, new_pos.y) - cur_pos;
+    set_speed(20*dpos.x, 20*dpos.y);
+
+    //skin->setPosition(pos);
 }
 
 /*void Player::set_position() {
@@ -50,7 +53,7 @@ void Player::set_rotation(float new_rot) {
     skin->setRotation(new_rot);
 }
 
-Player::Player(int _id): DrawableObject(_id) {}
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), KinematicObject(_world, size, pos) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
     skin = new Sprite(*player_texture);
@@ -63,6 +66,8 @@ float Player::get_rotation() {
 }
 
 void Player::draw(RenderWindow& window) {
+	b2Vec2 p = get_pos();
+	skin->setPosition(p.x, p.y);
     window.draw(*skin);
 }
 
