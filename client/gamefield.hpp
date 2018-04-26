@@ -8,6 +8,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
+#include "physics_object.hpp"
 
 using namespace sf;
 
@@ -17,9 +18,11 @@ class GameField {
     RenderWindow window;
  	std::map<int, DrawableObject*> map;
  	std::mutex mtx;
+ 	b2World* world;
  public:
     GameField();
     DrawableObject* find(int obj_id);
+    b2World* get_physics_world();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
     void render();

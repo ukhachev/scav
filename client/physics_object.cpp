@@ -1,5 +1,5 @@
 #include "physics_object.hpp"
-
+#include <iostream>
 PhysicsObject::PhysicsObject(b2World* _world) : world(_world) {
 
 }
@@ -9,11 +9,12 @@ PhysicsObject::~PhysicsObject() {
 }
 
 void PhysicsObject::set_pos(float px, float py) {
+
 	body->SetTransform(b2Vec2(px, py), 0);
 }
 
 const b2Vec2& PhysicsObject::get_pos() const {
-	return body->GetLocalCenter();
+	return body->GetWorldCenter();
 }
 
 StaticObject::StaticObject(b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_world) {
@@ -40,7 +41,7 @@ StaticObject::~StaticObject() {
 KinematicObject::KinematicObject(b2World* _world, const b2Vec2& size,const b2Vec2& pos): PhysicsObject(_world) {
 	b2BodyDef def;
 	def.position = b2Vec2(pos.x, pos.y);
-	def.type = b2_staticBody;
+	def.type = b2_dynamicBody;
 	body = world->CreateBody(&def);
 
 	b2PolygonShape shape;
@@ -60,7 +61,10 @@ KinematicObject::~KinematicObject() {
 }
 
 void KinematicObject::set_speed(float sx, float sy) {
-	body->SetLinearVelocity(b2Vec2(sx, sy));
+	//body->ApplyForceToCenter(b2Vec2(1, 1));
+	b2Vec2 pos = body->GetPosition();
+	//body->SetTransform(pos + b2Vec2(sx, sy), 0);
+	body->SetLinearVelocity( b2Vec2(sx, sy));
 }
 
 const b2Vec2& KinematicObject::get_speed() const {

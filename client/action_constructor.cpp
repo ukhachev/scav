@@ -30,11 +30,17 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 		case 100: {
 			int _cl_id = 0;
 			packet >> _cl_id;
-			Player* p = new Player(obj_id);
+			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 			Texture* playertexture = new Texture();
 			playertexture->loadFromFile("Solder clone.png");
 			p->set_player_sprite(playertexture);
 			field->add(p, obj_id);
+
+			Player* p1 = new Player(obj_id+100, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(50, 50));
+			Texture* playertexture1 = new Texture();
+			playertexture1->loadFromFile("Solder clone.png");
+			p1->set_player_sprite(playertexture);
+			field->add(p1, obj_id+100);
 
 			if (_cl_id == cl_id) {
 				field->set_player(obj_id);

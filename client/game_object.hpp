@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include "Box2D/Box2D.h"
+#include "physics_object.hpp"
 
 using namespace sf;
 
@@ -24,19 +26,19 @@ class DrawableObject: public GameObject {
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
- 	const sf::Vector2f& get_pos() const;
-    void virtual set_pos(Vector2f new_pos);// сделать виртуальным
+ 	//const sf::Vector2f& get_pos() const;
+    virtual void set_pos(Vector2f new_pos);// сделать виртуальным
  	virtual void draw(RenderWindow &window);
     virtual ~DrawableObject();
 };
 
 
-class Player: public DrawableObject {
+class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
     sf::Sprite* skin;
  public:
-    Player(int _id);
+    Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
     void set_player_sprite(Texture* player_texture);
     //void set_position();
