@@ -4,37 +4,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include "Box2D/Box2D.h"
+#include "physics_object.hpp"
 
 using namespace sf;
-
-
-
-/*class PhysicsObject {
- protected:
-     Vector2f pos;
- public:
-     PhysicsObject();
-     virtual Vector2f get_pos();
-     virtual void set_pos(float x, float y);
-     virtual ~PhysicsObject();
-};
-
-class DynamicObject: public PhysicsObject {
- protected:
-     Vector2f velocity;
- public:
-     DynamicObject();
-     void set_velocity(float vx, float vy);
-     virtual Vector2f get_pos();
-     virtual void set_pos(float x, float y);
-};
-
-
-class StaticObject: public PhysicsObject{
- protected:
-
-}*/
-
 
 
 class GameObject {
@@ -53,19 +26,19 @@ class DrawableObject: public GameObject {
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
- 	const sf::Vector2f& get_pos() const;
-    void virtual set_pos(Vector2f new_pos);// сделать виртуальным
+ 	//const sf::Vector2f& get_pos() const;
+    virtual void set_pos(Vector2f new_pos);// сделать виртуальным
  	virtual void draw(RenderWindow &window);
     virtual ~DrawableObject();
 };
 
 
-class Player: public DrawableObject {
+class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
     sf::Sprite* skin;
  public:
-    Player(int _id);
+    Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
     void set_player_sprite(Texture* player_texture);
     //void set_position();
@@ -73,6 +46,7 @@ class Player: public DrawableObject {
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
+
     ~Player();
 };
 
@@ -85,6 +59,16 @@ class GameMap: public DrawableObject {
 
 };
 
+/*class Camera: public DrawableObject {
+ private:
+     View camera;
+ public:
+     Camera();
+     void set_pos(Vector2f new_pos);
+     void draw(RenderWindow &window);
+     ~Camera();
+}*/
+
 /*class Bullet: public DrawableObject {
  private:
     Vector2f velicity;
@@ -95,20 +79,19 @@ class GameMap: public DrawableObject {
 
 };*/
 
-/*class Wall: public DrawableObject {
+class Wall: public DrawableObject, public StaticObject {
  private:
      Sprite* wall_sprite;
-     int healf;
  public:
-      Wall();
+      Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
       void set_pos(Vector2f new_pos);
-      void set_sprite();
+      void set_sprite(Texture* player_texture);
       void draw(RenderWindow& window);
-      void take_damage(int dmg);
+      //void take_damage(int dmg);
       void set_rotation(float new_rot);
-      float get_rotation();
+     // float get_rotation();
       ~Wall();
-}*/
+};
 
 /*class Walls: public DrawableObject {
  private:

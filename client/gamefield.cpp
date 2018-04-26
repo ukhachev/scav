@@ -1,16 +1,18 @@
 
-
+//#include "view.hpp"
 #include "gamefield.hpp"
 #include <iostream>
 
 
-GameField::GameField() {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
     //window.setMouseCursorVisible(0);
 }
-
+b2World* GameField::get_physics_world() {
+    return world;
+}
 
 DrawableObject* GameField::find(int obj_id) {
 
@@ -36,6 +38,7 @@ bool GameField::get_action(sf::Packet& packet) {
 
 
 void GameField::render() {
+    //Camera player_cam;
     while (window.isOpen())
     {
 
@@ -47,23 +50,21 @@ void GameField::render() {
         }
 
         if (player != nullptr) {
-
-	        Vector2f prev_position = player->get_pos();
-            Vector2f pos(0, 0);
+            b2Vec2 speed(0, 0);
 
 	        if(Keyboard::isKeyPressed(Keyboard::A)) {
-	            pos += Vector2f(-10.f, 0.f);
+	            speed += b2Vec2(-100.f, 0.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::D)) {
-	            pos += Vector2f(10.f, 0.f);
+	            speed += b2Vec2(100.f, 0.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::W)) {
-	            pos += Vector2f(0.f, -10.f);
+	            speed += b2Vec2(0.f, -100.f);
 	        }
 	        if(Keyboard::isKeyPressed(Keyboard::S)) {
-	            pos += Vector2f(0.f, 10.f);
+	            speed += b2Vec2(0.f, 100.f);
 	        }
-	        player->set_pos(pos + prev_position);
+	        player->set_speed(speed.x, speed.y);
 
             //player->set_position();
 
@@ -72,13 +73,19 @@ void GameField::render() {
             std::cout << "player" <<std::endl;
 
         }
-
+        world->Step(1/60.f, 8, 3);
         window.clear();
+
+
+        //player_cam.set_center(player->get_pos());
 
         for (auto iter = map.begin(); iter != map.end(); iter++) {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
         }
+
+
+        //player_cam.draw(window);
         window.display();
     }
     delete player;
