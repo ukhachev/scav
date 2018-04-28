@@ -3,11 +3,11 @@
 
 #include "client_action.hpp"
 #include <mutex>
-#include <stack>
+#include <queue>
 
 class ActionContainer {
  private:
- 	std::stack<ClientAction*> actions;
+ 	std::queue<ClientAction*> actions;
  public:
 	ActionContainer();
 	~ActionContainer();

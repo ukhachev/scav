@@ -15,7 +15,7 @@ ClientAction* ActionContainer::pop() {
 	if (actions.size() == 0) {
 		return nullptr;
 	}
-	ClientAction* res = actions.top();
+	ClientAction* res = actions.front();
 	actions.pop();
 	return res;
 }
