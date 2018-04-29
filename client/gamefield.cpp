@@ -41,17 +41,18 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::render() {
     Textures t_cont("textures.txt");
-    Texture* t = t_cont.get_texture(3);
+    Texture* t = t_cont.get_texture(4);
     //Sprite s(t_cont.get_texture(1));
     //Texture t;
     //t.loadFromFile("wall.png");
-    Sprite s(*t);
-    s.setScale(0.1, 0.1);
-
+    //Sprite s(*t);
+    //s.setScale(0.5, 0.5);
+    MapConst g_map(20, 20, t_cont);
     //MapConst g_map(2, 2, t_cont);
     while (window.isOpen())
     {
         View view;
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -84,11 +85,13 @@ void GameField::render() {
             view.setCenter(player->get_pos().x, player->get_pos().y);
 
         }
+
         world->Step(1/60.f, 8, 3);
         window.clear();
         window.setView(view);
+        g_map.draw(window);
 
-        window.draw(s);
+        //window.draw(s);
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
