@@ -3,6 +3,7 @@
 #include "gamefield.hpp"
 #include "textures.hpp"
 #include "map_constructor.hpp"
+#include "camera.hpp"
 #include <iostream>
 
 
@@ -49,9 +50,10 @@ void GameField::render() {
     //s.setScale(0.5, 0.5);
     MapConst g_map(20, 20, t_cont);
     //MapConst g_map(2, 2, t_cont);
+    //View view; ---
+    Camera g_cam;
     while (window.isOpen())
     {
-        View view;
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -82,13 +84,15 @@ void GameField::render() {
             player->mouse_rotation(window);
             //std::cout << player->get_rotation() << std::endl;
             std::cout << "player" <<std::endl;
-            view.setCenter(player->get_pos().x, player->get_pos().y);
+            //view.setCenter(player->get_pos().x, player->get_pos().y);
+            g_cam.set_center(player);
 
         }
 
         world->Step(1/60.f, 8, 3);
         window.clear();
-        window.setView(view);
+        //window.setView(view);
+        g_cam.draw(window);
         g_map.draw(window);
 
         //window.draw(s);
