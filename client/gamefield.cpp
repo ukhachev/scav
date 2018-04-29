@@ -41,11 +41,11 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::render() {
     Textures t_cont("textures.txt");
-    Texture t = t_cont.get_texture(2);
+    Texture* t = t_cont.get_texture(2);
     //Sprite s(t_cont.get_texture(1));
     //Texture t;
     //t.loadFromFile("wall.png");
-    Sprite s(t);
+    Sprite s(*t);
     s.setScale(0.1, 0.1);
 
     //MapConst g_map(2, 2, t_cont);

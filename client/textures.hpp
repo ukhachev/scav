@@ -10,10 +10,10 @@ using namespace sf;
 
 class Textures {
  private:
-    std::map<int, Texture> texture_container;
+    std::map<int, Texture*> texture_container;
  public:
      Textures(const char* file_name);
-     Texture get_texture(int _id);
+     Texture* get_texture(int _id);
      ~Textures();
 };
 

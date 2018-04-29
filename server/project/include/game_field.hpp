@@ -9,7 +9,8 @@ class GameField {
  private:
 	std::map<int, Player*> players;
 	std::map<int, PhysicsObject*> objects;
-
+	
+	b2World world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;
  public:
