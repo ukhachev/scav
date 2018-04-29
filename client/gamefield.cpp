@@ -16,10 +16,10 @@ b2World* GameField::get_physics_world() {
     return world;
 }
 
-DrawableObject* GameField::find(int obj_id) {
+Player* GameField::find_player(int obj_id) {
 
-    auto iter = map.find(obj_id);
-    if (iter != map.end()) {
+    auto iter = players.find(obj_id);
+    if (iter != players.end()) {
         return iter->second;
     }
 
@@ -41,7 +41,7 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::render() {
     Textures t_cont("textures.txt");
-    Texture* t = t_cont.get_texture(2);
+    Texture* t = t_cont.get_texture(3);
     //Sprite s(t_cont.get_texture(1));
     //Texture t;
     //t.loadFromFile("wall.png");
@@ -90,9 +90,12 @@ void GameField::render() {
 
         window.draw(s);
 
-        for (auto iter = map.begin(); iter != map.end(); iter++) {
+        for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
+        }
+        for (auto iter = walls.begin(); iter != walls.end(); iter++) {
+            iter->second->draw(window);
         }
         //g_map.draw(window);
         window.display();
@@ -102,17 +105,15 @@ void GameField::render() {
 
 
 
-int GameField::add(DrawableObject* obj, int new_id) {
+int GameField::add_player(Player* obj, int new_id) {
 
-    map.emplace(new_id, obj);
-
+    players.emplace(new_id, obj);
     return 0;
 }
 
 int GameField::add_wall(Wall* obj, int new_id) {
 
-    map_wall.emplace(new_id, obj);
-
+    walls.emplace(new_id, obj);
     return 0;
 }
 
@@ -124,7 +125,7 @@ int GameField::add_wall(Wall* obj, int new_id) {
 }*/
 
 void GameField::set_player(int player_id) {
-    player = dynamic_cast<Player*>(find(player_id));
+    player = find_player(player_id);
 }
 
 Player* GameField::get_player() {

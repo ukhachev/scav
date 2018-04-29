@@ -21,7 +21,6 @@ void get(Connector* connector, GameField* field) {
 
 void render(GameField* field) {
 	field->render();
-	std::cout << "ok2" << std::endl;
 }
 
 void send(Connector* connector, GameField* field) {
@@ -51,7 +50,7 @@ int main(int argc, char const *argv[])
 		Texture* playertexture = new Texture();
 		playertexture->loadFromFile("wall.png");
 		p->set_sprite(playertexture);
-		field.add(p, 200+i);
+		field.add_wall(p, 200+i);
 	}
 	//------
 
