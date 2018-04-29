@@ -22,7 +22,7 @@ void GameField::add_object(PhysicsObject* obj) {
 void GameField::add_player(int cl_id) {
 	Player* pl = new Player(cl_id);
 	players.emplace(cl_id, pl);
-	add_object(pl);
+	//add_object(pl);
 }
 
 void GameField::delete_player(int cl_id) {

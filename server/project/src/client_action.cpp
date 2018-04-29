@@ -27,9 +27,7 @@ int PlayerJoinedAction::get_id() {
 void PlayerJoinedAction::execute(GameField& gf) {
 	gf.add_player(cl_id);
 	int id = gf.get_player(cl_id)->get_id();
-	*(gf.get_state_packet()) << 100 << id << cl_id;
-	//sf::Packet* packet = gf.add_private_packet(cl_id);
-	//*packet << 101 << id;
+	*(gf.get_state_packet()) << 100 << cl_id << cl_id;
 }
 
 //Moves player
@@ -47,8 +45,7 @@ int MoveAction::get_id() {
 
 void MoveAction::execute(GameField& gf) {
 	Player* player = gf.get_player(cl_id);
-	int id = player->get_id();
 	//std::cout << id << std::endl;
-	player->set_position(x, y, angle);
+	player->set_pos(x, y);
 	*(gf.get_state_packet()) << 1 << id << x << y << angle;
 }

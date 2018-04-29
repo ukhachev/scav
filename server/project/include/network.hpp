@@ -13,7 +13,7 @@ class Network {
  	int port;
  	GameField* field;
  	bool online;
-	std::map<int, sf::TcpSocket*> sockets;
+ 	std::map<int, sf::TcpSocket*> sockets;
 	std::list<std::thread*> get_threads;
 	SafeActionContainer container;
 	void delete_client(int cl_id);

@@ -1,44 +1,16 @@
 #ifndef SCAV_SERVER_GAME_OBJECT_HPP_
 #define SCAV_SERVER_GAME_OBJECT_HPP_
 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <SFML/System.hpp>
+#include "physics_object.hpp"
 
-struct Position {
-	float x;
-	float y;
-	float angle;
-};
 
-class GameObject {
- protected:
-	int id;
+
+class Player : public StaticObject {
  public:
-	GameObject();
-	virtual ~GameObject();
-	void set_id(int _id);
-	int get_id();
-};
-
-class PhysicsObject: public GameObject {
- protected:
-	//b2Body body;
-	Position pos;
-
- public:
- 	PhysicsObject();
- 	virtual ~PhysicsObject();
- 	void set_position(float _x, float _y, float _angle);
- 	const Position& get_pos();
-	//b2Body& get_body();
-};
-
-class Player : public PhysicsObject {
-	int cl_id;
- public:
- 	Player(int _cl_id);
+ 	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
  	~Player();
- 	int get_client();
 };
 
 #endif
