@@ -1,6 +1,8 @@
 
-#include "view.hpp"
+//#include "view.hpp"
 #include "gamefield.hpp"
+#include "textures.hpp"
+#include "map_constructor.hpp"
 #include <iostream>
 
 
@@ -38,13 +40,18 @@ bool GameField::get_action(sf::Packet& packet) {
 
 
 void GameField::render() {
-    Texture *map_text = new Texture();
-    map_text->loadFromFile("game_map.png");
-    //Camera player_cam;
-    GameMap g_map = new GameMap(map_text);
+    Textures t_cont("textures.txt");
+    Texture t = t_cont.get_texture(2);
+    //Sprite s(t_cont.get_texture(1));
+    //Texture t;
+    //t.loadFromFile("wall.png");
+    Sprite s(t);
+    s.setScale(0.1, 0.1);
+
+    //MapConst g_map(2, 2, t_cont);
     while (window.isOpen())
     {
-
+        View view;
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -74,26 +81,23 @@ void GameField::render() {
             player->mouse_rotation(window);
             //std::cout << player->get_rotation() << std::endl;
             std::cout << "player" <<std::endl;
+            view.setCenter(player->get_pos().x, player->get_pos().y);
 
         }
         world->Step(1/60.f, 8, 3);
         window.clear();
+        window.setView(view);
 
+        window.draw(s);
 
-        //player_cam.set_center(player->get_pos());
-        g_map.draw(window);
         for (auto iter = map.begin(); iter != map.end(); iter++) {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
         }
-
-
-        //player_cam.draw(window);
+        //g_map.draw(window);
         window.display();
     }
-    delete map_text;
     delete player;
-    //delete map;
 }
 
 
@@ -105,6 +109,19 @@ int GameField::add(DrawableObject* obj, int new_id) {
     return 0;
 }
 
+int GameField::add_wall(Wall* obj, int new_id) {
+
+    map_wall.emplace(new_id, obj);
+
+    return 0;
+}
+
+/*int GameField::add_bullet(Bullet* obj, int new_id) {
+
+    map_bullets.emplace(new_id, obj);
+
+    return 0;
+}*/
 
 void GameField::set_player(int player_id) {
     player = dynamic_cast<Player*>(find(player_id));

@@ -75,18 +75,36 @@ Player::~Player() {
     delete skin;
 }
 
-GameMap::GameMap(Texture* map_texture)/*: DrawableObject(0)*/ {
-    map_sprite = new Sprite(*map_texture);
-    map_sprite->setScale(1.25, 1.25);
-}
-/*void GameMap::set_sprite(Texture map_text) {
-
-}*/
-
-void GameMap::draw(RenderWindow &window) {
-    window.draw(*map_sprite);
+/*GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {
+    map_sprite = new Sprite(map_texture);
 }
 
 GameMap::~GameMap() {
     delete map_sprite;
+}*/
+
+Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos) {}
+
+void Wall::set_pos(Vector2f new_pos) {
+	(void) new_pos;
+}
+
+void Wall::set_sprite(Texture* player_texture) {
+	wall_sprite = new Sprite(*player_texture);
+    wall_sprite->setOrigin(wall_sprite->getLocalBounds().width / 2, wall_sprite->getLocalBounds().height / 2);
+    wall_sprite->setScale(0.05, 0.05);
+}
+
+void Wall::draw(RenderWindow& window) {
+	b2Vec2 p = get_pos();
+	wall_sprite->setPosition(p.x, p.y);
+    window.draw(*wall_sprite);
+}
+
+Wall::~Wall() {
+	delete wall_sprite;
+}
+
+void Wall::set_rotation(float new_rot) {
+	(void)new_rot;
 }

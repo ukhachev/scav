@@ -9,6 +9,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 #include "physics_object.hpp"
+#include <map>
 
 using namespace sf;
 
@@ -16,7 +17,9 @@ class GameField {
  private:
     Player* player;
     RenderWindow window;
- 	std::map<int, DrawableObject*> map;
+ 	std::map<int, DrawableObject*> map; //я забыл, для чего именно нам это нужно, только для игроков, или для чего-то еще
+ 	std::map<int, Wall*> map_wall;
+ 	//std::map<int, Bullet*> map_bullets; Пока класса для пуль нет, но пусть будет здесь, пригодится
  	std::mutex mtx;
  	b2World* world;
  public:
@@ -28,6 +31,8 @@ class GameField {
     void render();
     Player* get_player();
  	int add(DrawableObject* obj, int new_id);
+ 	int add_wall(Wall* obj, int new_id);
+ 	//int add_bullet(Bullet* obj, int new_id);  Пригодится
 };
 
 #endif  // SCAV_GAME_OBJECT_HPP_

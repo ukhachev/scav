@@ -19,7 +19,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 
 			packet >> x >> y >> angle;
 			DrawableObject* obj = field->find(obj_id);
-			if (obj!=nullptr)
+			if (obj != nullptr)
 			if (obj != field->get_player()) {
 				Vector2f pos(x, y);
                 obj->set_pos(pos);
@@ -32,13 +32,13 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet) {
 			packet >> _cl_id;
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 			Texture* playertexture = new Texture();
-			playertexture->loadFromFile("Solder clone.png");
+			playertexture->loadFromFile("Solder_clone.png");
 			p->set_player_sprite(playertexture);
 			field->add(p, obj_id);
 
 			Player* p1 = new Player(obj_id+100, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(50, 50));
 			Texture* playertexture1 = new Texture();
-			playertexture1->loadFromFile("Solder clone.png");
+			playertexture1->loadFromFile("Solder_clone.png");
 			p1->set_player_sprite(playertexture);
 			field->add(p1, obj_id+100);
 
