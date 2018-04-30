@@ -7,9 +7,9 @@ class GameObject {
  protected:
 	int id;
  public:
-	GameObject();
-	virtual ~GameObject();
+	GameObject(int _id);
 	void set_id(int _id);
+	virtual ~GameObject();
 	int get_id();
 };
 
@@ -17,12 +17,14 @@ class PhysicsObject: public GameObject {
 protected:
 	b2Body* body;
 	b2World* world;
-
+	int hp;
  public:
  	PhysicsObject(int _id, b2World* _world);
  	virtual ~PhysicsObject();
  	virtual const b2Vec2& get_pos() const;
  	virtual void set_pos(float px, float py);
+ 	int get_hp();
+ 	void hit(int dmg);
 };
 
 class StaticObject: public PhysicsObject {
@@ -40,8 +42,13 @@ class KinematicObject: public PhysicsObject {
 };
 
 
-/*class Bullet: public KinematicObject {
-
-};*/
+class Bullet: public KinematicObject {
+ private:
+ 	int dmg;
+ public:
+	Bullet(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
+	~Bullet();
+	int get_dmg();
+};
 
 #endif

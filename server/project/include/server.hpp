@@ -5,6 +5,8 @@
 #include "client_action.hpp"
 #include "game_object.hpp"
 #include "network.hpp"
+#include "physics_action.hpp"
+#include "contact_listener.hpp"
 
 #endif
 

@@ -1,6 +1,6 @@
 #include "game_field.hpp"
 
-GameField::GameField() {
+GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
 }
 
 GameField::~GameField() {
@@ -19,10 +19,16 @@ void GameField::add_object(PhysicsObject* obj) {
 	obj->set_id(id);
 }
 
+void GameField::add_bullet(Bullet* bullet) {
+	bullets.push_front(bullet);
+}
 void GameField::add_player(int cl_id) {
-	Player* pl = new Player(cl_id);
+	Player* pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0));
 	players.emplace(cl_id, pl);
-	//add_object(pl);
+}
+
+b2World* GameField::get_world() {
+	return world;
 }
 
 void GameField::delete_player(int cl_id) {
@@ -50,7 +56,12 @@ Player* GameField::get_player(int cl_id) {
 	return nullptr;
 }
 
+void GameField::step() {
+	world->Step(1.0f / 60.0f, 8, 3);
+}
+
 sf::Packet* GameField::get_state_packet() {
+
 	return &state_packet;
 }
 
@@ -82,8 +93,9 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 
 sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
+	for (auto i = players.begin(); i != players.end(); ++i) {
 		*res << 100 << i->first;
 	}
 	return res;
 }
+

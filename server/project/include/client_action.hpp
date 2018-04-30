@@ -5,6 +5,7 @@
 #include "game_field.hpp"
 #include <SFML/Network.hpp>
 #include <list>
+#include "Box2D/Box2D.h"
 
 class ClientAction {
  protected:
@@ -13,18 +14,18 @@ class ClientAction {
  	ClientAction(int _cl_id);
  	virtual ~ClientAction();
  	int get_client_id();
-	virtual int get_id() = 0;
 	virtual void execute(GameField& gf) = 0;
 };
 
+//100 action
 class PlayerJoinedAction: public ClientAction {
  public:
  	PlayerJoinedAction(int _cl_id);
  	~PlayerJoinedAction();
- 	int get_id();
  	void execute(GameField& gf);
 };
 
+//1 action
 class MoveAction : public ClientAction {
  private:
 	float x;
@@ -33,8 +34,17 @@ class MoveAction : public ClientAction {
  public:
  	MoveAction(int _cl_id, sf::Packet& packet);
  	~MoveAction();
- 	int get_id();
 	void execute(GameField& gf);
 };
 
+//14 action
+class ShotAction : public ClientAction {
+ private:
+ 	b2Vec2 start_point;
+ 	float angle;
+ public:
+ 	ShotAction(int _cl_id, sf::Packet& packet);
+ 	~ShotAction();
+ 	void execute(GameField& gf);
+};
 #endif

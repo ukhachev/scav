@@ -1,7 +1,7 @@
 #include "game_object.hpp"
 
 //GameObject
-GameObject::GameObject() {
+GameObject::GameObject(int _id): id(_id) {
 }
 
 GameObject::~GameObject() {

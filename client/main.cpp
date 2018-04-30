@@ -6,22 +6,16 @@ bool online = true;
 void get(Connector* connector, GameField* field) {
 	while (online) {
 		sf::Packet* packet = connector->get();
-		std::cout << "get" << std::endl;
-		
-		
 
 		while (!packet->endOfPacket()) {
 			ActionConstructor::execute_action(field, *packet);
-			//std::cout << id << std::endl;
 		}
-		std::cout << "read" << std::endl;
 		delete packet;
 	}
 }
 
 void render(GameField* field) {
 	field->render();
-	std::cout << "ok2" << std::endl;
 }
 
 void send(Connector* connector, GameField* field) {

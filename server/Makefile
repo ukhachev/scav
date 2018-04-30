@@ -10,6 +10,10 @@ SRCS = \
 	project/src/game_object.cpp \
 	project/src/client_action_constructor.cpp \
 	project/src/network.cpp \
+	project/src/physics_object.cpp \
+	project/src/box2d.cpp \
+	project/src/physics_action.cpp \
+	project/src/contact_listener.cpp \
 	project/src/main.cpp
 
 CFLAGS =  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread

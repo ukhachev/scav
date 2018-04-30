@@ -2,6 +2,9 @@
 #include <unistd.h>
 #include <iostream>
 void interact(Network& net, GameField& gf) {
+	b2World* world = gf.get_world();
+	ContactListener l;
+	world->SetContactListener(&l);
 	while (true) {
 		ActionContainer* ac = net.get_actions();
 		ClientAction* act = ac->pop();
@@ -11,7 +14,7 @@ void interact(Network& net, GameField& gf) {
 			delete act;
 			act = ac->pop();
 		}
-
+		gf.step();
 		net.translate(gf.get_state_packet());
 		gf.reset();
 		delete ac;
