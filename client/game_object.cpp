@@ -71,13 +71,6 @@ void Player::draw(RenderWindow& window) {
     window.draw(*skin);
 }
 
-/*void Player::shoot() {
-    Vector2f playerCenter = skin->getPosition();
-    Vector2f mousePosWindow = Vector2f(Mouse::getPosition(window));
-    Vector2f aimDir = mousePosWindow - playerCenter;
-    Vector2f aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
-}*/
-
 
 Player::~Player() {
     delete skin;

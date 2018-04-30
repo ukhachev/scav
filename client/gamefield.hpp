@@ -28,7 +28,7 @@ class GameField {
     b2World* get_physics_world();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
-    void shoot(float x, float y);
+    void shoot();
     void render();
 
     Player* get_player();

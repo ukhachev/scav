@@ -39,22 +39,14 @@ bool GameField::get_action(sf::Packet& packet) {
     return false;
 }
 
-void GameField::shoot(float x, float y) {
-    b2Vec2 point(x, y);
-    b2Vec2 aim_dir = point - player->get_pos();
+void GameField::shoot() {
+
 }
 
 void GameField::render() {
     Textures t_cont("textures.txt");
     Texture* t = t_cont.get_texture(4);
-    //Sprite s(t_cont.get_texture(1));
-    //Texture t;
-    //t.loadFromFile("wall.png");
-    //Sprite s(*t);
-    //s.setScale(0.5, 0.5);
     MapConst g_map(20, 20, t_cont);
-    //MapConst g_map(2, 2, t_cont);
-    //View view; ---
     Camera g_cam;
     while (window.isOpen())
     {
@@ -92,7 +84,7 @@ void GameField::render() {
         }
 
         if (Mouse::isButtonPressed(Mouse::Left)) {
-            shoot(Mouse::getPosition(window).x, Mouse::getPosition(window).y);
+            shoot();
         }
 
 

@@ -47,7 +47,6 @@ class Player: public DrawableObject, public KinematicObject {
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
-    //void shoot();
     //void get_damage(int dmg);
 
     ~Player();
