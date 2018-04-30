@@ -39,6 +39,10 @@ bool GameField::get_action(sf::Packet& packet) {
     return false;
 }
 
+void GameField::shoot(float x, float y) {
+    b2Vec2 point(x, y);
+    b2Vec2 aim_dir = point - player->get_pos();
+}
 
 void GameField::render() {
     Textures t_cont("textures.txt");
@@ -82,20 +86,22 @@ void GameField::render() {
             //player->set_position();
 
             player->mouse_rotation(window);
-            //std::cout << player->get_rotation() << std::endl;
             std::cout << "player" <<std::endl;
-            //view.setCenter(player->get_pos().x, player->get_pos().y);
             g_cam.set_center(player);
 
         }
 
+        if (Mouse::isButtonPressed(Mouse::Left)) {
+            shoot(Mouse::getPosition(window).x, Mouse::getPosition(window).y);
+        }
+
+
+
         world->Step(1/60.f, 8, 3);
         window.clear();
-        //window.setView(view);
         g_cam.draw(window);
         g_map.draw(window);
-
-        //window.draw(s);
+;
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);

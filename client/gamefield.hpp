@@ -28,13 +28,15 @@ class GameField {
     b2World* get_physics_world();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
+    void shoot(float x, float y);
     void render();
-    
+
     Player* get_player();
     Player* find_player(int obj_id);
- 	
+
  	int add_player(Player* obj, int new_id);
  	int add_wall(Wall* obj, int new_id);
+
  	//int add_bullet(Bullet* obj, int new_id);  Пригодится
 };
 
