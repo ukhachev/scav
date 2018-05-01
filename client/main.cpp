@@ -13,7 +13,6 @@ void get(Connector* connector, GameField* field) {
 
 		while (!packet->endOfPacket()) {
 			ActionConstructor::execute_action(field, *packet, textures);
-			//std::cout << id << std::endl;
 		}
 		delete packet;
 	}

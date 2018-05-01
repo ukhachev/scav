@@ -32,21 +32,25 @@ void Network::listen() {
 		if (i != sockets.rend()) {
 			cl_id = i->first + 1;
 		}
-
+		sf::Packet player_set;
+		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
+			std::cout << "q" << std::endl;
+			player_set << 100 << i->first;
+		}
 		sockets.emplace(cl_id, socket);
 
 		std::thread* client_thread = 
 			new std::thread(receive, cl_id, socket, std::ref(container), &online, this);
 		get_threads.push_front(client_thread);
 
-		sf::Packet player_set;
+		
 		player_set << 101 << cl_id;
 
-		sf::Packet* obj_packet = field->get_objects();
+		//sf::Packet* obj_packet = field->get_objects();
 		
 		send_to_socket(socket, &player_set);
-		send_to_socket(socket, obj_packet);
-		delete obj_packet;
+		//send_to_socket(socket, obj_packet);
+		//delete obj_packet;
 
 		container.add_action(new PlayerJoinedAction(cl_id));
 

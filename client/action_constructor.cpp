@@ -12,6 +12,9 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 	packet >> id;
 	packet >> obj_id;
 	std::mutex& mtx = field->get_mutex();
+	if (id == 100) {
+		std::cout << obj_id << std::endl;
+	}
 	mtx.lock();
 	switch (id) {
 		case 1: {
@@ -47,21 +50,20 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			break;
 		}
 		case 100: {
-			int _cl_id = 0;
-			packet >> _cl_id;
+			//int _cl_id = 0;
+			//packet >> _cl_id;
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 
 			p->set_player_sprite(textures->get_texture(1));
 			field->add_player(p, obj_id);
 
-			if (_cl_id == cl_id) {
+			if (obj_id == cl_id) {
 				field->set_player(obj_id);
 			}
 			break;
 		}
 		case 101: {
 			cl_id = obj_id;
-			std::cout << obj_id << std::endl;
 		}
 	}
 	mtx.unlock();
