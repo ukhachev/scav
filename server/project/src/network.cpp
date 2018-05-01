@@ -32,23 +32,27 @@ void Network::listen() {
 		if (i != sockets.rend()) {
 			cl_id = i->first + 1;
 		}
-
+		sf::Packet player_set;
+		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
+			std::cout << "q" << std::endl;
+			player_set << 100 << i->first;
+		}
 		sockets.emplace(cl_id, socket);
 
 		std::thread* client_thread = 
 			new std::thread(receive, cl_id, socket, std::ref(container), &online, this);
 		get_threads.push_front(client_thread);
 
-		sf::Packet player_set;
+		
 		player_set << 101 << cl_id;
 
-		sf::Packet* obj_packet = field->get_objects();
+		//sf::Packet* obj_packet = field->get_objects();
 		
 		send_to_socket(socket, &player_set);
-		send_to_socket(socket, obj_packet);
-		delete obj_packet;
+		//send_to_socket(socket, obj_packet);
+		//delete obj_packet;
 
-		container.add_action(cl_id, new PlayerJoinedAction(cl_id));
+		container.add_action(new PlayerJoinedAction(cl_id));
 
 		std::cout << "joined  " 
 		<< cl_id << " : " << socket->getRemoteAddress() << std::endl;
@@ -86,7 +90,7 @@ void Network::receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& con
 		while (!packet.endOfPacket()) {
 			ClientAction* act = 
 				ClientActionConstructor::construct(cl_id, packet);
-			container.add_action(cl_id, act);
+			container.add_action(act);
 		}
 	}
 }
@@ -97,6 +101,9 @@ ActionContainer* Network::get_actions() {
 
 void Network::delete_client(int cl_id) {
 	auto i = sockets.find(cl_id);
+	ClientAction* left_act = new PlayerLeftAction(cl_id);
+	container.add_action(left_act);
+	
 	std::cout << "disconnect " << cl_id <<std::endl;
 	delete i->second;
 	sockets.erase(i);

@@ -2,11 +2,21 @@
 #include <unistd.h>
 #include <iostream>
 void interact(Network& net, GameField& gf) {
+	b2World* world = gf.get_world();
+	ContactListener l;
+	world->SetContactListener(&l);
 	while (true) {
 		ActionContainer* ac = net.get_actions();
-		for (auto i = ac->begin(); i != ac->end(); ++i) {
-			i->second->execute(gf);
+		ClientAction* act = ac->pop();
+
+		while (act != nullptr) {
+			act->execute(gf);
+			delete act;
+			act = ac->pop();
 		}
+		l.execute_actions(gf);
+		gf.step();
+		
 		net.translate(gf.get_state_packet());
 		gf.reset();
 		delete ac;
@@ -18,6 +28,13 @@ int main()
 {
 	int port = 55503;
 	GameField gf;
+
+	//Временно
+	for (int i = 0; i< 10; ++i) {
+		StaticObject* s = new StaticObject(200, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
+		gf.add_object(s);
+	}
+	//----------------
 	Network net(port, &gf);
 	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));

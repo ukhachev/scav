@@ -2,7 +2,7 @@
 #define SCAV_ACTION_HPP_
 #include <SFML/Network.hpp>
 #include "gamefield.hpp"
-
+#include "textures.hpp"
 /*class Action {
  protected:
 	int obj_id;
@@ -25,7 +25,7 @@ public:
 */
 class ActionConstructor {
  public:
-	static void execute_action(GameField* field, sf::Packet& packet);
+	static void execute_action(GameField* field, sf::Packet& packet, Textures* textures);
 };
 
 #endif

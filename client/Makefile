@@ -13,6 +13,8 @@ SRCS = \
        textures.cpp \
        map_constructor.cpp \
        camera.cpp \
+       physics_action.cpp \
+       contact_listener.cpp \
        main.cpp
 HDRS = \
 	   .

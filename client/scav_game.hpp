@@ -5,5 +5,7 @@
 #include "connector.hpp"
 #include "action.hpp"
 #include "gamefield.hpp"
+#include "contact_listener.hpp"
+#include "physics_action.hpp"
 
 #endif

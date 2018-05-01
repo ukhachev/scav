@@ -26,9 +26,8 @@ class DrawableObject: public GameObject {
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
- 	//const sf::Vector2f& get_pos() const;
-    virtual void set_pos(Vector2f new_pos);// сделать виртуальным
- 	virtual void draw(RenderWindow &window);
+    virtual void set_pos(Vector2f new_pos);
+ 	  virtual void draw(RenderWindow &window);
     virtual ~DrawableObject();
 };
 
@@ -52,15 +51,16 @@ class Player: public DrawableObject, public KinematicObject {
     ~Player();
 };
 
-/*class Bullet: public DrawableObject {
+class DrawableBullet: public DrawableObject, public Bullet {
  private:
-    Vector2f velicity;
     Sprite* bullet_sprite;
-    float maxSpeed;
  public:
-    Bullet();
-
-};*/
+    DrawableBullet(b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
+    void draw(RenderWindow &window);
+    void set_rotation(float new_rot);
+    void set_sprite(Texture* texture);
+    ~DrawableBullet();
+};
 
 class Wall: public DrawableObject, public StaticObject {
  private:

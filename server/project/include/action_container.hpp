@@ -3,20 +3,16 @@
 
 #include "client_action.hpp"
 #include <mutex>
-#include <map>
+#include <queue>
 
 class ActionContainer {
  private:
- 	std::map<int, ClientAction*> actions;
- 	int get_hash(int x, int y);
+ 	std::queue<ClientAction*> actions;
  public:
 	ActionContainer();
 	~ActionContainer();
-
-	std::map<int, ClientAction*>::iterator begin();
-	std::map<int, ClientAction*>::iterator end();
-
-	void add_action(int cl_id, ClientAction* action);
+	ClientAction* pop();
+	void add_action(ClientAction* action);
 };
 
 class SafeActionContainer {
@@ -29,7 +25,7 @@ class SafeActionContainer {
  	SafeActionContainer();
  	~SafeActionContainer();
  	ActionContainer* get_actions();
- 	void add_action(int cl_id, ClientAction* action);
+ 	void add_action(ClientAction* action);
 };
 
 #endif

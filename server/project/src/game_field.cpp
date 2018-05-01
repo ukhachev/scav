@@ -1,6 +1,14 @@
 #include "game_field.hpp"
-
-GameField::GameField() {
+#include <iostream>
+GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
+	StaticObject* left = new StaticObject(1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
+	StaticObject* right = new StaticObject(2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
+	StaticObject* top = new StaticObject(3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
+	StaticObject* bot = new StaticObject(4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
+	(void)left;
+	(void)top;
+	(void)bot;
+	(void)right;
 }
 
 GameField::~GameField() {
@@ -19,10 +27,16 @@ void GameField::add_object(PhysicsObject* obj) {
 	obj->set_id(id);
 }
 
+void GameField::add_bullet(Bullet* bullet) {
+	bullets.push_front(bullet);
+}
 void GameField::add_player(int cl_id) {
-	Player* pl = new Player(cl_id);
+	Player* pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0));
 	players.emplace(cl_id, pl);
-	add_object(pl);
+}
+
+b2World* GameField::get_world() {
+	return world;
 }
 
 void GameField::delete_player(int cl_id) {
@@ -50,7 +64,12 @@ Player* GameField::get_player(int cl_id) {
 	return nullptr;
 }
 
+void GameField::step() {
+	world->Step(1.0f / 60.0f, 8, 3);
+}
+
 sf::Packet* GameField::get_state_packet() {
+
 	return &state_packet;
 }
 
@@ -82,8 +101,22 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 
 sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		*res << 100 << i->second->get_id();
+	for (auto i = players.begin(); i != players.end(); ++i) {
+		*res << 100 << i->first;
 	}
 	return res;
+}
+
+b2World* GameField::get_physics_world() {
+	return world;
+}
+
+void GameField::delete_bullet(Bullet* b) {
+	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
+		if (*i == b) {
+			bullets.erase(i);
+			delete b;
+			return;
+		}
+	}
 }

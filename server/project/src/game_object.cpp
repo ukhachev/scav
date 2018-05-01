@@ -1,7 +1,7 @@
 #include "game_object.hpp"
 
 //GameObject
-GameObject::GameObject() {
+GameObject::GameObject(int _id): id(_id) {
 }
 
 GameObject::~GameObject() {
@@ -15,30 +15,12 @@ int GameObject::get_id() {
 	return id;
 }
 
-//Physics object
-PhysicsObject::PhysicsObject() {
-}
-
-PhysicsObject::~PhysicsObject() {
-}
-
-void PhysicsObject::set_position(float _x, float _y, float _angle) {
-	pos.x = _x;
-	pos.y = _y;
-	pos.angle = _angle;
-}
-
-const Position& PhysicsObject::get_pos() {
-	return pos;
-}
-
 //Player
-Player::Player(int _cl_id) : cl_id(_cl_id) {
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) 
+				: StaticObject(_id, _world, size, pos) {
 }
 
 Player::~Player() {
-}
-
-int Player::get_client() {
-	return cl_id;
+	//body->SetActive(false);
+	//this->body->GetWorld()->DestroyBody(body);
 }

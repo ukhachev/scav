@@ -26,7 +26,7 @@ class MapConst {
     //std::list<MapBlock*> game_map;
     std::list<Sprite*> game_map;
  public:
-     MapConst(int w, int h, Textures t_cont);
+     MapConst(int w, int h, Texture* m_texture);
      void draw(sf::RenderWindow& window);
      ~MapConst();
 };

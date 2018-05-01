@@ -7,13 +7,13 @@
 #include <thread>
 #include <list>
 #include <map>
-
+#include <vector>
 class Network {
  private:
  	int port;
  	GameField* field;
  	bool online;
-	std::map<int, sf::TcpSocket*> sockets;
+ 	std::map<int, sf::TcpSocket*> sockets;
 	std::list<std::thread*> get_threads;
 	SafeActionContainer container;
 	void delete_client(int cl_id);
@@ -29,4 +29,16 @@ class Network {
 
 };
 
+/*class Client {
+ private:
+ 	int id;
+ 	sf:TcpSocket socket;
+ 	std::thread get_thread;
+ 	static void read();
+ public:
+ 	Client(const sf::TcpSocket& _socket);
+ 	~Client();
+ 	void send(sf::Packet& packet);
+ 	void receive();
+}*/
 #endif
