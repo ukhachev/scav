@@ -40,12 +40,10 @@ void Player::set_pos(Vector2f new_pos) {
 }*/
 
 void Player::mouse_rotation(RenderWindow& window) {
-    Vector2f playerCenter = skin->getPosition();
-    Vector2f mousePosWindow = Vector2f(Mouse::getPosition(window));
-    Vector2f aimDir = mousePosWindow - playerCenter;
-    Vector2f aimDirNorm = aimDir / (float)(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));
-    player_rotation = (atan2(aimDir.y, aimDir.x)) * 180 / 3.14159265 +90;
-    skin->setRotation(player_rotation);
+    Vector2i mouse_pos = sf::Mouse::getPosition(window);
+    sf::Vector2f cursor =  window.mapPixelToCoords(mouse_pos);
+    sf::Vector2f direction = cursor - skin->getPosition();
+    skin->setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159265 + 90);
 }
 
 void Player::set_rotation(float new_rot) {
