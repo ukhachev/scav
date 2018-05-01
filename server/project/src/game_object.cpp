@@ -21,4 +21,6 @@ Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos)
 }
 
 Player::~Player() {
+	//body->SetActive(false);
+	//this->body->GetWorld()->DestroyBody(body);
 }

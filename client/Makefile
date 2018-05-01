@@ -10,6 +10,11 @@ SRCS = \
        action_constructor.cpp\
        box2d.cpp \
        physics_object.cpp \
+       textures.cpp \
+       map_constructor.cpp \
+       camera.cpp \
+       physics_action.cpp \
+       contact_listener.cpp \
        main.cpp
 HDRS = \
 	   .

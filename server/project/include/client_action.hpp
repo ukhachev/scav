@@ -47,4 +47,11 @@ class ShotAction : public ClientAction {
  	~ShotAction();
  	void execute(GameField& gf);
 };
+
+class PlayerLeftAction: public ClientAction {
+ public:
+ 	PlayerLeftAction(int _cl_id);
+ 	~PlayerLeftAction();
+ 	void execute(GameField& gf);
+};
 #endif

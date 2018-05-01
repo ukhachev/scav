@@ -2,13 +2,12 @@
 #include "physics_object.hpp"
 #include <iostream>
 void ContactListener::BeginContact(b2Contact* contact) {
-    //check if fixture A was a ball
     PhysicsObject* bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureA()->GetBody()->GetUserData());
-    Bullet* bullet = NULL;
+    DrawableBullet* bullet = NULL;
     PhysicsObject* obj = NULL;
-    std::cout << "contact" << std::endl;
-    if (dynamic_cast<Bullet*>(bodyUserData)) {
-        bullet = dynamic_cast<Bullet*>(bodyUserData);
+
+    if (dynamic_cast<DrawableBullet*>(bodyUserData)) {
+        bullet = dynamic_cast<DrawableBullet*>(bodyUserData);
     }
     else {
       obj = dynamic_cast<PhysicsObject*>(bodyUserData);
@@ -16,8 +15,8 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
     bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
-    if (dynamic_cast<Bullet*>(bodyUserData)) {
-        bullet = dynamic_cast<Bullet*>(bodyUserData);
+    if (dynamic_cast<DrawableBullet*>(bodyUserData)) {
+        bullet = dynamic_cast<DrawableBullet*>(bodyUserData);
     }
     else {
       obj = dynamic_cast<PhysicsObject*>(bodyUserData);

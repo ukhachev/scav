@@ -26,9 +26,8 @@ class DrawableObject: public GameObject {
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
- 	//const sf::Vector2f& get_pos() const;
-    virtual void set_pos(Vector2f new_pos);// сделать виртуальным
- 	virtual void draw(RenderWindow &window);
+    virtual void set_pos(Vector2f new_pos);
+ 	  virtual void draw(RenderWindow &window);
     virtual ~DrawableObject();
 };
 
@@ -37,6 +36,7 @@ class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
     sf::Sprite* skin;
+    int hp;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
@@ -46,38 +46,21 @@ class Player: public DrawableObject, public KinematicObject {
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
+    //void get_damage(int dmg);
 
     ~Player();
 };
 
-class GameMap: public DrawableObject {
+class DrawableBullet: public DrawableObject, public Bullet {
  private:
-    sf::Sprite* map_sprite;
- public:
-     GameMap(int id, Texture map_texture);
-     ~GameMap();
-
-};
-
-/*class Camera: public DrawableObject {
- private:
-     View camera;
- public:
-     Camera();
-     void set_pos(Vector2f new_pos);
-     void draw(RenderWindow &window);
-     ~Camera();
-}*/
-
-/*class Bullet: public DrawableObject {
- private:
-    Vector2f velicity;
     Sprite* bullet_sprite;
-    float maxSpeed;
  public:
-    Bullet();
-
-};*/
+    DrawableBullet(b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
+    void draw(RenderWindow &window);
+    void set_rotation(float new_rot);
+    void set_sprite(Texture* texture);
+    ~DrawableBullet();
+};
 
 class Wall: public DrawableObject, public StaticObject {
  private:
@@ -87,19 +70,19 @@ class Wall: public DrawableObject, public StaticObject {
       void set_pos(Vector2f new_pos);
       void set_sprite(Texture* player_texture);
       void draw(RenderWindow& window);
-      //void take_damage(int dmg);
       void set_rotation(float new_rot);
      // float get_rotation();
       ~Wall();
 };
 
-/*class Walls: public DrawableObject {
+
+class Cursor: public DrawableObject {
  private:
-     std::list<>
-}*/
-
-
-
+     Sprite* cursor;
+ public:
+     Cursor();
+     void set_pos();
+};
 
 // Сделать класс для временных объектов с таймером, который изменяется при вызове метода draw.
 

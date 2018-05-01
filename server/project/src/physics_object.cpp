@@ -6,16 +6,22 @@ PhysicsObject::PhysicsObject(int _id, b2World* _world) :
 }
 
 PhysicsObject::~PhysicsObject() {
+	body->SetActive(false);
 	this->body->GetWorld()->DestroyBody(body);
+	std::cout << "delete" << std::endl;
+
 }
 
 void PhysicsObject::set_pos(float px, float py) {
 
-	body->SetTransform(b2Vec2(px, py), 0);
+	body->SetTransform(b2Vec2(px /100.f, py / 100.f), 0);
 }
 
-const b2Vec2& PhysicsObject::get_pos() const {
-	return body->GetWorldCenter();
+const b2Vec2 PhysicsObject::get_pos() const {
+	b2Vec2 pos = body->GetWorldCenter();
+	pos.x *= 100;
+	pos.y *= 100;
+	return pos;
 }
 
 int PhysicsObject::get_hp() {
@@ -28,12 +34,12 @@ void PhysicsObject::hit(int dmg) {
 
 StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
 	b2BodyDef def;
-	def.position = b2Vec2(pos.x, pos.y);
+	def.position = b2Vec2(pos.x /100.f, pos.y / 100.f);
 	def.type = b2_staticBody;
 	body = world->CreateBody(&def);
 
 	b2PolygonShape shape;
-	shape.SetAsBox(size.x, size.y);
+	shape.SetAsBox(size.x /100.f, size.y /100.f);
 
 	b2FixtureDef fixture;
 	fixture.density = 0;
@@ -45,17 +51,18 @@ StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2
 }
 
 StaticObject::~StaticObject() {
-	this->body->GetWorld()->DestroyBody(body);
+	//body->SetActive(false);
+	//this->body->GetWorld()->DestroyBody(body);
 }
 
 KinematicObject::KinematicObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): PhysicsObject(_id, _world) {
 	b2BodyDef def;
-	def.position = b2Vec2(pos.x, pos.y);
-	def.type = b2_kinematicBody;
+	def.position = b2Vec2(pos.x /100.f, pos.y /100.f);
+	def.type = b2_dynamicBody;
 	body = world->CreateBody(&def);
 
 	b2PolygonShape shape;
-	shape.SetAsBox(size.x, size.y);
+	shape.SetAsBox(size.x /100.f, size.y /100.f);
 
 	b2FixtureDef fixture;
 	fixture.density = 1;
@@ -68,11 +75,11 @@ KinematicObject::KinematicObject(int _id, b2World* _world, const b2Vec2& size,co
 }
 
 KinematicObject::~KinematicObject() {
-	this->body->GetWorld()->DestroyBody(body);
+	//this->body->GetWorld()->DestroyBody(body);
 }
 
 void KinematicObject::set_speed(float sx, float sy) {
-	body->SetLinearVelocity(b2Vec2(sx, sy));
+	body->SetLinearVelocity(b2Vec2(sx /100.f, sy /100.f));
 }
 
 const b2Vec2& KinematicObject::get_speed() const {
@@ -82,11 +89,12 @@ const b2Vec2& KinematicObject::get_speed() const {
 Bullet::Bullet(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg): 
 							KinematicObject(_id, _world, size, pos), dmg(_dmg) {
 	body->SetBullet(true);
-	body->SetLinearVelocity(speed);
+	set_speed(speed.x, speed.y);
 }
 
 Bullet::~Bullet() {
-
+	//body->SetActive(false);
+	//this->body->GetWorld()->DestroyBody(body);
 }
 
 int Bullet::get_dmg() {

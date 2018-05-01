@@ -10,24 +10,44 @@
 #include <SFML/Network.hpp>
 #include "physics_object.hpp"
 
+#include "textures.hpp"
+#include "map_constructor.hpp"
+#include "camera.hpp"
+
+#include <map>
+#include <list>
 using namespace sf;
 
 class GameField {
  private:
     Player* player;
     RenderWindow window;
- 	std::map<int, DrawableObject*> map;
+    Camera g_cam;
+
+ 	std::map<int, Player*> players;
+ 	std::map<int, Wall*> walls;
+    bool was_shot = false;
+ 	std::list<DrawableBullet*> bullets;
  	std::mutex mtx;
  	b2World* world;
+    int last_shot = 0;
  public:
     GameField();
-    DrawableObject* find(int obj_id);
     b2World* get_physics_world();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);
-    void render();
+    void shoot();
+    bool render();
+
+    std::mutex& get_mutex();
     Player* get_player();
- 	int add(DrawableObject* obj, int new_id);
+    Player* find_player(int obj_id);
+
+ 	int add_player(Player* obj, int new_id);
+ 	int add_wall(Wall* obj, int new_id);
+
+ 	int add_bullet(DrawableBullet* obj);
+    void delete_bullet(DrawableBullet* b);
 };
 
 #endif  // SCAV_GAME_OBJECT_HPP_

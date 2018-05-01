@@ -8,6 +8,8 @@ ClientAction* ClientActionConstructor::construct(int cl_id, sf::Packet& packet) 
 			return new PlayerJoinedAction(cl_id);
 		case 1:
 			return new MoveAction(cl_id, packet);
+		case 14:
+			return new ShotAction(cl_id, packet);
 	}
 	return nullptr;
 }

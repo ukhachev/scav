@@ -21,7 +21,7 @@ protected:
  public:
  	PhysicsObject(int _id, b2World* _world);
  	virtual ~PhysicsObject();
- 	virtual const b2Vec2& get_pos() const;
+ 	virtual const b2Vec2 get_pos() const;
  	virtual void set_pos(float px, float py);
  	int get_hp();
  	void hit(int dmg);

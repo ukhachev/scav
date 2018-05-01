@@ -1,5 +1,5 @@
 #include "physics_action.hpp"
-
+#include <iostream>
 PhysicsAction::PhysicsAction() {
 }
 
@@ -28,6 +28,6 @@ void HitPhysicsAction::execute(GameField& field) {
 		//Объект уничтожен
 		*(field.get_state_packet()) << 6 << id;
 	}
-
+	field.delete_bullet(bullet);
 	//Реализовать удаление пули и смерть игрока
 }

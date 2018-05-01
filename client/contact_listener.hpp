@@ -2,7 +2,7 @@
 #define CONTACT_LISTENER_HPP
 
 #include "Box2D/Box2D.h"
-#include "game_field.hpp"
+#include "gamefield.hpp"
 #include "physics_action.hpp"
 #include <list>
 
