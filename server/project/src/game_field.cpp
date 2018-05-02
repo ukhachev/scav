@@ -124,7 +124,7 @@ void GameField::delete_bullet(Bullet* b) {
 
 void GameField::delete_object(int id) {
 	auto i = objects.find(id);
-	std::cout << "abc" << std::endl;
+	//std::cout << "abc" << std::endl;
 	if (i != objects.end()) {
 		delete i->second;
 		objects.erase(i);
