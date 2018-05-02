@@ -37,6 +37,9 @@ void Network::listen() {
 			std::cout << "q" << std::endl;
 			player_set << 100 << i->first;
 		}
+
+		sf::Packet* object_set = field->get_objects();
+
 		sockets.emplace(cl_id, socket);
 
 		std::thread* client_thread = 
@@ -49,7 +52,8 @@ void Network::listen() {
 		//sf::Packet* obj_packet = field->get_objects();
 		
 		send_to_socket(socket, &player_set);
-		//send_to_socket(socket, obj_packet);
+		send_to_socket(socket, object_set);
+		delete object_set;
 		//delete obj_packet;
 
 		container.add_action(new PlayerJoinedAction(cl_id));

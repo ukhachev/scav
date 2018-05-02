@@ -46,8 +46,11 @@ class GameField {
     Player* find_player(int obj_id);
 
  	int add_player(Player* obj, int new_id);
- 	int add_wall(Wall* obj, int new_id);
+    void delete_player(int cl_id);
 
+    int add_wall(Wall* obj, int new_id);
+    void delete_wall(int id);
+    Wall* get_wall(int id);
  	int add_bullet(DrawableBullet* obj);
     void delete_bullet(DrawableBullet* b);
 };

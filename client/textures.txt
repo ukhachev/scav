@@ -3,3 +3,6 @@
 3 map.png
 4 grass2.png
 5 Bullet.png
+6 player_blood.png
+7 wall_destruction_dark_red.png
+8 Dead_body_base.png

@@ -35,17 +35,23 @@ class DrawableObject: public GameObject {
 class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
-    sf::Sprite* skin;
+    Sprite* skin;
+    Sprite* damage;
+    Sprite* dead;
     int hp;
+    int timer;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
     void set_player_sprite(Texture* player_texture);
+    void set_damage_sprite(Texture* damage_texture);
+    void set_dead_sprite(Texture* dead_texture);
     //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
+    void hit();
     //void get_damage(int dmg);
 
     ~Player();
@@ -65,11 +71,15 @@ class DrawableBullet: public DrawableObject, public Bullet {
 class Wall: public DrawableObject, public StaticObject {
  private:
      Sprite* wall_sprite;
+     Sprite* damage;
+     int timer;
  public:
       Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
       void set_pos(Vector2f new_pos);
       void set_sprite(Texture* player_texture);
+      void set_damage_sprite(Texture* damage_texture);
       void draw(RenderWindow& window);
+      void hit();
       void set_rotation(float new_rot);
      // float get_rotation();
       ~Wall();

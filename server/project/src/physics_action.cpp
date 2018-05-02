@@ -19,15 +19,15 @@ void HitPhysicsAction::execute(GameField& field) {
 	
 	int hp = object->get_hp();
 	int id = object->get_id();
+	std::cout << id << std::endl;
 
-	if (object->get_hp() > 0) {
-		//Нанесение урона
+	if (id > 0) {
 		*(field.get_state_packet()) << 5 << id << hp;
-	}
-	else {
-		//Объект уничтожен
-		*(field.get_state_packet()) << 6 << id;
+
+		if (object->get_hp() < 0) {
+			field.delete_object(id);
+		
+		}
 	}
 	field.delete_bullet(bullet);
-	//Реализовать удаление пули и смерть игрока
 }

@@ -96,9 +96,9 @@ bool GameField::render() {
 
         }
 
-       
+
         g_cam.draw(window);
-        
+
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
@@ -159,4 +159,28 @@ void GameField::delete_bullet(DrawableBullet* b) {
 			return;
 		}
 	}
+}
+
+void GameField::delete_player(int cl_id) {
+    auto p = players.find(cl_id);
+    delete p->second;
+    players.erase(p);
+}
+
+void GameField::delete_wall(int id) {
+    auto w = walls.find(id);
+    if (w == walls.end()) {
+        return;
+    }
+    delete w->second;
+    walls.erase(w);
+}
+
+Wall* GameField::get_wall(int id) {
+    auto iter = walls.find(id);
+    if (iter != walls.end()) {
+        return iter->second;
+    }
+
+    return nullptr;
 }

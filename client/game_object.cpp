@@ -48,7 +48,7 @@ void Player::set_rotation(float new_rot) {
     skin->setRotation(new_rot);
 }
 
-Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), KinematicObject(_world, size, pos) {}
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), KinematicObject(_world, size, pos), timer(0) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
     skin = new Sprite(*player_texture);
@@ -56,19 +56,48 @@ void Player::set_player_sprite(Texture* player_texture) {
     skin->setScale(0.05, 0.05);
 }
 
+void Player::set_damage_sprite(Texture* damage_texture) {
+    damage = new Sprite(*damage_texture);
+    damage->setOrigin(damage->getLocalBounds().width / 2, damage->getLocalBounds().height / 2);
+    damage->setScale(1.5, 1.5);
+}
+
+void Player::set_dead_sprite(Texture* dead_texture) {
+    dead = new Sprite(*dead_texture);
+    dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
+    dead->setScale(2, 2);
+}
+
 float Player::get_rotation() {
     return player_rotation;
 }
 
 void Player::draw(RenderWindow& window) {
-	b2Vec2 p = get_pos();
-	skin->setPosition(p.x, p.y);
-    window.draw(*skin);
+    b2Vec2 p = get_pos();
+    if (hp > 0) {
+        skin->setPosition(p.x, p.y);
+        window.draw(*skin);
+        if (timer != 0) {
+            damage->setPosition(p.x, p.y);
+            //damage->setRotation(skin->getRotation());
+            window.draw(*damage);
+            timer--;
+        }
+    } else {
+        dead->setPosition(p.x, p.y);
+
+        window.draw(*dead);
+    }
+}
+
+void Player::hit() {
+    timer = 20;
 }
 
 
 Player::~Player() {
     delete skin;
+    delete damage;
 }
 
 /*GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {
@@ -79,7 +108,7 @@ GameMap::~GameMap() {
     delete map_sprite;
 }*/
 
-Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos) {}
+Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos), timer(0) {}
 
 void Wall::set_pos(Vector2f new_pos) {
 	(void) new_pos;
@@ -91,14 +120,31 @@ void Wall::set_sprite(Texture* player_texture) {
     wall_sprite->setScale(0.05, 0.05);
 }
 
+void Wall::set_damage_sprite(Texture* damage_texture) {
+    damage = new Sprite(*damage_texture);
+    damage->setOrigin(damage->getLocalBounds().width / 2, damage->getLocalBounds().height / 2);
+    damage->setScale(1.5, 1.5);
+}
+
+void Wall::hit() {
+    timer = 20;
+}
+
 void Wall::draw(RenderWindow& window) {
 	b2Vec2 p = get_pos();
 	wall_sprite->setPosition(p.x, p.y);
     window.draw(*wall_sprite);
+    if (timer != 0) {
+        damage->setPosition(p.x, p.y);
+        window.draw(*damage);
+        timer--;
+    }
+
 }
 
 Wall::~Wall() {
 	delete wall_sprite;
+    delete damage;
 }
 
 void Wall::set_rotation(float new_rot) {

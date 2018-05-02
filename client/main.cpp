@@ -58,13 +58,7 @@ int main(int argc, char const *argv[])
 	int port = std::stoi(argv[2]);
 	GameField field;
 
-	//Удалить
-	for (int i = 0; i< 10; ++i) {
-		Wall* p = new Wall(200, field.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
-		p->set_sprite(textures->get_texture(2));
-		field.add_wall(p, 200+i);
-	}
-	//------
+
 
 	Connector connector(ip, port);
 

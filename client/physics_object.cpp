@@ -24,8 +24,8 @@ int PhysicsObject::get_hp() {
 	return hp;
 }
 
-void PhysicsObject::hit(int dmg) {
-	hp -= dmg;
+void PhysicsObject::set_hp(int _hp) {
+	hp = _hp;
 }
 
 StaticObject::StaticObject(b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_world) {
