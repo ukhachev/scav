@@ -24,8 +24,8 @@ MapBlock::~MapBlock() {
 MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
     srand(time(NULL));
     int num;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
+    for (int i = -n; i < n; i++) {
+        for (int j = -m; j < m; j++) {
             Sprite* block = new Sprite(*m_texture);
             block->setPosition(i * block->getTextureRect().width, j * block->getTextureRect().height);
             game_map.push_back(block);
@@ -35,9 +35,11 @@ MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
 }
 
 
-void MapConst::draw(RenderWindow& window) {
+void MapConst::draw(RenderWindow& window, float px, float py) {
     for (auto iter = game_map.begin(); iter != game_map.end(); iter++) {
-        window.draw(**iter);
+        sf::Vector2f pos = (*iter)->getPosition();
+        if (px + 500 > pos.x && px - 750 < pos.x && py + 500 > pos.y && py -750 < pos.y)
+            window.draw(**iter);
         //*iter->draw(window);
     }
 }

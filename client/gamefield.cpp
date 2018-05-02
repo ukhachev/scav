@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(50, 50, t_cont.get_texture(4)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -69,7 +69,7 @@ bool GameField::render() {
             if (event.type == sf::Event::Closed)
             window.close();
         }
-
+     window.clear();
         if (player != nullptr) {
             b2Vec2 speed(0, 0);
 
@@ -92,12 +92,13 @@ bool GameField::render() {
             if (Mouse::isButtonPressed(Mouse::Left)) {
             	shoot();
         	}
+            g_map.draw(window, player->get_pos().x, player->get_pos().y);
 
         }
 
-        window.clear();
+       
         g_cam.draw(window);
-        g_map.draw(window);
+        
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
