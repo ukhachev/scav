@@ -28,6 +28,7 @@ class DrawableObject: public GameObject {
     DrawableObject(int _id);
     virtual void set_pos(Vector2f new_pos);
  	  virtual void draw(RenderWindow &window);
+    virtual void hit();
     virtual ~DrawableObject();
 };
 
@@ -38,14 +39,15 @@ class Player: public DrawableObject, public KinematicObject {
     Sprite* skin;
     Sprite* damage;
     Sprite* dead;
-    int hp;
     int timer;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
+    
     void set_player_sprite(Texture* player_texture);
     void set_damage_sprite(Texture* damage_texture);
     void set_dead_sprite(Texture* dead_texture);
+    
     //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);

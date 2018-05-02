@@ -20,6 +20,9 @@ void DrawableObject::set_pos(Vector2f new_pos) {
 void DrawableObject::draw(RenderWindow& window) {
 }
 
+void DrawableObject::hit() {
+
+}
 
 void Player::set_pos(Vector2f new_pos) {
     pos = new_pos;
@@ -48,7 +51,8 @@ void Player::set_rotation(float new_rot) {
     skin->setRotation(new_rot);
 }
 
-Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), KinematicObject(_world, size, pos), timer(0) {}
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): 
+        DrawableObject(_id), KinematicObject(_world, size, pos), timer(0) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
     skin = new Sprite(*player_texture);
@@ -82,8 +86,9 @@ void Player::draw(RenderWindow& window) {
             //damage->setRotation(skin->getRotation());
             window.draw(*damage);
             timer--;
-        }
+       }
     } else {
+
         dead->setPosition(p.x, p.y);
 
         window.draw(*dead);
@@ -98,6 +103,7 @@ void Player::hit() {
 Player::~Player() {
     delete skin;
     delete damage;
+    delete dead;
 }
 
 /*GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {

@@ -56,7 +56,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			else {
 				obj = field->find_player(obj_id);
-
 			}
 			if (obj != nullptr) {
 				obj->set_hp(hp);
