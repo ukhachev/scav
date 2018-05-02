@@ -1,10 +1,10 @@
 #include "game_field.hpp"
 #include <iostream>
 GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
-	StaticObject* left = new StaticObject(1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
-	StaticObject* right = new StaticObject(2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
-	StaticObject* top = new StaticObject(3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
-	StaticObject* bot = new StaticObject(4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
+	StaticObject* left = new StaticObject(-1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
+	StaticObject* right = new StaticObject(-2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
+	StaticObject* top = new StaticObject(-3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
+	StaticObject* bot = new StaticObject(-4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
 	(void)left;
 	(void)top;
 	(void)bot;
@@ -19,7 +19,7 @@ GameField::~GameField() {
 }
 
 void GameField::add_object(PhysicsObject* obj) {
-	int id = 0;
+	int id = 200;
 	if (objects.rbegin() != objects.rend()) {
 		id = objects.rbegin()->first + 1;
 	}
@@ -101,8 +101,9 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 
 sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
-	for (auto i = players.begin(); i != players.end(); ++i) {
-		*res << 100 << i->first;
+	for (auto i = objects.begin(); i != objects.end(); ++i) {
+		b2Vec2 pos = i->second->get_pos();
+		*res << 2 << i->first << pos.x << pos.y;
 	}
 	return res;
 }
@@ -118,5 +119,14 @@ void GameField::delete_bullet(Bullet* b) {
 			delete b;
 			return;
 		}
+	}
+}
+
+void GameField::delete_object(int id) {
+	auto i = objects.find(id);
+	std::cout << "abc" << std::endl;
+	if (i != objects.end()) {
+		delete i->second;
+		objects.erase(i);
 	}
 }

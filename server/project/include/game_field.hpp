@@ -25,7 +25,8 @@ class GameField {
 
 	void delete_player(int cl_id);
 	void delete_bullet(Bullet* b);
-
+	void delete_object(int id);
+	
 	void step();
 	void reset();
 
@@ -34,6 +35,7 @@ class GameField {
 
 	std::map<int, sf::Packet*>::iterator p_packets_begin();
 	std::map<int, sf::Packet*>::iterator p_packets_end();
+
 	PhysicsObject* get_object(int id);
 	Player* get_player(int cl_id);
 	b2World* get_physics_world();

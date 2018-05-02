@@ -1,7 +1,7 @@
 #include "physics_object.hpp"
 #include <iostream>
 PhysicsObject::PhysicsObject(int _id, b2World* _world) : 
-					GameObject(_id), world(_world) {
+					GameObject(_id), world(_world), hp(100) {
 
 }
 

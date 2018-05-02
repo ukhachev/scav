@@ -72,5 +72,6 @@ PlayerLeftAction::~PlayerLeftAction() {
 }
 
 void PlayerLeftAction::execute(GameField& gf) {
+	*(gf.get_state_packet()) << 102 << cl_id;
 	gf.delete_player(cl_id);
 }

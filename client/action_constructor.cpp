@@ -32,6 +32,37 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
+		case 2: {
+			float x =0;
+			float y = 0;
+			packet >> x >> y;
+			Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
+			w->set_sprite(textures->get_texture(2));
+			field->add_wall(w, obj_id);
+			std::cout << "wall " << obj_id << std::endl;
+			break;
+		}
+		case 5: {
+			PhysicsObject* obj = nullptr;
+			int hp = 0;
+			packet >> hp;
+			std::cout << hp << std::endl;
+			if (obj_id >= 200) {
+				obj = field->get_wall(obj_id);
+				if (hp <= 0 && obj != nullptr) {
+					field->delete_wall(obj_id);
+				}
+			}
+			else {
+				obj = field->find_player(obj_id);
+
+			}
+			if (obj != nullptr) {
+				obj->set_hp(hp);
+
+			}
+			break;
+		}
 		case 14: {
 			float x = 0;
 			float y = 0;
@@ -64,7 +95,12 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 101: {
 			cl_id = obj_id;
+			break;
 		}
+		case 102: {
+			field->delete_player(obj_id);
+		}
+
 	}
 	mtx.unlock();
 }

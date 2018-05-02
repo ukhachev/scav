@@ -21,21 +21,13 @@ MapBlock::~MapBlock() {
     delete block;
 }*/
 
-MapConst::MapConst(int w, int h, Textures t_cont): n(w), m(h) {
+MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
     srand(time(NULL));
     int num;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            //num = rand() % 2 + 1;
-            Texture t;
-            t.loadFromFile("grass2.png");
-            //sf::Sprite* block = new sf::Sprite(*t_cont.get_texture(2));
-            //block->setScale(0.75, 0.75);
-            Sprite* block = new Sprite();
-            block->setTexture(t);
+    for (int i = -n; i < n; i++) {
+        for (int j = -m; j < m; j++) {
+            Sprite* block = new Sprite(*m_texture);
             block->setPosition(i * block->getTextureRect().width, j * block->getTextureRect().height);
-            /*MapBlock m_block(t_cont.get_texture(2), i, j);
-            game_map.push_back(m_block);*/
             game_map.push_back(block);
 
         }
@@ -43,9 +35,11 @@ MapConst::MapConst(int w, int h, Textures t_cont): n(w), m(h) {
 }
 
 
-void MapConst::draw(RenderWindow& window) {
+void MapConst::draw(RenderWindow& window, float px, float py) {
     for (auto iter = game_map.begin(); iter != game_map.end(); iter++) {
-        window.draw(**iter);
+        sf::Vector2f pos = (*iter)->getPosition();
+        if (px + 500 > pos.x && px - 750 < pos.x && py + 500 > pos.y && py -750 < pos.y)
+            window.draw(**iter);
         //*iter->draw(window);
     }
 }

@@ -31,7 +31,7 @@ int main()
 
 	//Временно
 	for (int i = 0; i< 10; ++i) {
-		StaticObject* s = new StaticObject(200, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
+		StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
 		gf.add_object(s);
 	}
 	//----------------
