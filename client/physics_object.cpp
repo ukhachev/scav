@@ -117,3 +117,4 @@ int Bullet::get_dmg() {
 	return dmg;
 }
 
+

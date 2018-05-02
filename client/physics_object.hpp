@@ -2,7 +2,7 @@
 #define PHYSICS_OBJECT_HPP
 
 #include "Box2D/Box2D.h"
-
+#include <SFML/Network.hpp>
 
 class PhysicsObject {
 protected:

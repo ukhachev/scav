@@ -8,7 +8,6 @@ PhysicsObject::PhysicsObject(int _id, b2World* _world) :
 PhysicsObject::~PhysicsObject() {
 	body->SetActive(false);
 	this->body->GetWorld()->DestroyBody(body);
-	std::cout << "delete" << std::endl;
 
 }
 
@@ -30,6 +29,10 @@ int PhysicsObject::get_hp() {
 
 void PhysicsObject::hit(int dmg) {
 	hp -= dmg;
+}
+
+void PhysicsObject::set_hp(int val) {
+	hp = val;
 }
 
 StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
@@ -99,4 +102,41 @@ Bullet::~Bullet() {
 
 int Bullet::get_dmg() {
 	return dmg;
+}
+
+Entity::Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
+	b2BodyDef def;
+	def.position = b2Vec2(pos.x /100.f, pos.y /100.f);
+	def.type = b2_kinematicBody;
+	body = world->CreateBody(&def);
+
+	b2PolygonShape shape;
+	shape.SetAsBox(size.x /100.f, size.y /100.f);
+
+	b2FixtureDef fixture;
+	fixture.density = 1;
+	fixture.friction = 0;
+	fixture.shape = &shape;
+	fixture.isSensor = true;
+	body->CreateFixture(&fixture);
+	body->SetUserData(this); 
+}
+
+Entity::~Entity() {
+
+}
+
+AidKit::AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
+			Entity(_id, _world, size, pos) {
+
+}
+
+AidKit::~AidKit() {
+
+}
+
+void AidKit::interact(PhysicsObject* object, sf::Packet* packet) {
+	object->set_hp(100);
+	*packet << 5 << object->get_id() << 100;
+	std::cout << "used kit" << std::endl;
 }

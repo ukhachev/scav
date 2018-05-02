@@ -2,6 +2,7 @@
 #define PHYSICS_OBJECT_HPP
 
 #include "Box2D/Box2D.h"
+#include <SFML/Network.hpp>
 
 class GameObject {
  protected:
@@ -25,6 +26,7 @@ protected:
  	virtual void set_pos(float px, float py);
  	int get_hp();
  	void hit(int dmg);
+ 	void set_hp(int val);
 };
 
 class StaticObject: public PhysicsObject {
@@ -49,6 +51,20 @@ class Bullet: public KinematicObject {
 	Bullet(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
 	~Bullet();
 	int get_dmg();
+};
+
+class Entity: public PhysicsObject {
+ public:
+	Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+	virtual ~Entity();
+	virtual void interact(PhysicsObject* object, sf::Packet* packet) = 0;
+};
+
+class AidKit : public Entity {
+ public:
+	AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+	~AidKit();
+	void interact(PhysicsObject* object, sf::Packet* packet);
 };
 
 #endif
