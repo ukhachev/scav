@@ -10,3 +10,4 @@
 10 mine.png
 11 ammo.png
 12 explosion.png
+13 mine1.png

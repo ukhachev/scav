@@ -36,10 +36,8 @@ void TempContainer::draw(RenderWindow& window) {
     for (auto iter = tmp_list.begin(); iter != tmp_list.end(); iter++) {
         if((*iter)->get_timer() != 0) {
             (*iter)->draw(window);
-            std::cout << "Kek" << std::endl;
         } else {
             tmp_list.erase(iter);
-            std::cout << "Fuck" << std::endl;
             iter--;
         }
     }
