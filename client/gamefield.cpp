@@ -189,3 +189,7 @@ PhysicsObject* GameField::get_object(int id) {
 
     return nullptr;
 }
+
+RenderWindow* GameField::get_window() {
+    return &window;
+}

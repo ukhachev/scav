@@ -55,6 +55,7 @@ class GameField {
 
  	int add_bullet(DrawableBullet* obj);
     void delete_bullet(DrawableBullet* b);
+    RenderWindow* get_window();
 };
 
 #endif  // SCAV_GAME_OBJECT_HPP_

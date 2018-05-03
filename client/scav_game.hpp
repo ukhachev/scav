@@ -7,5 +7,6 @@
 #include "gamefield.hpp"
 #include "contact_listener.hpp"
 #include "physics_action.hpp"
+#include "menu.hpp"
 
 #endif
