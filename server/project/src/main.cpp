@@ -34,6 +34,9 @@ int main()
 		StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
 		gf.add_object(s);
 	}
+	AidKit* s = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 50));
+	gf.add_object(s);
+
 	//----------------
 	Network net(port, &gf);
 	

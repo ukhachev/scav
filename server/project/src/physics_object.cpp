@@ -35,6 +35,7 @@ void PhysicsObject::set_hp(int val) {
 	hp = val;
 }
 
+
 StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
 	b2BodyDef def;
 	def.position = b2Vec2(pos.x /100.f, pos.y / 100.f);
@@ -56,6 +57,10 @@ StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2
 StaticObject::~StaticObject() {
 	//body->SetActive(false);
 	//this->body->GetWorld()->DestroyBody(body);
+}
+
+int StaticObject::object_type() {
+	return 2;
 }
 
 KinematicObject::KinematicObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): PhysicsObject(_id, _world) {
@@ -85,6 +90,10 @@ void KinematicObject::set_speed(float sx, float sy) {
 	body->SetLinearVelocity(b2Vec2(sx /100.f, sy /100.f));
 }
 
+int KinematicObject::object_type() {
+	return 1;
+}
+
 const b2Vec2& KinematicObject::get_speed() const {
 	return body->GetLinearVelocity();
 }
@@ -100,6 +109,10 @@ Bullet::~Bullet() {
 	//this->body->GetWorld()->DestroyBody(body);
 }
 
+int Bullet::object_type() {
+	return 0;
+}
+
 int Bullet::get_dmg() {
 	return dmg;
 }
@@ -107,7 +120,7 @@ int Bullet::get_dmg() {
 Entity::Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
 	b2BodyDef def;
 	def.position = b2Vec2(pos.x /100.f, pos.y /100.f);
-	def.type = b2_kinematicBody;
+	def.type = b2_dynamicBody;
 	body = world->CreateBody(&def);
 
 	b2PolygonShape shape;
@@ -119,7 +132,8 @@ Entity::Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
 	fixture.shape = &shape;
 	fixture.isSensor = true;
 	body->CreateFixture(&fixture);
-	body->SetUserData(this); 
+	body->SetUserData(this);
+	body->SetSleepingAllowed(false);
 }
 
 Entity::~Entity() {
@@ -128,11 +142,16 @@ Entity::~Entity() {
 
 AidKit::AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
 			Entity(_id, _world, size, pos) {
+	
 
 }
 
 AidKit::~AidKit() {
 
+}
+
+int AidKit::object_type() {
+	return 3;
 }
 
 void AidKit::interact(PhysicsObject* object, sf::Packet* packet) {

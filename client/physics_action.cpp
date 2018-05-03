@@ -18,5 +18,9 @@ void HitPhysicsAction::execute(GameField& field) {
 	
 	int hp = object->get_hp();
 	field.delete_bullet(bullet);
+	DrawableObject* d_obj = dynamic_cast<DrawableObject*>(object);
+	if (d_obj) {
+		d_obj->hit();
+	}
 	//Реализовать удаление пули и смерть игрока
 }

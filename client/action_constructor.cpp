@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <mutex>
+
 void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures) {
 	static int cl_id = 0;
 	int id = 0;
@@ -35,11 +36,28 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		case 2: {
 			float x =0;
 			float y = 0;
-			packet >> x >> y;
-			Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
-			w->set_sprite(textures->get_texture(2));
-			field->add_wall(w, obj_id);
-			std::cout << "wall " << obj_id << std::endl;
+			int obj_type = 0;
+
+			packet >> obj_type >> x >> y;
+
+			switch (obj_type) {
+				case 2: {
+					Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
+					w->set_sprite(textures->get_texture(2));
+					w->set_damage_sprite(textures->get_texture(7));
+					field->add_object(w, obj_id);
+					std::cout << "wall " << obj_id << std::endl;
+					break;
+				}
+				case 3: {
+					AidKit* a = new AidKit(obj_id);
+					a->set_sprite(textures->get_texture(9));
+					a->set_pos(Vector2f(x, y));
+					field->add_object(a, obj_id);
+					std::cout << "aid kit " << obj_id << std::endl;
+					break;
+				}
+			}
 			break;
 		}
 		case 5: {
@@ -48,14 +66,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			packet >> hp;
 			std::cout << hp << std::endl;
 			if (obj_id >= 200) {
-				obj = field->get_wall(obj_id);
+				obj = field->get_object(obj_id);
 				if (hp <= 0 && obj != nullptr) {
-					field->delete_wall(obj_id);
+					field->delete_object(obj_id);
+					break;
 				}
 			}
 			else {
 				obj = field->find_player(obj_id);
-
 			}
 			if (obj != nullptr) {
 				obj->set_hp(hp);
@@ -71,9 +89,9 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			b2World* world = field->get_physics_world();
 			b2Vec2 start_point(x, y);
 			b2Vec2 speed(700.0f * cos(angle) , 700.0f * sin(angle));
-			
+
 			DrawableBullet* b = new DrawableBullet(world, b2Vec2(4, 4), start_point, speed, 10);
-			
+
 			b->set_sprite(textures->get_texture(5));
 
 			field->add_bullet(b);
@@ -86,6 +104,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 
 			p->set_player_sprite(textures->get_texture(1));
+			p->set_damage_sprite(textures->get_texture(6));
+			p->set_dead_sprite(textures->get_texture(8));
 			field->add_player(p, obj_id);
 
 			if (obj_id == cl_id) {

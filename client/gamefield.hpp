@@ -27,7 +27,7 @@ class GameField {
     MapConst g_map;
 
  	std::map<int, Player*> players;
- 	std::map<int, Wall*> walls;
+ 	std::map<int, PhysicsObject*> objects;
     bool was_shot = false;
  	std::list<DrawableBullet*> bullets;
  	std::mutex mtx;
@@ -47,10 +47,12 @@ class GameField {
 
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
- 	
-    int add_wall(Wall* obj, int new_id);
-    void delete_wall(int id);
-    Wall* get_wall(int id);
+
+    int add_object(PhysicsObject* obj, int new_id);
+
+    void delete_object(int id);
+    PhysicsObject* get_object(int id);
+
  	int add_bullet(DrawableBullet* obj);
     void delete_bullet(DrawableBullet* b);
 };

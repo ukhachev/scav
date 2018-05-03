@@ -22,4 +22,5 @@ class HitPhysicsAction : public PhysicsAction {
     void execute(GameField& field);
 };
 
+
 #endif

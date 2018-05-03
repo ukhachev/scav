@@ -103,7 +103,7 @@ sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		b2Vec2 pos = i->second->get_pos();
-		*res << 2 << i->first << pos.x << pos.y;
+		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y;
 	}
 	return res;
 }

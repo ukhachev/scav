@@ -2,7 +2,7 @@
 #define PHYSICS_OBJECT_HPP
 
 #include "Box2D/Box2D.h"
-#include <SFML/Network.hpp>
+
 
 class PhysicsObject {
 protected:
@@ -43,6 +43,12 @@ class Bullet: public PhysicsObject {
  	const b2Vec2& get_speed() const;
  	
 	int get_dmg();
+};
+
+class Entity : public PhysicsObject {
+ public:
+ 	Entity();
+ 	virtual ~Entity();
 };
 
 #endif

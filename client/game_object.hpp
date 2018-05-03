@@ -28,6 +28,7 @@ class DrawableObject: public GameObject {
     DrawableObject(int _id);
     virtual void set_pos(Vector2f new_pos);
  	  virtual void draw(RenderWindow &window);
+    virtual void hit();
     virtual ~DrawableObject();
 };
 
@@ -35,17 +36,24 @@ class DrawableObject: public GameObject {
 class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
-    sf::Sprite* skin;
-    int hp;
+    Sprite* skin;
+    Sprite* damage;
+    Sprite* dead;
+    int timer;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
+    
     void set_player_sprite(Texture* player_texture);
+    void set_damage_sprite(Texture* damage_texture);
+    void set_dead_sprite(Texture* dead_texture);
+    
     //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);
     float get_rotation();
     void draw(RenderWindow &window);
+    void hit();
     //void get_damage(int dmg);
 
     ~Player();
@@ -65,16 +73,30 @@ class DrawableBullet: public DrawableObject, public Bullet {
 class Wall: public DrawableObject, public StaticObject {
  private:
      Sprite* wall_sprite;
+     Sprite* damage;
+     int timer;
  public:
       Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
       void set_pos(Vector2f new_pos);
       void set_sprite(Texture* player_texture);
+      void set_damage_sprite(Texture* damage_texture);
       void draw(RenderWindow& window);
+      void hit();
       void set_rotation(float new_rot);
-     // float get_rotation();
       ~Wall();
 };
 
+class AidKit : public DrawableObject, public Entity {
+ private:
+    Sprite* sprite;
+ public:
+    AidKit(int _id);
+    void set_pos(Vector2f new_pos);
+    void set_sprite(Texture* texture);
+    void draw(RenderWindow& window);
+    void set_rotation(float new_rot);
+    ~AidKit();
+};
 
 class Cursor: public DrawableObject {
  private:

@@ -11,6 +11,7 @@ class GameObject {
 	GameObject(int _id);
 	void set_id(int _id);
 	virtual ~GameObject();
+	virtual int object_type() = 0; //1 игрок, 2 статика, 3 аптечка
 	int get_id();
 };
 
@@ -24,6 +25,7 @@ protected:
  	virtual ~PhysicsObject();
  	virtual const b2Vec2 get_pos() const;
  	virtual void set_pos(float px, float py);
+
  	int get_hp();
  	void hit(int dmg);
  	void set_hp(int val);
@@ -33,6 +35,7 @@ class StaticObject: public PhysicsObject {
  public:
 	StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
 	~StaticObject();
+	int object_type();
 };
 
 class KinematicObject: public PhysicsObject {
@@ -41,6 +44,7 @@ class KinematicObject: public PhysicsObject {
  	~KinematicObject();
  	void set_speed(float sx, float sy);
  	const b2Vec2& get_speed() const;
+ 	int object_type();
 };
 
 
@@ -51,6 +55,7 @@ class Bullet: public KinematicObject {
 	Bullet(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
 	~Bullet();
 	int get_dmg();
+	int object_type();
 };
 
 class Entity: public PhysicsObject {
@@ -65,6 +70,7 @@ class AidKit : public Entity {
 	AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
 	~AidKit();
 	void interact(PhysicsObject* object, sf::Packet* packet);
+	int object_type();
 };
 
 #endif

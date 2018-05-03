@@ -19,9 +19,8 @@ void HitPhysicsAction::execute(GameField& field) {
 	
 	int hp = object->get_hp();
 	int id = object->get_id();
-	std::cout << id << std::endl;
 
-	if (id > 0) {
+	if (id >= 0) {
 		*(field.get_state_packet()) << 5 << id << hp;
 
 		if (object->get_hp() < 0) {
