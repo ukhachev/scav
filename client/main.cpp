@@ -48,17 +48,23 @@ void send(Connector* connector, GameField* field) {
 
 int main(int argc, char const *argv[])
 {
+	textures = new Textures("textures.txt");
+    GameField field;
+    std::string name;
+    std::string ip;
+    int port = 55503;
 	if (argc < 3) {
 		std::cout << "Input ip and port" << std::endl;
-		return -1;
+		Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
+		menu.draw();
+		name = menu.get_name();
+		ip = menu.get_ip();
+		port = menu.get_port();
 	}
-	textures = new Textures("textures.txt");
-
-	std::string ip(argv[1]);
-	int port = std::stoi(argv[2]);
-	GameField field;
-
-
+	else {
+		ip = argv[1];
+		port = std::stoi(argv[2]);
+	}
 
 	Connector connector(ip, port);
 

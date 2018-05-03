@@ -15,11 +15,13 @@ SRCS = \
        camera.cpp \
        physics_action.cpp \
        contact_listener.cpp \
+       menu.cpp \
+       animation.cpp \
        main.cpp
 HDRS = \
 	   .
 
-CFLAGS =  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread
+CFLAGS =  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread -lsfml-audio
 
 .PHONY: all clean
 

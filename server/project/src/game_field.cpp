@@ -103,7 +103,7 @@ sf::Packet* GameField::get_objects() {
 	sf::Packet* res = new sf::Packet();
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		b2Vec2 pos = i->second->get_pos();
-		*res << 2 << i->first << pos.x << pos.y;
+		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
 	return res;
 }
@@ -124,7 +124,7 @@ void GameField::delete_bullet(Bullet* b) {
 
 void GameField::delete_object(int id) {
 	auto i = objects.find(id);
-	std::cout << "abc" << std::endl;
+	//std::cout << "abc" << std::endl;
 	if (i != objects.end()) {
 		delete i->second;
 		objects.erase(i);

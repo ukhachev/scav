@@ -1,12 +1,14 @@
 #include "physics_object.hpp"
 #include <iostream>
 PhysicsObject::PhysicsObject(b2World* _world) : 
-					world(_world), hp(100) {
+					world(_world), hp(100), body(nullptr) {
 
 }
 
 PhysicsObject::~PhysicsObject() {
-	this->body->GetWorld()->DestroyBody(body);
+	if (body != nullptr) {
+		this->body->GetWorld()->DestroyBody(body);
+	}
 }
 
 void PhysicsObject::set_pos(float px, float py) {
@@ -105,7 +107,6 @@ void Bullet::set_speed(float sx, float sy) {
 	body->SetLinearVelocity(b2Vec2(sx /100.0f, sy /100.0f));
 }
 const b2Vec2& Bullet::get_speed() const {
-
 	return body->GetLinearVelocity();
 }
 
@@ -116,4 +117,13 @@ Bullet::~Bullet() {
 int Bullet::get_dmg() {
 	return dmg;
 }
+
+Entity::Entity() : PhysicsObject(nullptr) {
+
+}
+
+Entity::~Entity() {
+
+}
+
 

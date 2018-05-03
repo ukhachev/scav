@@ -34,7 +34,6 @@ void Network::listen() {
 		}
 		sf::Packet player_set;
 		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
-			std::cout << "q" << std::endl;
 			player_set << 100 << i->first;
 		}
 

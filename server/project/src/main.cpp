@@ -34,6 +34,14 @@ int main()
 		StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
 		gf.add_object(s);
 	}
+	AidKit* s = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 50));
+	gf.add_object(s);
+
+	LandingMine* l = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, -10));
+	gf.add_object(l);
+
+	BulletContainer* b = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(160, 30));
+	gf.add_object(b);
 	//----------------
 	Network net(port, &gf);
 	

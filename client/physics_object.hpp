@@ -45,4 +45,10 @@ class Bullet: public PhysicsObject {
 	int get_dmg();
 };
 
+class Entity : public PhysicsObject {
+ public:
+ 	Entity();
+ 	virtual ~Entity();
+};
+
 #endif

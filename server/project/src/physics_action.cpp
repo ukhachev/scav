@@ -19,9 +19,8 @@ void HitPhysicsAction::execute(GameField& field) {
 	
 	int hp = object->get_hp();
 	int id = object->get_id();
-	std::cout << id << std::endl;
 
-	if (id > 0) {
+	if (id >= 0) {
 		*(field.get_state_packet()) << 5 << id << hp;
 
 		if (object->get_hp() < 0) {
@@ -30,4 +29,22 @@ void HitPhysicsAction::execute(GameField& field) {
 		}
 	}
 	field.delete_bullet(bullet);
+}
+
+EntityPhysicsAction::EntityPhysicsAction(Entity* e, PhysicsObject* o) : 
+	entity(e), object(o) {
+
+}
+
+EntityPhysicsAction::~EntityPhysicsAction() {
+
+}
+
+void EntityPhysicsAction::execute(GameField& field) {
+	(void)field;
+	int id = entity->get_id();
+	entity->interact(object, field.get_state_packet());
+	field.delete_object(id);
+
+	*(field.get_state_packet()) << 5 << id << 0;
 }

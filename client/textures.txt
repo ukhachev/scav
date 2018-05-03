@@ -6,3 +6,6 @@
 6 player_blood.png
 7 wall_destruction_dark_red.png
 8 Dead_body_base.png
+9 medkit.png
+10 mine.png
+11 ammo.png

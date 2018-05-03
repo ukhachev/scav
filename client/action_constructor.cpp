@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <mutex>
+
 void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures) {
 	static int cl_id = 0;
 	int id = 0;
@@ -12,12 +13,10 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 	packet >> id;
 	packet >> obj_id;
 	std::mutex& mtx = field->get_mutex();
-	if (id == 100) {
-		std::cout << obj_id << std::endl;
-	}
+
 	mtx.lock();
 	switch (id) {
-		case 1: {
+		case 1: { //Движение
 			float x = 0;
 			float y = 0;
 			float angle = 0;
@@ -32,26 +31,52 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
-		case 2: {
+		case 2: { //Создание объекта
 			float x =0;
 			float y = 0;
-			packet >> x >> y;
-			Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
-			w->set_sprite(textures->get_texture(2));
-            w->set_damage_sprite(textures->get_texture(7));
-			field->add_wall(w, obj_id);
-			std::cout << "wall " << obj_id << std::endl;
+			int obj_type = 0;
+			int texture_id = 0;
+
+			packet >> obj_type >> x >> y >> texture_id;
+
+			switch (obj_type) {
+				case 2: {
+					Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
+					w->set_sprite(textures->get_texture(2));
+					w->set_damage_sprite(textures->get_texture(7));
+					field->add_object(w, obj_id);
+					std::cout << "wall " << obj_id << std::endl;
+					break;
+				}
+				case 3: {
+					AidKit* a = new AidKit(obj_id);
+					a->set_sprite(textures->get_texture(texture_id));
+					a->set_pos(Vector2f(x, y));
+					field->add_object(a, obj_id);
+					std::cout << "entity " << obj_id << std::endl;
+					break;
+				}
+			}
 			break;
 		}
-		case 5: {
+		case 3: {  //Боезапас
+			int ammo = 0;
+			packet >> ammo;
+			Player* p = field->find_player(obj_id);
+			if (p!= nullptr) {
+				p->set_ammo(ammo);
+			}
+			break;
+		}
+		case 5: { //Хп
 			PhysicsObject* obj = nullptr;
 			int hp = 0;
 			packet >> hp;
-			std::cout << hp << std::endl;
 			if (obj_id >= 200) {
-				obj = field->get_wall(obj_id);
+				obj = field->get_object(obj_id);
 				if (hp <= 0 && obj != nullptr) {
-					field->delete_wall(obj_id);
+					field->delete_object(obj_id);
+					break;
 				}
 			}
 			else {
@@ -62,7 +87,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			}
 			break;
-		}
+		}  //Пули
 		case 14: {
 			float x = 0;
 			float y = 0;
@@ -80,9 +105,9 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			break;
 		}
-		case 100: {
-			//int _cl_id = 0;
-			//packet >> _cl_id;
+		case 100: { //Создать игрока
+			std::cout << "player "<<obj_id << std::endl;
+			
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 
 			p->set_player_sprite(textures->get_texture(1));
@@ -95,11 +120,11 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
-		case 101: {
+		case 101: { //Привязать игрока
 			cl_id = obj_id;
 			break;
 		}
-		case 102: {
+		case 102: { //Удалить игрока
 			field->delete_player(obj_id);
 		}
 

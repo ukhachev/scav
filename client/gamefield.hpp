@@ -13,6 +13,8 @@
 #include "textures.hpp"
 #include "map_constructor.hpp"
 #include "camera.hpp"
+#include "menu.hpp"
+#include "animation.hpp"
 
 #include <map>
 #include <list>
@@ -25,14 +27,16 @@ class GameField {
     Textures t_cont;
     Camera g_cam;
     MapConst g_map;
+    TempContainer tmp_a_cont;
 
  	std::map<int, Player*> players;
- 	std::map<int, Wall*> walls;
+ 	std::map<int, PhysicsObject*> objects;
     bool was_shot = false;
  	std::list<DrawableBullet*> bullets;
  	std::mutex mtx;
  	b2World* world;
     int last_shot = 0;
+    Interface interface;
  public:
     GameField();
     b2World* get_physics_world();
@@ -48,11 +52,14 @@ class GameField {
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
 
-    int add_wall(Wall* obj, int new_id);
-    void delete_wall(int id);
-    Wall* get_wall(int id);
+    int add_object(PhysicsObject* obj, int new_id);
+
+    void delete_object(int id);
+    PhysicsObject* get_object(int id);
+
  	int add_bullet(DrawableBullet* obj);
     void delete_bullet(DrawableBullet* b);
+    RenderWindow* get_window();
 };
 
 #endif  // SCAV_GAME_OBJECT_HPP_

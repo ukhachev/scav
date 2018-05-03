@@ -9,6 +9,7 @@ int GameObject::get_id() {
     return id;
 }
 
+
 DrawableObject::DrawableObject(int _id): GameObject(_id) {}
 DrawableObject::~DrawableObject() {}
 
@@ -29,14 +30,7 @@ void Player::set_pos(Vector2f new_pos) {
     b2Vec2 cur_pos = get_pos();
     b2Vec2 dpos = b2Vec2(new_pos.x, new_pos.y) - cur_pos;
     set_speed(20*dpos.x, 20*dpos.y);
-
-    //skin->setPosition(pos);
 }
-
-/*void Player::set_position() {
-    Vector2f curr_position = get_pos();
-    skin->setPosition(curr_position);
-}*/
 
 void Player::mouse_rotation(RenderWindow& window) {
     Vector2i mouse_pos = sf::Mouse::getPosition(window);
@@ -49,10 +43,19 @@ void Player::mouse_rotation(RenderWindow& window) {
 void Player::set_rotation(float new_rot) {
     player_rotation = new_rot;
     skin->setRotation(new_rot);
+    dead->setRotation(new_rot);
 }
 
-Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): 
-        DrawableObject(_id), KinematicObject(_world, size, pos), timer(0) {}
+void Player::set_ammo(int val) {
+    ammo = val;
+}
+
+int Player::get_ammo() {
+    return ammo;
+}
+
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos):
+        DrawableObject(_id), KinematicObject(_world, size, pos), timer(0), ammo(50) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
     skin = new Sprite(*player_texture);
@@ -69,7 +72,7 @@ void Player::set_damage_sprite(Texture* damage_texture) {
 void Player::set_dead_sprite(Texture* dead_texture) {
     dead = new Sprite(*dead_texture);
     dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
-    dead->setScale(2, 2);
+    dead->setScale(1.5, 1.5);
 }
 
 float Player::get_rotation() {
@@ -81,22 +84,19 @@ void Player::draw(RenderWindow& window) {
     if (hp > 0) {
         skin->setPosition(p.x, p.y);
         window.draw(*skin);
-        if (timer != 0) {
-            damage->setPosition(p.x, p.y);
-            //damage->setRotation(skin->getRotation());
-            window.draw(*damage);
-            timer--;
-       }
     } else {
-
         dead->setPosition(p.x, p.y);
-
         window.draw(*dead);
+    }
+    if (timer != 0) {
+        damage->setPosition(p.x, p.y);
+        window.draw(*damage);
+        timer--;
     }
 }
 
 void Player::hit() {
-    timer = 20;
+    timer = 4;
 }
 
 
@@ -106,13 +106,6 @@ Player::~Player() {
     delete dead;
 }
 
-/*GameMap::GameMap(int _id, Texture map_texture): DrawableObject(_id) {
-    map_sprite = new Sprite(map_texture);
-}
-
-GameMap::~GameMap() {
-    delete map_sprite;
-}*/
 
 Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos), timer(0) {}
 
@@ -133,7 +126,7 @@ void Wall::set_damage_sprite(Texture* damage_texture) {
 }
 
 void Wall::hit() {
-    timer = 20;
+    timer = 4;
 }
 
 void Wall::draw(RenderWindow& window) {
@@ -178,4 +171,30 @@ void DrawableBullet::set_sprite(Texture* texture) {
     bullet_sprite = new Sprite(*texture);
     bullet_sprite->setOrigin(bullet_sprite->getLocalBounds().width / 2, bullet_sprite->getLocalBounds().height / 2);
     bullet_sprite->setScale(0.05, 0.05);
+}
+
+AidKit::AidKit(int _id): DrawableObject(_id) {
+
+}
+
+AidKit::~AidKit() {
+    delete sprite;
+}
+
+void AidKit::set_pos(sf::Vector2f new_pos) {
+    sprite->setPosition(new_pos.x, new_pos.y);
+}
+
+void AidKit::set_sprite(Texture* texture) {
+    sprite = new Sprite(*texture);
+    sprite->setOrigin(sprite->getLocalBounds().width / 2, sprite->getLocalBounds().height / 2);
+    sprite->setScale(1.5, 1.5);
+}
+
+void AidKit::draw(RenderWindow& window) {
+    window.draw(*sprite);
+}
+
+void AidKit::set_rotation(float new_rot) {
+    (void) new_rot;
 }

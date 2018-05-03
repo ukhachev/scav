@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -51,6 +51,7 @@ void GameField::shoot() {
 	if (last_shot > 5) {
 	    was_shot = true;
 	    last_shot = 0;
+        player->set_ammo(player->get_ammo() - 1);
 	}
 }
 
@@ -71,27 +72,34 @@ bool GameField::render() {
         }
      window.clear();
         if (player != nullptr) {
-            b2Vec2 speed(0, 0);
+            if (player->get_hp() > 0) {
+                b2Vec2 speed(0, 0);
 
-	        if(Keyboard::isKeyPressed(Keyboard::A)) {
-	            speed += b2Vec2(-200.f, 0.f);
-	        }
-	        if(Keyboard::isKeyPressed(Keyboard::D)) {
-	            speed += b2Vec2(200.f, 0.f);
-	        }
-	        if(Keyboard::isKeyPressed(Keyboard::W)) {
-	            speed += b2Vec2(0.f, -200.f);
-	        }
-	        if(Keyboard::isKeyPressed(Keyboard::S)) {
-	            speed += b2Vec2(0.f, 200.f);
-	        }
-	        player->set_speed(speed.x, speed.y);
+    	        if(Keyboard::isKeyPressed(Keyboard::A)) {
+    	            speed += b2Vec2(-200.f, 0.f);
+    	        }
+    	        if(Keyboard::isKeyPressed(Keyboard::D)) {
+    	            speed += b2Vec2(200.f, 0.f);
+    	        }
+    	        if(Keyboard::isKeyPressed(Keyboard::W)) {
+    	            speed += b2Vec2(0.f, -200.f);
+    	        }
+    	        if(Keyboard::isKeyPressed(Keyboard::S)) {
+    	            speed += b2Vec2(0.f, 200.f);
+    	        }
+    	        player->set_speed(speed.x, speed.y);
 
-            player->mouse_rotation(window);
+                player->mouse_rotation(window);
+
+                if (Mouse::isButtonPressed(Mouse::Left)) {
+                    if (player->get_ammo() > 0) {
+                	   shoot();
+                    }
+            	}
+            }
+            interface.set_hp(player->get_hp());
+            interface.set_ammo(player->get_ammo());
             g_cam.set_center(player);
-            if (Mouse::isButtonPressed(Mouse::Left)) {
-            	shoot();
-        	}
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
 
         }
@@ -104,13 +112,18 @@ bool GameField::render() {
             iter->second->draw(window);
             //std::cout << iter->second->get_id() << std::endl;
         }
-        for (auto iter = walls.begin(); iter != walls.end(); iter++) {
-            iter->second->draw(window);
+        for (auto iter = objects.begin(); iter != objects.end(); iter++) {
+            DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
+            if (obj != nullptr) {
+                obj->draw(window);
+            }
         }
         for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
             (*iter)->draw(window);
         }
-        //g_map.draw(window);
+        if (player!=nullptr) {
+            interface.draw(player->get_pos().x, player->get_pos().y);
+        }
         window.display();
     }
     else {
@@ -130,9 +143,9 @@ int GameField::add_player(Player* obj, int new_id) {
     return 0;
 }
 
-int GameField::add_wall(Wall* obj, int new_id) {
+int GameField::add_object(PhysicsObject* obj, int new_id) {
 
-    walls.emplace(new_id, obj);
+    objects.emplace(new_id, obj);
     return 0;
 }
 
@@ -167,20 +180,24 @@ void GameField::delete_player(int cl_id) {
     players.erase(p);
 }
 
-void GameField::delete_wall(int id) {
-    auto w = walls.find(id);
-    if (w == walls.end()) {
+void GameField::delete_object(int id) {
+    auto w = objects.find(id);
+    if (w == objects.end()) {
         return;
     }
     delete w->second;
-    walls.erase(w);
+    objects.erase(w);
 }
 
-Wall* GameField::get_wall(int id) {
-    auto iter = walls.find(id);
-    if (iter != walls.end()) {
+PhysicsObject* GameField::get_object(int id) {
+    auto iter = objects.find(id);
+    if (iter != objects.end()) {
         return iter->second;
     }
 
     return nullptr;
+}
+
+RenderWindow* GameField::get_window() {
+    return &window;
 }
