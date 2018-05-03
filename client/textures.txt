@@ -9,3 +9,4 @@
 9 medkit.png
 10 mine.png
 11 ammo.png
+12 explosion.png
