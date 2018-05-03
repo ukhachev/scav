@@ -38,6 +38,7 @@ void TempContainer::draw(RenderWindow& window) {
             (*iter)->draw(window);
         } else {
             tmp_list.erase(iter);
+            delete *iter;
             iter--;
         }
     }
