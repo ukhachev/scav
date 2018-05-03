@@ -50,15 +50,21 @@ int main(int argc, char const *argv[])
 {
 	textures = new Textures("textures.txt");
     GameField field;
-	Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
-	menu.draw();
-	std::string name = menu.get_name();
-	std::string ip = menu.get_ip();//"127.0.0.1";//
-	int port = menu.get_port();//55503;//
-
-	
-
-
+    std::string name;
+    std::string ip;
+    int port = 55503;
+	if (argc < 3) {
+		std::cout << "Input ip and port" << std::endl;
+		Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
+		menu.draw();
+		name = menu.get_name();
+		ip = menu.get_ip();
+		port = menu.get_port();
+	}
+	else {
+		ip = argv[1];
+		port = std::stoi(argv[2]);
+	}
 
 	Connector connector(ip, port);
 
