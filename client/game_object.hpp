@@ -40,9 +40,13 @@ class Player: public DrawableObject, public KinematicObject {
     Sprite* damage;
     Sprite* dead;
     int timer;
+    int ammo;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
+    
+    int get_ammo();
+    void set_ammo(int val);
     
     void set_player_sprite(Texture* player_texture);
     void set_damage_sprite(Texture* damage_texture);

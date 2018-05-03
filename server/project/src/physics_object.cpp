@@ -139,3 +139,5 @@ Entity::Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
 Entity::~Entity() {
 
 }
+
+

@@ -25,8 +25,7 @@ Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos)
 }
 
 Player::~Player() {
-	//body->SetActive(false);
-	//this->body->GetWorld()->DestroyBody(body);
+	
 }
 
 
@@ -74,4 +73,27 @@ int LandingMine::object_type() {
 void LandingMine::interact(PhysicsObject* object, sf::Packet* packet) {
 	object->set_hp(object->get_hp() - 50);
 	*packet << 5 << object->get_id() << object->get_hp();
+}
+
+BulletContainer::BulletContainer(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
+			Entity(_id, _world, size, pos) {
+	
+
+}
+
+BulletContainer::~BulletContainer() {
+
+}
+
+int BulletContainer::texture() {
+	return 11;
+}
+
+int BulletContainer::object_type() {
+	return 3;
+}
+
+void BulletContainer::interact(PhysicsObject* object, sf::Packet* packet) {
+	*packet << 3 << object->get_id() << 60;
+	printf("Bullet\n");
 }

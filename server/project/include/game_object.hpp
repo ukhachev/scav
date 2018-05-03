@@ -30,4 +30,14 @@ class LandingMine: public Entity {
 	int object_type();
 };
 
+
+class BulletContainer: public Entity {
+ public:
+	BulletContainer(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+	~BulletContainer();
+	int texture();
+	void interact(PhysicsObject* object, sf::Packet* packet);
+	int object_type();
+};
+
 #endif

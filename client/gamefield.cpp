@@ -51,6 +51,7 @@ void GameField::shoot() {
 	if (last_shot > 5) {
 	    was_shot = true;
 	    last_shot = 0;
+        player->set_ammo(player->get_ammo() - 1);
 	}
 }
 
@@ -91,11 +92,13 @@ bool GameField::render() {
                 player->mouse_rotation(window);
                 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
-                	shoot();
+                    if (player->get_ammo() > 0) {
+                	   shoot();
+                    }
             	}
             }
             interface.set_hp(player->get_hp());
-            
+            interface.set_ammo(player->get_ammo());
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
 

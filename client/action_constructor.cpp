@@ -16,7 +16,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 	mtx.lock();
 	switch (id) {
-		case 1: {
+		case 1: { //Движение
 			float x = 0;
 			float y = 0;
 			float angle = 0;
@@ -31,7 +31,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
-		case 2: {
+		case 2: { //Создание объекта
 			float x =0;
 			float y = 0;
 			int obj_type = 0;
@@ -59,7 +59,16 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
-		case 5: {
+		case 3: {  //Боезапас
+			int ammo = 0;
+			packet >> ammo;
+			Player* p = field->find_player(obj_id);
+			if (p!= nullptr) {
+				p->set_ammo(ammo);
+			}
+			break;
+		}
+		case 5: { //Хп
 			PhysicsObject* obj = nullptr;
 			int hp = 0;
 			packet >> hp;
@@ -78,7 +87,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			}
 			break;
-		}
+		}  //Пули
 		case 14: {
 			float x = 0;
 			float y = 0;
@@ -96,7 +105,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			break;
 		}
-		case 100: {
+		case 100: { //Создать игрока
 			std::cout << "player "<<obj_id << std::endl;
 			
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
@@ -111,11 +120,11 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
-		case 101: {
+		case 101: { //Привязать игрока
 			cl_id = obj_id;
 			break;
 		}
-		case 102: {
+		case 102: { //Удалить игрока
 			field->delete_player(obj_id);
 		}
 

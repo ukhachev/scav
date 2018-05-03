@@ -9,6 +9,7 @@ int GameObject::get_id() {
     return id;
 }
 
+
 DrawableObject::DrawableObject(int _id): GameObject(_id) {}
 DrawableObject::~DrawableObject() {}
 
@@ -45,8 +46,16 @@ void Player::set_rotation(float new_rot) {
     dead->setRotation(new_rot);
 }
 
+void Player::set_ammo(int val) {
+    ammo = val;
+}
+
+int Player::get_ammo() {
+    return ammo;
+}
+
 Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): 
-        DrawableObject(_id), KinematicObject(_world, size, pos), timer(0) {}
+        DrawableObject(_id), KinematicObject(_world, size, pos), timer(0), ammo(50) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
     skin = new Sprite(*player_texture);

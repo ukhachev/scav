@@ -39,6 +39,9 @@ int main()
 
 	LandingMine* l = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, -10));
 	gf.add_object(l);
+
+	BulletContainer* b = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(160, 30));
+	gf.add_object(b);
 	//----------------
 	Network net(port, &gf);
 	
