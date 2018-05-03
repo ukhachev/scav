@@ -185,11 +185,9 @@ std::string Menu::get_input_value(std::list<MenuElement*>::iterator ptr) {
                                 (*ptr)->set_text("");
                             }
                             if(event.type==sf::Event::TextEntered) {
-                                printf("lol\n");
                                 if(Keyboard::isKeyPressed(Keyboard::BackSpace) && s.size() != 0) {
                                     s.pop_back();
                                     (*ptr)->set_text(s);
-                                    std::cout<<s<<std::endl;
                                 }
                                 else if(Keyboard::isKeyPressed(Keyboard::Return) && s.size() != 0) {
                                     std::string ip_addr=(*ptr)->get_text();
@@ -200,7 +198,7 @@ std::string Menu::get_input_value(std::list<MenuElement*>::iterator ptr) {
                                 else if (event.text.unicode <128) {
                                     s.push_back((char)event.text.unicode);
                                     (*ptr)->set_text(s);
-                                    std::cout<<s<<std::endl;
+
                                 }
                             }
                             redraw_elements();
@@ -297,15 +295,17 @@ void Interface::add_element(MenuElement* el) {
     elements.push_back(el);
 }
 
-void Interface::draw() {
+void Interface::draw(float cx, float cy) {
+    int i = 0;
     for(std::list<MenuElement*>::iterator ptr = elements.begin(); ptr != elements.end(); ptr++) {
+            ++i;
+            (*ptr)->setPos(cx - 450, cy + i*40 - 450);
             (*ptr)->draw();
-            std::cout<<"drawn"<<std::endl;
         }
 }
 
 void Interface::set_hp(int points) {
-    hp=hp+points;
+    hp=points;
     elements.front()->set_text(std::string("HP:")+std::to_string(hp));
     if(hp<80 && hp>40) {
         elements.front()->set_color(255,222,0);
@@ -313,27 +313,27 @@ void Interface::set_hp(int points) {
     else if(hp<40 && hp>0) {
         elements.front()->set_color(255,0,0);
     }
-    else if(hp<1) {
+    /*else if(hp<1) {
         dead_window();
-    }
+    }*/
     else {
         elements.front()->set_color(51,255,0);
     }
 }
 
 void Interface::set_ammo(int points) {
-    ammo=ammo+points;
+    ammo=points;
     elements.back()->set_text(std::string("AM:")+std::to_string(ammo));
-    sf::SoundBuffer buffer;
-    buffer.loadFromFile("gun.wav");
-    sf::Sound sound;
-    sound.setBuffer(buffer);
-    sound.setVolume(80);
-    sound.play();
+    //sf::SoundBuffer buffer;
+    //buffer.loadFromFile("gun.wav");
+    //sf::Sound sound;
+    //sound.setBuffer(buffer);
+   // sound.setVolume(80);
+    //sound.play();
 }
 
 
-void Interface::dead_window() {
+void Interface::dead_window()  { //Не нужно пока
     int stillDead=1;
     while (window->isOpen() && stillDead)
     {

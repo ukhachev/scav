@@ -102,7 +102,7 @@ class Interface {
 	public:
 		Interface(RenderWindow* wnd);
 		void add_element(MenuElement* el);
-		void draw();
+		void draw(float cx, float cy);
 		void set_hp(int points);
 		void set_ammo(int points);
 		void dead_window();

@@ -13,6 +13,7 @@
 #include "textures.hpp"
 #include "map_constructor.hpp"
 #include "camera.hpp"
+#include "menu.hpp"
 
 #include <map>
 #include <list>
@@ -33,6 +34,7 @@ class GameField {
  	std::mutex mtx;
  	b2World* world;
     int last_shot = 0;
+    Interface interface;
  public:
     GameField();
     b2World* get_physics_world();

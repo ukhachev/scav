@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -94,6 +94,8 @@ bool GameField::render() {
                 	shoot();
             	}
             }
+            interface.set_hp(player->get_hp());
+            
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
 
@@ -115,6 +117,9 @@ bool GameField::render() {
         }
         for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
             (*iter)->draw(window);
+        }
+        if (player!=nullptr) {
+            interface.draw(player->get_pos().x, player->get_pos().y);
         }
         window.display();
     }
