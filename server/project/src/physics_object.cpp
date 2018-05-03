@@ -139,23 +139,3 @@ Entity::Entity(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
 Entity::~Entity() {
 
 }
-
-AidKit::AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
-			Entity(_id, _world, size, pos) {
-	
-
-}
-
-AidKit::~AidKit() {
-
-}
-
-int AidKit::object_type() {
-	return 3;
-}
-
-void AidKit::interact(PhysicsObject* object, sf::Packet* packet) {
-	object->set_hp(100);
-	*packet << 5 << object->get_id() << 100;
-	std::cout << "used kit" << std::endl;
-}

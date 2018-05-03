@@ -13,9 +13,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 	packet >> id;
 	packet >> obj_id;
 	std::mutex& mtx = field->get_mutex();
-	if (id == 100) {
-		std::cout << obj_id << std::endl;
-	}
+
 	mtx.lock();
 	switch (id) {
 		case 1: {
@@ -37,8 +35,9 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float x =0;
 			float y = 0;
 			int obj_type = 0;
+			int texture_id = 0;
 
-			packet >> obj_type >> x >> y;
+			packet >> obj_type >> x >> y >> texture_id;
 
 			switch (obj_type) {
 				case 2: {
@@ -51,10 +50,10 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 				}
 				case 3: {
 					AidKit* a = new AidKit(obj_id);
-					a->set_sprite(textures->get_texture(9));
+					a->set_sprite(textures->get_texture(texture_id));
 					a->set_pos(Vector2f(x, y));
 					field->add_object(a, obj_id);
-					std::cout << "aid kit " << obj_id << std::endl;
+					std::cout << "entity " << obj_id << std::endl;
 					break;
 				}
 			}
@@ -64,7 +63,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			PhysicsObject* obj = nullptr;
 			int hp = 0;
 			packet >> hp;
-			std::cout << hp << std::endl;
 			if (obj_id >= 200) {
 				obj = field->get_object(obj_id);
 				if (hp <= 0 && obj != nullptr) {
@@ -99,8 +97,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			break;
 		}
 		case 100: {
-			//int _cl_id = 0;
-			//packet >> _cl_id;
+			std::cout << "player "<<obj_id << std::endl;
+			
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 
 			p->set_player_sprite(textures->get_texture(1));

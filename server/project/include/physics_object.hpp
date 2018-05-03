@@ -12,6 +12,7 @@ class GameObject {
 	void set_id(int _id);
 	virtual ~GameObject();
 	virtual int object_type() = 0; //1 игрок, 2 статика, 3 аптечка
+	virtual int texture();
 	int get_id();
 };
 
@@ -65,12 +66,6 @@ class Entity: public PhysicsObject {
 	virtual void interact(PhysicsObject* object, sf::Packet* packet) = 0;
 };
 
-class AidKit : public Entity {
- public:
-	AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
-	~AidKit();
-	void interact(PhysicsObject* object, sf::Packet* packet);
-	int object_type();
-};
+
 
 #endif

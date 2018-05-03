@@ -22,4 +22,15 @@ class HitPhysicsAction : public PhysicsAction {
     void execute(GameField& field);
 };
 
+class EntityPhysicsAction : public PhysicsAction {
+ private:
+    Entity* entity;
+    PhysicsObject* object;
+ public:
+    EntityPhysicsAction(Entity* e, PhysicsObject* o);
+    ~EntityPhysicsAction();
+    void execute(GameField& field);
+};
+
+
 #endif

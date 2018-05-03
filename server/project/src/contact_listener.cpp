@@ -6,21 +6,22 @@ void ContactListener::BeginContact(b2Contact* contact) {
     PhysicsObject* bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureA()->GetBody()->GetUserData());
     Bullet* bullet = NULL;
     PhysicsObject* obj = NULL;
+    Entity* e = NULL;
 
     if (dynamic_cast<Bullet*>(bodyUserData)) {
         bullet = dynamic_cast<Bullet*>(bodyUserData);
     }
-    else {
+    else if (dynamic_cast<Entity*>(bodyUserData)) {
+        e = dynamic_cast<Entity*>(bodyUserData);
+    } else {
       obj = dynamic_cast<PhysicsObject*>(bodyUserData);
     }
-    if (dynamic_cast<Entity*>(bodyUserData)) {
-        std::cout << "Entity" << std::endl;
-    }
+   
     
     bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureB()->GetBody()->GetUserData());
-    if (dynamic_cast<Entity*>(bodyUserData)) {
+    /*if (dynamic_cast<Entity*>(bodyUserData)) {
         std::cout << "Entity" << std::endl;
-    }
+    }*/
 
     if (dynamic_cast<Bullet*>(bodyUserData)) {
         bullet = dynamic_cast<Bullet*>(bodyUserData);
@@ -30,6 +31,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
     }
     if (obj && bullet) {
         actions.push_front(new HitPhysicsAction(bullet, obj));
+    }
+
+    if (obj && e) {
+        actions.push_front(new EntityPhysicsAction(e, obj));
     }
   
 }

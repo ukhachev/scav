@@ -37,6 +37,8 @@ int main()
 	AidKit* s = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 50));
 	gf.add_object(s);
 
+	LandingMine* l = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, -10));
+	gf.add_object(l);
 	//----------------
 	Network net(port, &gf);
 	
