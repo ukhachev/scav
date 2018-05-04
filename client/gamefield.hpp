@@ -39,6 +39,7 @@ class GameField {
  	b2World* world;
     int last_shot = 0;
     Interface interface;
+    Inventor inv;
  public:
     GameField();
     b2World* get_physics_world();

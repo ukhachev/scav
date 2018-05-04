@@ -206,12 +206,6 @@ std::string Menu::get_input_value(std::list<MenuElement*>::iterator ptr) {
                         }
 }
 void Menu::draw() {
-    sf::SoundBuffer buffer;
-    buffer.loadFromFile("back.wav");
-    sf::Sound sound;
-    sound.setBuffer(buffer);
-    sound.setVolume(80);
-    sound.play();
     window->clear();
     sf::Texture bgtxt;
     bgtxt.loadFromFile(background);
@@ -249,7 +243,7 @@ void Menu::draw() {
                     }
                     case 7: {
                         isMenu=0;
-                        sound.stop();
+                        //sound.stop();
                         break;
                     }
                     default : 
@@ -284,9 +278,9 @@ Interface::Interface(RenderWindow* wnd) {
     window=wnd;
     hp=100;
     ammo=100;
-    add_element(new TextInput(200,30,1,1, "minecraft.otf",std::string("HP:") +std::to_string(hp), 25, window,0));
+    add_element(new TextInput(200,30,1,1, "minecraft.otf",std::string("HP:") +std::to_string(hp), 50, window,0));
     elements.front()->set_color(51,255,0);
-    add_element(new TextInput(200,30,1,40, "minecraft.otf",std::string("AM:") +std::to_string(ammo), 25, window,0));
+    add_element(new TextInput(200,30,1,100, "minecraft.otf",std::string("AM:") +std::to_string(ammo), 50, window,0));
     elements.back()->set_color(255,255,255);
 
 }
@@ -299,7 +293,7 @@ void Interface::draw(float cx, float cy) {
     int i = 0;
     for(std::list<MenuElement*>::iterator ptr = elements.begin(); ptr != elements.end(); ptr++) {
             ++i;
-            (*ptr)->setPos(cx - 450, cy + i*40 - 450);
+            (*ptr)->setPos(cx - 450, cy + i*75 - 450);
             (*ptr)->draw();
         }
 }
@@ -334,6 +328,9 @@ void Interface::set_ammo(int points) {
 
 
 void Interface::dead_window()  { //Не нужно пока
+    Texture backtxt;
+    backtxt.loadFromFile("dead_back.jpg");
+    Sprite back(backtxt);
     int stillDead=1;
     while (window->isOpen() && stillDead)
     {
@@ -344,9 +341,6 @@ void Interface::dead_window()  { //Не нужно пока
             if (event.type == sf::Event::Closed)
             window->close();
         }    
-        Texture backtxt;
-        backtxt.loadFromFile("dead_back.jpg");
-        Sprite back(backtxt);
         back.setPosition(2,2);
         window->draw(back);
         if(Keyboard::isKeyPressed(Keyboard::Return)) {
@@ -357,6 +351,102 @@ void Interface::dead_window()  { //Не нужно пока
         window->display();
 
     }
+}
+
+Weapon::Weapon(int max, int s, int d, std::string filename) {
+	maxAmmo=max;
+	ammo=max;
+	speed=s;
+	damage=d;
+	txt = Texture();
+	txt.loadFromFile(filename);
+	pic=Sprite(txt);
+    pic.setScale(0.80,0.80);
+    //pic.Rezie(50.0,50.0);
+}
+
+void Weapon::set_ammo(int a) {
+	ammo=ammo+a;
+}
+
+Sprite* Weapon::getSprite() {
+	return &pic;
+}
+
+Weapon* Inventor::inv[5]={NULL,NULL,NULL,NULL,NULL};
+int Inventor::current=0;
+
+Inventor::Inventor(RenderWindow* wnd) {
+	window=wnd;
+}
+
+void Inventor::draw(float cx, float cy) {
+	for(int i=0; i<5; ++i) {
+			sf::RectangleShape rectangle;
+			rectangle.setSize(sf::Vector2f(100, 100));
+			if(i==current){
+                rectangle.setOutlineColor(sf::Color(0,51,255));
+            }
+            else {
+                rectangle.setOutlineColor(sf::Color::Black);
+            }
+			rectangle.setOutlineThickness(4);
+			rectangle.setPosition(cx-260+120*i, cy+370);
+			rectangle.setFillColor(sf::Color(60,60,60));
+			window->draw(rectangle);
+			if(Inventor::inv[i] != NULL) {
+                Inventor::inv[i]->getSprite()->setPosition(cx-258+115*i, cy+360);
+                window->draw(*(Inventor::inv[i]->getSprite()));
+            }
+	}
+}
+
+Weapon* Inventor::get_current() {
+	return Inventor::inv[current];
+}
+
+void Inventor::set_current(int id) {
+	Inventor::current=id;
+}
+
+void Inventor::put(Weapon* weapon) {
+	for(int i=0; i<5; ++i) {
+		if(Inventor::inv[i]==NULL) {
+			Inventor::inv[i]=weapon;
+			break;
+		}
+	}
+}
+
+void Inventor::remove(int id) {
+	Inventor::inv[id]=NULL;
+}
+
+void Inventor::check_key() {
+    if(Keyboard::isKeyPressed(Keyboard::Num1)) {
+                    set_current(0);
+    }
+    if(Keyboard::isKeyPressed(Keyboard::Num2)) {
+                    set_current(1);
+    }
+    if(Keyboard::isKeyPressed(Keyboard::Num3)) {
+                    set_current(2);
+    }
+    if(Keyboard::isKeyPressed(Keyboard::Num4)) {
+                    set_current(3);
+    }
+    if(Keyboard::isKeyPressed(Keyboard::Num5)) {
+                    set_current(4);
+    }
+
+}
+
+int Weapon::get_ammo() {
+    return ammo;
+}
+
+int Weapon::get_speed() {
+    return speed;
 }
 /*
 Indicators::Indicators(int w, int h, int dx, int dy, std::string fontname, std::string txt, int size, RenderWindow* wnd, int dbg):MenuElement(w,h,dx,dy,wnd) {

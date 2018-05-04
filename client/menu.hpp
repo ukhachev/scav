@@ -109,6 +109,36 @@ class Interface {
 
 };
 
+
+class Weapon {
+	private:
+		int ammo;
+		int maxAmmo;
+		Texture txt;
+		int speed;
+		int damage;
+		Sprite pic;
+	public:
+		Weapon(int max, int s, int d, std::string filename);
+		void set_ammo(int a);
+		int get_ammo();
+		int get_speed();
+		Sprite* getSprite();
+};
+
+class Inventor {
+	public:
+		static Weapon* inv[5];
+		static int current;
+		RenderWindow* window;
+		Inventor(RenderWindow* wnd);
+		void draw(float cx, float cy);
+		Weapon* get_current();
+		void check_key();
+		void set_current(int id);
+		void put(Weapon* weapon);
+		void remove(int id);
+};
 /*
 class Indicators : public MenuElement {
 	private:

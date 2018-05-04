@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -55,7 +55,8 @@ bool GameField::get_action(sf::Packet& packet) {
 }
 
 void GameField::shoot() {
-	if (last_shot > 5) {
+    Weapon* w = inv.get_current();
+	if (last_shot > w->get_speed()) {
 	    was_shot = true;
 	    last_shot = 0;
         player->set_ammo(player->get_ammo() - 1);
@@ -71,6 +72,28 @@ bool GameField::render() {
     	if (last_shot < 100000) {
     		last_shot++;
     	}
+        
+        if(Inventor::inv[0]==NULL) {
+            Weapon* rifle = new Weapon(150, 5, 15, std::string("rifle.png"));
+            inv.put(rifle);
+        }
+        if(Inventor::inv[1]==NULL) {
+            Weapon* pistol = new Weapon(150, 10, 15, std::string("pistol.png"));
+            inv.put(pistol);
+        }
+        if(Inventor::inv[2]==NULL) {
+            Weapon* shotgun = new Weapon(150, 15, 15, std::string("shotgun.png"));
+            inv.put(shotgun);
+        } 
+        if(Inventor::inv[3]==NULL) {
+            Weapon* grenade = new Weapon(150, 30, 15, std::string("grenade.png"));
+            inv.put(grenade);
+        }
+        if(Inventor::inv[4]==NULL) {
+            Weapon* hp = new Weapon(150, 1000000, 15, std::string("hp.png"));
+            inv.put(hp);
+        } 
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -129,6 +152,8 @@ bool GameField::render() {
         }
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
+            inv.check_key();
+            inv.draw(player->get_pos().x, player->get_pos().y);
         }
         tmp_a_cont.draw(window);
         window.display();
