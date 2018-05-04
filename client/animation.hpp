@@ -14,6 +14,7 @@ private:
     int timer;
 public:
     TempObject(Texture* tenp_texture, int _timer, float x, float y);
+    TempObject(Sprite* new_sprite, int _timer);
     int get_timer();
     void draw(RenderWindow& window);
     ~TempObject();

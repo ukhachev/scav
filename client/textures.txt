@@ -7,8 +7,8 @@
 7 wall_destruction_dark_red.png
 8 Dead_body_base.png
 9 medkit.png
-10 mine1.png
+10 mine_clone.png
 11 ammo.png
 12 explosion.png
-13 mine1.png
+13 mine_big.png
 14 cursor.png

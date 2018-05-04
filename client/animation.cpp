@@ -10,6 +10,13 @@ TempObject::TempObject(Texture* temp_texture, int _timer, float x, float y): tim
     temp_sprite->setScale(0.25, 0.25);
 }
 
+TempObject::TempObject(Sprite* new_sprite, int _timer): timer(_timer) {
+    temp_sprite = new_sprite;
+    //temp_sprite->setPosition(x, y);
+    //temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
+    //temp_sprite->setScale(0.25, 0.25);
+}
+
 
 int TempObject::get_timer() {
     return timer;

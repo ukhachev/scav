@@ -100,20 +100,17 @@ bool GameField::render() {
 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
                     if (player->get_ammo() > 0) {
-                	   shoot();
+                        shoot();
                     }
-            	}
+                }
             }
-            //g_curs.set_pos(window);
             interface.set_hp(player->get_hp());
             interface.set_ammo(player->get_ammo());
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
-
         }
-
-        //tmp_a_cont.draw(window);
+        tmp_a_cont.draw(window);
         g_cam.draw(window);
 
 
