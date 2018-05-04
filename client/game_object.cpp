@@ -211,7 +211,7 @@ void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
         dead->setPosition(sprite->getPosition());
         TempObject* tmp_obj = new TempObject(dead, 4);
         tmp_a_cont.add(tmp_obj);
-    } 
+    }
 }
 
 void AidKit::draw(RenderWindow& window) {
