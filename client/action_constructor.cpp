@@ -51,7 +51,8 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 				case 3: {
 					AidKit* a = new AidKit(obj_id);
 					a->set_sprite(textures->get_texture(texture_id));
-                    //a->set_dead_sprite(textures->get_texture(12);   ------------------
+					if (texture_id == 10)
+                    a->set_dead_sprite(textures->get_texture(12));
 					a->set_pos(Vector2f(x, y));
 					field->add_object(a, obj_id);
 					std::cout << "entity " << obj_id << std::endl;

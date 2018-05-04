@@ -182,7 +182,7 @@ void DrawableBullet::set_sprite(Texture* texture) {
     bullet_sprite->setScale(0.05, 0.05);
 }
 
-AidKit::AidKit(int _id): DrawableObject(_id) {
+AidKit::AidKit(int _id): DrawableObject(_id), dead(nullptr) {
 
 }
 
@@ -207,9 +207,11 @@ void AidKit::set_dead_sprite(Texture* texture) {
 }
 
 void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
-    dead->setPosition(sprite->getPosition());
-    TempObject* tmp_obj = new TempObject(dead, 4);
-    tmp_a_cont.add(tmp_obj);
+    if (dead!=nullptr) {
+        dead->setPosition(sprite->getPosition());
+        TempObject* tmp_obj = new TempObject(dead, 4);
+        tmp_a_cont.add(tmp_obj);
+    } 
 }
 
 void AidKit::draw(RenderWindow& window) {

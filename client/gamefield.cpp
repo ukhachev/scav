@@ -110,7 +110,7 @@ bool GameField::render() {
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
         }
-        tmp_a_cont.draw(window);
+      
         g_cam.draw(window);
 
 
@@ -130,6 +130,7 @@ bool GameField::render() {
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
         }
+        tmp_a_cont.draw(window);
         window.display();
     }
     else {
@@ -190,6 +191,10 @@ void GameField::delete_object(int id) {
     auto w = objects.find(id);
     if (w == objects.end()) {
         return;
+    }
+    DrawableObject* d_obj = dynamic_cast<DrawableObject*>(w->second);
+    if (d_obj != nullptr) {
+        d_obj->get_delete_sprite(tmp_a_cont);
     }
     delete w->second;
     objects.erase(w);
