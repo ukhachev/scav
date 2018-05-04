@@ -12,3 +12,4 @@
 12 explosion.png
 13 mine_big.png
 14 cursor.png
+15 healing.png
