@@ -15,6 +15,7 @@
 #include "camera.hpp"
 #include "menu.hpp"
 #include "animation.hpp"
+#include "cursor.hpp"
 
 #include <map>
 #include <list>
@@ -28,6 +29,7 @@ class GameField {
     Camera g_cam;
     MapConst g_map;
     TempContainer tmp_a_cont;
+    Cursor g_curs;
 
  	std::map<int, Player*> players;
  	std::map<int, PhysicsObject*> objects;

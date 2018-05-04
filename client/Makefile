@@ -17,6 +17,7 @@ SRCS = \
        contact_listener.cpp \
        menu.cpp \
        animation.cpp \
+       cursor.cpp \
        main.cpp
 HDRS = \
 	   .

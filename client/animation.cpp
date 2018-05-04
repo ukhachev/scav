@@ -33,13 +33,23 @@ void TempContainer::add(TempObject* tmp_obj) {
 }
 
 void TempContainer::draw(RenderWindow& window) {
-    for (auto iter = tmp_list.begin(); iter != tmp_list.end(); iter++) {
+    /*for (auto iter = tmp_list.begin(); iter != tmp_list.end(); iter++) {
         if((*iter)->get_timer() != 0) {
             (*iter)->draw(window);
         } else {
             tmp_list.erase(iter);
             delete *iter;
             iter--;
+        }
+    }*/
+    auto iter = tmp_list.begin();
+    while (iter != tmp_list.end()) {
+        if((*iter)->get_timer() != 0) {
+            (*iter)->draw(window);
+            iter++;
+        } else {
+            delete *iter;
+            iter = tmp_list.erase(iter);
         }
     }
 }

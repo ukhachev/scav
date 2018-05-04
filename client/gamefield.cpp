@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -16,7 +16,14 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     (void)top;
     (void)bot;
     (void)right;
-    //window.setMouseCursorVisible(0);
+    window.setMouseCursorVisible(0);
+
+    /*for (int i = 1; i < 6; i++) {
+        TempObject* tmp_obj = new TempObject(t_cont.get_texture(i), i*20, i*50, 0);
+        tmp_a_cont.add(tmp_obj);
+    }*/
+
+
 }
 b2World* GameField::get_physics_world() {
     return world;
@@ -97,14 +104,16 @@ bool GameField::render() {
                     }
             	}
             }
+            //g_curs.set_pos(window);
             interface.set_hp(player->get_hp());
             interface.set_ammo(player->get_ammo());
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
+            g_curs.draw(window);
 
         }
 
-
+        //tmp_a_cont.draw(window);
         g_cam.draw(window);
 
 

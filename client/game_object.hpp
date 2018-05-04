@@ -102,13 +102,13 @@ class AidKit : public DrawableObject, public Entity {
     ~AidKit();
 };
 
-class Cursor: public DrawableObject {
+/*class Cursor: public DrawableObject {
  private:
      Sprite* cursor;
  public:
      Cursor();
      void set_pos();
-};
+};*/
 
 // Сделать класс для временных объектов с таймером, который изменяется при вызове метода draw.
 
