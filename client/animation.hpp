@@ -12,6 +12,12 @@ class TempObject {
 private:
     Sprite* temp_sprite;
     int timer;
+
+    //Удалить или изменить
+    int frames;
+    int cur_frame;
+    //------
+
 public:
     TempObject(Texture* tenp_texture, int _timer, float x, float y);
     TempObject(Sprite* new_sprite, int _timer);

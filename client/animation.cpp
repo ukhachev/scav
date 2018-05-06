@@ -6,12 +6,23 @@
 TempObject::TempObject(Texture* temp_texture, int _timer, float x, float y): timer(_timer) {
     temp_sprite = new Sprite(*temp_texture);
     temp_sprite->setPosition(x, y);
-    temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
     temp_sprite->setScale(0.25, 0.25);
 }
 
-TempObject::TempObject(Sprite* new_sprite, int _timer): timer(_timer) {
+/*TempObject::TempObject(Sprite* new_sprite, int _timer): timer(_timer) {
     temp_sprite = new_sprite;
+    //temp_sprite->setPosition(x, y);
+    //temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
+    //temp_sprite->setScale(0.25, 0.25);
+}*/
+
+
+TempObject::TempObject(Sprite* new_sprite, int _timer): timer(_timer) {
+    frames = 5;
+    cur_frame = 0;
+    temp_sprite = new_sprite;
+    temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
+    temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
     //temp_sprite->setPosition(x, y);
     //temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
     //temp_sprite->setScale(0.25, 0.25);
@@ -22,9 +33,21 @@ int TempObject::get_timer() {
     return timer;
 }
 
-void TempObject::draw(RenderWindow& window) {
+/*void TempObject::draw(RenderWindow& window) {
     window.draw(*temp_sprite);
     timer--;
+}*/
+
+void TempObject::draw(RenderWindow& window) {
+    if ((timer % 4) == 0) {
+        if (cur_frame < frames) {
+            temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
+            cur_frame++;
+        }
+    }
+    window.draw(*temp_sprite);
+    timer--;
+
 }
 
 TempObject::~TempObject() {

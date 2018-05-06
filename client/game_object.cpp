@@ -209,7 +209,8 @@ void AidKit::set_dead_sprite(Texture* texture) {
 void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
     if (dead!=nullptr) {
         dead->setPosition(sprite->getPosition());
-        TempObject* tmp_obj = new TempObject(dead, 4);
+        //TempObject* tmp_obj = new TempObject(dead, 4);
+        TempObject* tmp_obj = new TempObject(dead, 20);
         tmp_a_cont.add(tmp_obj);
     }
 }
