@@ -16,7 +16,7 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     (void)top;
     (void)bot;
     (void)right;
-    window.setMouseCursorVisible(0);
+    
 
     /*for (int i = 1; i < 6; i++) {
         TempObject* tmp_obj = new TempObject(t_cont.get_texture(i), i*20, i*50, 0);

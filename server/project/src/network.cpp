@@ -2,29 +2,35 @@
 #include "client_action_constructor.hpp"
 #include "client_action.hpp"
 #include <iostream>
-
+#include <unistd.h>
 Network::Network(int _port, GameField* _field): port(_port), field(_field), online(false) {
 }
 
 Network::~Network() {
-	for (auto i = get_threads.begin(); i != get_threads.end(); ++i) {
-		(*i)->join();
-		delete *i;
+	online = false;
+	while(!sockets.empty()) {
+		usleep(10000);
 	}
-	for (auto i = sockets.begin(); i != sockets.end(); ++i) {
-		i->second->disconnect();
-		delete i->second;
-	}
+	std::cout << "all resources are cleaned" << std::endl;
+}
+
+void Network::stop() {
+	online = false;
 }
 
 void Network::listen() {
 	sf::TcpListener listener;
+	listener.setBlocking(false);
 	online = true;
 	listener.listen(port);
-	while (online) {
-		sf::TcpSocket* socket = new sf::TcpSocket();
 
-		listener.accept(*socket);
+	sf::TcpSocket* socket = new sf::TcpSocket();
+
+	while (online) {
+		if (listener.accept(*socket) != sf::Socket::Done) {
+			usleep(20000);
+			continue;
+		}
 
 		int cl_id = 0;
 		auto i = sockets.rbegin();
@@ -41,25 +47,23 @@ void Network::listen() {
 
 		sockets.emplace(cl_id, socket);
 
-		std::thread* client_thread = 
-			new std::thread(receive, cl_id, socket, std::ref(container), &online, this);
-		get_threads.push_front(client_thread);
-
+		std::thread client_thread(receive, cl_id, socket, std::ref(container), &online, this);
+		client_thread.detach();
 		
 		player_set << 101 << cl_id;
-
-		//sf::Packet* obj_packet = field->get_objects();
 		
 		send_to_socket(socket, &player_set);
 		send_to_socket(socket, object_set);
 		delete object_set;
-		//delete obj_packet;
 
 		container.add_action(new PlayerJoinedAction(cl_id));
 
 		std::cout << "joined  " 
 		<< cl_id << " : " << socket->getRemoteAddress() << std::endl;
+
+		socket = new sf::TcpSocket();
 	}
+	delete socket;
 }
 
 static void send(sf::TcpSocket* socket, sf::Packet* packet) {
@@ -87,8 +91,7 @@ void Network::receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& con
 	while (*online) {
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Disconnected) {
-			net->delete_client(cl_id);
-			return;
+			break;
 		}
 		while (!packet.endOfPacket()) {
 			ClientAction* act = 
@@ -96,6 +99,7 @@ void Network::receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& con
 			container.add_action(act);
 		}
 	}
+	net->delete_client(cl_id);
 }
 
 ActionContainer* Network::get_actions() {
@@ -110,4 +114,5 @@ void Network::delete_client(int cl_id) {
 	std::cout << "disconnect " << cl_id <<std::endl;
 	delete i->second;
 	sockets.erase(i);
+
 }
