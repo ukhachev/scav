@@ -1,11 +1,15 @@
 1 Solder_clone.png
 2 wall.png
 3 map.png
-4 grass2.png
+4 sand.png
 5 Bullet.png
 6 player_blood.png
 7 wall_destruction_dark_red.png
 8 Dead_body_base.png
 9 medkit.png
-10 mine.png
+10 mine_n1.png
 11 ammo.png
+12 explosion.png
+13 mine_big.png
+14 cursor.png
+15 healing.png

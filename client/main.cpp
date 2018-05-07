@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <mutex>
 #include "textures.hpp"
+#include <SFML/Audio.hpp>
 bool online = true;
 Textures* textures;
 
@@ -53,6 +54,15 @@ int main(int argc, char const *argv[])
     std::string name;
     std::string ip;
     int port = 55503;
+
+	sf::SoundBuffer buffer;
+    buffer.loadFromFile("back.wav");
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+    sound.setVolume(90);
+    sound.setLoop(true);
+    sound.play();
+    
 	if (argc < 3) {
 		std::cout << "Input ip and port" << std::endl;
 		Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
@@ -60,12 +70,15 @@ int main(int argc, char const *argv[])
 		name = menu.get_name();
 		ip = menu.get_ip();
 		port = menu.get_port();
+		
 	}
 	else {
 		ip = argv[1];
 		port = std::stoi(argv[2]);
 	}
 
+
+	field.get_window()->setMouseCursorVisible(0);
 	Connector connector(ip, port);
 
 	std::thread get_thread(get, &connector, &field);

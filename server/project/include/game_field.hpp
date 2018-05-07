@@ -11,7 +11,8 @@ class GameField {
 	std::map<int, Player*> players;
 	std::map<int, PhysicsObject*> objects;
 	std::list<Bullet*> bullets;
-
+	StaticObject* borders[4];
+	
 	b2World* world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;

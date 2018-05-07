@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -16,7 +16,14 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     (void)top;
     (void)bot;
     (void)right;
-    //window.setMouseCursorVisible(0);
+    
+
+    /*for (int i = 1; i < 6; i++) {
+        TempObject* tmp_obj = new TempObject(t_cont.get_texture(i), i*20, i*50, 0);
+        tmp_a_cont.add(tmp_obj);
+    }*/
+
+
 }
 b2World* GameField::get_physics_world() {
     return world;
@@ -48,7 +55,8 @@ bool GameField::get_action(sf::Packet& packet) {
 }
 
 void GameField::shoot() {
-	if (last_shot > 5) {
+    Weapon* w = inv.get_current();
+	if (last_shot > w->get_speed()) {
 	    was_shot = true;
 	    last_shot = 0;
         player->set_ammo(player->get_ammo() - 1);
@@ -64,6 +72,28 @@ bool GameField::render() {
     	if (last_shot < 100000) {
     		last_shot++;
     	}
+        
+        if(Inventor::inv[0]==NULL) {
+            Weapon* rifle = new Weapon(150, 5, 15, std::string("rifle.png"));
+            inv.put(rifle);
+        }
+        if(Inventor::inv[1]==NULL) {
+            Weapon* pistol = new Weapon(150, 10, 15, std::string("pistol.png"));
+            inv.put(pistol);
+        }
+        if(Inventor::inv[2]==NULL) {
+            Weapon* shotgun = new Weapon(150, 15, 15, std::string("shotgun.png"));
+            inv.put(shotgun);
+        } 
+        if(Inventor::inv[3]==NULL) {
+            Weapon* grenade = new Weapon(150, 30, 15, std::string("grenade.png"));
+            inv.put(grenade);
+        }
+        if(Inventor::inv[4]==NULL) {
+            Weapon* hp = new Weapon(150, 1000000, 15, std::string("hp.png"));
+            inv.put(hp);
+        } 
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -90,21 +120,20 @@ bool GameField::render() {
     	        player->set_speed(speed.x, speed.y);
 
                 player->mouse_rotation(window);
-                
+
                 if (Mouse::isButtonPressed(Mouse::Left)) {
                     if (player->get_ammo() > 0) {
-                	   shoot();
+                        shoot();
                     }
-            	}
+                }
             }
             interface.set_hp(player->get_hp());
             interface.set_ammo(player->get_ammo());
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
-
+            g_curs.draw(window);
         }
-
-
+      
         g_cam.draw(window);
 
 
@@ -123,7 +152,10 @@ bool GameField::render() {
         }
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
+            inv.check_key();
+            inv.draw(player->get_pos().x, player->get_pos().y);
         }
+        tmp_a_cont.draw(window);
         window.display();
     }
     else {
@@ -184,6 +216,10 @@ void GameField::delete_object(int id) {
     auto w = objects.find(id);
     if (w == objects.end()) {
         return;
+    }
+    DrawableObject* d_obj = dynamic_cast<DrawableObject*>(w->second);
+    if (d_obj != nullptr) {
+        d_obj->get_delete_sprite(tmp_a_cont);
     }
     delete w->second;
     objects.erase(w);

@@ -1,21 +1,26 @@
 #include "game_field.hpp"
 #include <iostream>
 GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
-	StaticObject* left = new StaticObject(-1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
-	StaticObject* right = new StaticObject(-2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
-	StaticObject* top = new StaticObject(-3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
-	StaticObject* bot = new StaticObject(-4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
-	(void)left;
-	(void)top;
-	(void)bot;
-	(void)right;
+	borders[0] = new StaticObject(-1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
+	borders[1]  = new StaticObject(-2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
+	borders[2]  = new StaticObject(-3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
+	borders[3]  = new StaticObject(-4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
 }
 
 GameField::~GameField() {
 	reset();
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		delete i->second;
+		objects.erase(i);
 	}
+	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
+		delete *i;
+		bullets.erase(i);
+	}
+	for (int i = 0; i < 4; ++i) {
+		delete borders[i];
+	}
+	delete world;
 }
 
 void GameField::add_object(PhysicsObject* obj) {

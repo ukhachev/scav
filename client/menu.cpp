@@ -206,12 +206,6 @@ std::string Menu::get_input_value(std::list<MenuElement*>::iterator ptr) {
                         }
 }
 void Menu::draw() {
-    sf::SoundBuffer buffer;
-    buffer.loadFromFile("back.wav");
-    sf::Sound sound;
-    sound.setBuffer(buffer);
-    sound.setVolume(80);
-    sound.play();
     window->clear();
     sf::Texture bgtxt;
     bgtxt.loadFromFile(background);
@@ -249,7 +243,7 @@ void Menu::draw() {
                     }
                     case 7: {
                         isMenu=0;
-                        sound.stop();
+                        //sound.stop();
                         break;
                     }
                     default : 
@@ -284,9 +278,9 @@ Interface::Interface(RenderWindow* wnd) {
     window=wnd;
     hp=100;
     ammo=100;
-    add_element(new TextInput(200,30,1,1, "minecraft.otf",std::string("HP:") +std::to_string(hp), 25, window,0));
+    add_element(new TextInput(200,30,1,1, "minecraft.otf",std::string("HP:") +std::to_string(hp), 50, window,0));
     elements.front()->set_color(51,255,0);
-    add_element(new TextInput(200,30,1,40, "minecraft.otf",std::string("AM:") +std::to_string(ammo), 25, window,0));
+    add_element(new TextInput(200,30,1,100, "minecraft.otf",std::string("AM:") +std::to_string(ammo), 50, window,0));
     elements.back()->set_color(255,255,255);
 
 }
@@ -299,7 +293,7 @@ void Interface::draw(float cx, float cy) {
     int i = 0;
     for(std::list<MenuElement*>::iterator ptr = elements.begin(); ptr != elements.end(); ptr++) {
             ++i;
-            (*ptr)->setPos(cx - 450, cy + i*40 - 450);
+            (*ptr)->setPos(cx - 450, cy + i*75 - 450);
             (*ptr)->draw();
         }
 }
@@ -334,6 +328,9 @@ void Interface::set_ammo(int points) {
 
 
 void Interface::dead_window()  { //Не нужно пока
+    Texture backtxt;
+    backtxt.loadFromFile("dead_back.jpg");
+    Sprite back(backtxt);
     int stillDead=1;
     while (window->isOpen() && stillDead)
     {
@@ -344,9 +341,6 @@ void Interface::dead_window()  { //Не нужно пока
             if (event.type == sf::Event::Closed)
             window->close();
         }    
-        Texture backtxt;
-        backtxt.loadFromFile("dead_back.jpg");
-        Sprite back(backtxt);
         back.setPosition(2,2);
         window->draw(back);
         if(Keyboard::isKeyPressed(Keyboard::Return)) {
@@ -358,6 +352,8 @@ void Interface::dead_window()  { //Не нужно пока
 
     }
 }
+
+
 /*
 Indicators::Indicators(int w, int h, int dx, int dy, std::string fontname, std::string txt, int size, RenderWindow* wnd, int dbg):MenuElement(w,h,dx,dy,wnd) {
     font.loadFromFile(fontname);

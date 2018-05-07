@@ -21,6 +21,8 @@ void DrawableObject::set_pos(Vector2f new_pos) {
 void DrawableObject::draw(RenderWindow& window) {
 }
 
+void DrawableObject::get_delete_sprite(TempContainer& tmp_a_cont) {}
+
 void DrawableObject::hit() {
 
 }
@@ -54,7 +56,7 @@ int Player::get_ammo() {
     return ammo;
 }
 
-Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): 
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos):
         DrawableObject(_id), KinematicObject(_world, size, pos), timer(0), ammo(50) {}
 
 void Player::set_player_sprite(Texture* player_texture) {
@@ -74,6 +76,13 @@ void Player::set_dead_sprite(Texture* dead_texture) {
     dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
     dead->setScale(1.5, 1.5);
 }
+
+void Player::get_delete_sprite(TempContainer& tmp_a_cont) {
+    dead->setPosition(skin->getPosition());
+    TempObject* tmp_obj = new TempObject(dead, 100);
+    tmp_a_cont.add(tmp_obj);
+}
+
 
 float Player::get_rotation() {
     return player_rotation;
@@ -173,7 +182,7 @@ void DrawableBullet::set_sprite(Texture* texture) {
     bullet_sprite->setScale(0.05, 0.05);
 }
 
-AidKit::AidKit(int _id): DrawableObject(_id) {
+AidKit::AidKit(int _id): DrawableObject(_id), dead(nullptr) {
 
 }
 
@@ -189,6 +198,20 @@ void AidKit::set_sprite(Texture* texture) {
     sprite = new Sprite(*texture);
     sprite->setOrigin(sprite->getLocalBounds().width / 2, sprite->getLocalBounds().height / 2);
     sprite->setScale(1.5, 1.5);
+}
+
+void AidKit::set_dead_sprite(Texture* texture) {
+    dead = new Sprite(*texture);
+    dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
+    dead->setScale(1.5, 1.5);
+}
+
+void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
+    if (dead!=nullptr) {
+        dead->setPosition(sprite->getPosition());
+        TempObject* tmp_obj = new TempObject(dead, 4);
+        tmp_a_cont.add(tmp_obj);
+    }
 }
 
 void AidKit::draw(RenderWindow& window) {

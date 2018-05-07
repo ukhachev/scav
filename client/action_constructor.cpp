@@ -51,6 +51,13 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 				case 3: {
 					AidKit* a = new AidKit(obj_id);
 					a->set_sprite(textures->get_texture(texture_id));
+					//Криво
+					if (texture_id == 10)
+                    	a->set_dead_sprite(textures->get_texture(12));
+                    if (texture_id == 9) {
+                    	a->set_dead_sprite(textures->get_texture(15));
+                    }
+                    //------
 					a->set_pos(Vector2f(x, y));
 					field->add_object(a, obj_id);
 					std::cout << "entity " << obj_id << std::endl;
@@ -107,7 +114,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 100: { //Создать игрока
 			std::cout << "player "<<obj_id << std::endl;
-			
+
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 
 			p->set_player_sprite(textures->get_texture(1));

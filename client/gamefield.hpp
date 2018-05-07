@@ -14,6 +14,8 @@
 #include "map_constructor.hpp"
 #include "camera.hpp"
 #include "menu.hpp"
+#include "animation.hpp"
+#include "cursor.hpp"
 
 #include <map>
 #include <list>
@@ -26,6 +28,8 @@ class GameField {
     Textures t_cont;
     Camera g_cam;
     MapConst g_map;
+    TempContainer tmp_a_cont;
+    Cursor g_curs;
 
  	std::map<int, Player*> players;
  	std::map<int, PhysicsObject*> objects;
@@ -35,6 +39,7 @@ class GameField {
  	b2World* world;
     int last_shot = 0;
     Interface interface;
+    Inventor inv;
  public:
     GameField();
     b2World* get_physics_world();

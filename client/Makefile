@@ -16,6 +16,8 @@ SRCS = \
        physics_action.cpp \
        contact_listener.cpp \
        menu.cpp \
+       animation.cpp \
+       cursor.cpp \
        main.cpp
 HDRS = \
 	   .
