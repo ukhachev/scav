@@ -18,3 +18,8 @@
 103 shotgun.png
 104 grenade.png
 105 hp.png
+111 rifle_gnd.png
+112 pistol_gnd.png
+113 shotgun_gnd.png
+114 grenade_gnd.png
+115 hp_gnd.png

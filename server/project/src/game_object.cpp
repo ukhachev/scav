@@ -108,7 +108,7 @@ Weapon::~Weapon() {
 }
 
 int Weapon::texture() {
-	return type;
+	return type + 10;
 }
 
 int Weapon::object_type() {
