@@ -3,21 +3,21 @@
 #include "inventor.hpp"
 #include <iostream>
 
-Weapon::Weapon(int max, int s, int d, std::string filename, int did) {
-	maxAmmo=max;
-	ammo=max;
-	speed=s;
+Weapon::Weapon(int max, int s, int d, Texture* txt, int did) {
+	maxAmmo = max;
+	ammo = max;
+	speed = s;
 	damage=d;
-	txt = Texture();
-	txt.loadFromFile(filename);
-	pic=Sprite(txt);
+	pic = Sprite(*txt);
     pic.setScale(0.80,0.80);
-    id=did;
-    //pic.Rezie(50.0,50.0);
+    id = did;
+}
+int Weapon::get_id() {
+	return id;
 }
 
 void Weapon::set_ammo(int a) {
-	ammo=ammo+a;
+	ammo = a;
 }
 
 Sprite* Weapon::getSprite() {
@@ -25,13 +25,7 @@ Sprite* Weapon::getSprite() {
 }
 
 Weapon::~Weapon() {
-	delete &txt;
-	delete &pic;
-	delete &ammo;
-	delete &maxAmmo;
-	delete &speed;
-	delete &damage;
-	delete &id;
+
 }
 
 
@@ -79,8 +73,13 @@ void Inventor::put(Weapon* weapon) {
 }
 
 void Inventor::remove(int id) {
-	delete inv[id];
-	inv[id]=NULL;
+	for(int i = 0; i < 5; ++i) {
+		if(inv[i]->get_id() == id) {
+			delete inv[i];
+			inv[i] = NULL;
+			break;
+		}
+	}
 }
 
 void Inventor::check_key() {
@@ -108,4 +107,14 @@ int Weapon::get_ammo() {
 
 int Weapon::get_speed() {
     return speed;
+}
+
+static Weapon* create(int id, Textures* t_cont) {
+	switch(id) {
+		case 101: return new Weapon(150, 5, 15, t_cont->get_texture(101), 101);
+		case 102: return new Weapon(150, 10, 15, t_cont->get_texture(102), 102);
+		case 103: return new Weapon(150, 15, 15, t_cont->get_texture(103), 103);
+		case 104: return new Weapon(150, 30, 15, t_cont->get_texture(104), 104);
+		case 105: return new Weapon(150, 1000000, 15, t_cont->get_texture(105), 105);
+	}
 }

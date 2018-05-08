@@ -16,7 +16,7 @@
 #include "menu.hpp"
 #include "animation.hpp"
 #include "cursor.hpp"
-
+#include "inventor.hpp"
 #include <map>
 #include <list>
 using namespace sf;

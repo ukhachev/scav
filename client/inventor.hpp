@@ -11,16 +11,16 @@ class Weapon {
 	private:
 		int ammo;
 		int maxAmmo;
-		Texture txt;
 		int speed;
 		int damage;
 		Sprite pic;
 		int id;
 	public:
-		Weapon(int max, int s, int d, std::string filename, int did);
+		Weapon(int max, int s, int d, Texture* txt, int did);
 		void set_ammo(int a);
 		int get_ammo();
 		int get_speed();
+		int get_id();
 		Sprite* getSprite();
 		~Weapon();
 };
@@ -39,4 +39,9 @@ class Inventor {
 		void remove(int id);
 };
 
+class WeaponCreator
+{
+public:
+	static Weapon* create(int id, Textures* t_cont);	
+};
 #endif  // SCAV_INVENTOR_HPP_

@@ -18,6 +18,7 @@ SRCS = \
        menu.cpp \
        animation.cpp \
        cursor.cpp \
+       inventor.cpp \
        main.cpp
 HDRS = \
 	   .

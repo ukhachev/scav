@@ -54,6 +54,9 @@ int main()
 
 	BulletContainer* b = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-100, 30));
 	gf.add_object(b);
+
+	Weapon* w = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-300, 30), 102);
+	gf.add_object(w);
 	//----------------
 	Network net(port, &gf);
 	

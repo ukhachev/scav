@@ -46,7 +46,8 @@ bool GameField::get_action(sf::Packet& packet) {
     if (player != nullptr) {
         packet << 1 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
         if (was_shot) {
-            packet << 14 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
+            Weapon* w = inv.get_current();
+            packet << 14 << w->get_id() << player->get_pos().x <<player->get_pos().y << player->get_rotation();
             was_shot = false;
         }
         return true;
@@ -56,10 +57,15 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::shoot() {
     Weapon* w = inv.get_current();
-	if (last_shot > w->get_speed()) {
+
+    if (!w) {
+    	return;
+    }
+    int ammo =  w->get_ammo();
+	if (last_shot > w->get_speed() && ammo > 0) {
 	    was_shot = true;
 	    last_shot = 0;
-        player->set_ammo(player->get_ammo() - 1);
+        w->set_ammo(ammo - 1);
 	}
 }
 
@@ -73,25 +79,25 @@ bool GameField::render() {
     		last_shot++;
     	}
         
-        if(Inventor::inv[0]==NULL) {
-            Weapon* rifle = new Weapon(150, 5, 15, std::string("rifle.png"));
+        if(inv.inv[0]==NULL) {
+            Weapon* rifle = new Weapon(150, 5, 15, t_cont.get_texture(101), 101);
             inv.put(rifle);
         }
-        if(Inventor::inv[1]==NULL) {
-            Weapon* pistol = new Weapon(150, 10, 15, std::string("pistol.png"));
+        if(inv.inv[1]==NULL) {
+            Weapon* pistol = new Weapon(150, 10, 15, t_cont.get_texture(102), 102);
             inv.put(pistol);
         }
-        if(Inventor::inv[2]==NULL) {
-            Weapon* shotgun = new Weapon(150, 15, 15, std::string("shotgun.png"));
+        if(inv.inv[2]==NULL) {
+            Weapon* shotgun = new Weapon(150, 15, 15, t_cont.get_texture(103), 103);
             inv.put(shotgun);
         } 
-        if(Inventor::inv[3]==NULL) {
-            Weapon* grenade = new Weapon(150, 30, 15, std::string("grenade.png"));
+        if(inv.inv[3]==NULL) {
+            Weapon* grenade = new Weapon(150, 30, 15, t_cont.get_texture(104), 104);
             inv.put(grenade);
         }
-        if(Inventor::inv[4]==NULL) {
-            Weapon* hp = new Weapon(150, 1000000, 15, std::string("hp.png"));
-            inv.put(hp);
+        if(inv.inv[4]==NULL) {
+           // Weapon* hp = new Weapon(150, 1000000, 15, t_cont.get_texture(105), 105);
+           // inv.put(hp);
         } 
 
         sf::Event event;
@@ -122,13 +128,11 @@ bool GameField::render() {
                 player->mouse_rotation(window);
 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
-                    if (player->get_ammo() > 0) {
-                        shoot();
-                    }
+                    shoot();  
                 }
             }
             interface.set_hp(player->get_hp());
-            interface.set_ammo(player->get_ammo());
+           
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
@@ -152,6 +156,14 @@ bool GameField::render() {
         }
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
+            Weapon* w = inv.get_current();
+            if (w) {
+            	interface.set_ammo(w->get_ammo());
+            }
+            else {
+            	interface.set_ammo(0);
+            }
+            
             inv.check_key();
             inv.draw(player->get_pos().x, player->get_pos().y);
         }

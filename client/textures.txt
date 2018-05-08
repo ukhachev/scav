@@ -13,3 +13,8 @@
 13 mine_big.png
 14 cursor.png
 15 healing.png
+101 rifle.png
+102 pistol.png
+103 shotgun.png
+104 grenade.png
+105 hp.png
