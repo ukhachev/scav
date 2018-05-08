@@ -57,6 +57,12 @@ int main()
 
 	Weapon* w = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-300, 30), 102);
 	gf.add_object(w);
+
+	Weapon* w1 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-350, 30), 101);
+	gf.add_object(w1);
+
+	Weapon* w2 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-400, 30), 103);
+	gf.add_object(w2);
 	//----------------
 	Network net(port, &gf);
 	
