@@ -101,6 +101,16 @@ void Inventor::check_key() {
 
 }
 
+Weapon* Inventor::find(int id) {
+	for(int i = 0; i < 5; ++i) {
+		if (inv[i]) {
+			if(inv[i]->get_id() == id) {
+				return inv[i];
+			}
+		}
+	}
+	return nullptr;
+}
 int Weapon::get_ammo() {
     return ammo;
 }
@@ -109,7 +119,7 @@ int Weapon::get_speed() {
     return speed;
 }
 
-static Weapon* create(int id, Textures* t_cont) {
+Weapon* WeaponCreator::create(int id, Textures* t_cont) {
 	switch(id) {
 		case 101: return new Weapon(150, 5, 15, t_cont->get_texture(101), 101);
 		case 102: return new Weapon(150, 10, 15, t_cont->get_texture(102), 102);

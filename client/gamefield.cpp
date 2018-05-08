@@ -79,7 +79,7 @@ bool GameField::render() {
     		last_shot++;
     	}
         
-        if(inv.inv[0]==NULL) {
+       /* if(inv.inv[0]==NULL) {
             Weapon* rifle = new Weapon(150, 5, 15, t_cont.get_texture(101), 101);
             inv.put(rifle);
         }
@@ -98,7 +98,7 @@ bool GameField::render() {
         if(inv.inv[4]==NULL) {
            // Weapon* hp = new Weapon(150, 1000000, 15, t_cont.get_texture(105), 105);
            // inv.put(hp);
-        } 
+        } */
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -177,6 +177,9 @@ bool GameField::render() {
     //delete player;
 }
 
+Inventor* GameField::get_inventor() {
+    return &inv;
+}
 
 std::mutex& GameField::get_mutex() {
 	return mtx;

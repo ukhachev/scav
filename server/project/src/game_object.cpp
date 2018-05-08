@@ -117,5 +117,5 @@ int Weapon::object_type() {
 
 void Weapon::interact(PhysicsObject* object, sf::Packet* packet) {
 	object->set_hp(object->get_hp() - 50);
-	*packet << 5 << object->get_id() << type;
+	*packet << 6 << object->get_id() << type;
 }

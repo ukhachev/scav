@@ -1,6 +1,6 @@
 #include "action.hpp"
 #include "game_object.hpp"
-
+#include "inventor.hpp"
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <math.h>
@@ -94,8 +94,24 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			}
 			break;
-		}  //Пули
-		case 14: {
+		}  
+		case 6: {
+			int wtype = 0;
+			Inventor* inv = field->get_inventor();
+			
+			packet >> wtype;
+
+			Weapon* w = inv->find(wtype);
+			if (w==nullptr) {
+				w = WeaponCreator::create(wtype, textures);
+				inv->put(w);
+			} else {
+				w->set_ammo(150);
+			}
+			break;
+		}
+
+		case 14: {//Пули
 			float x = 0;
 			float y = 0;
 			float angle = 0;

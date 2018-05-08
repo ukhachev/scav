@@ -33,6 +33,7 @@ class Inventor {
 		Inventor(RenderWindow* wnd);
 		void draw(float cx, float cy);
 		Weapon* get_current();
+		Weapon* find(int id);
 		void check_key();
 		void set_current(int id);
 		void put(Weapon* weapon);
