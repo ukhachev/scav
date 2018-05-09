@@ -1,10 +1,11 @@
 #include "game_field.hpp"
 #include <iostream>
 GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
-	borders[0] = new StaticObject(-1, world, b2Vec2(10, 1000), b2Vec2(-500, 0));
-	borders[1]  = new StaticObject(-2, world, b2Vec2(10, 1000), b2Vec2(500, 0));
-	borders[2]  = new StaticObject(-3, world, b2Vec2(1000, 10), b2Vec2(0, 500));
-	borders[3]  = new StaticObject(-4, world, b2Vec2(1000, 10), b2Vec2(0, -500));
+	borders[0] = new StaticObject(-1, world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
+	borders[1]  = new StaticObject(-2, world, b2Vec2(10, 2000), b2Vec2(1000, 0));
+	borders[2]  = new StaticObject(-3, world, b2Vec2(2000, 10), b2Vec2(0, 1000));
+	borders[3]  = new StaticObject(-4, world, b2Vec2(2000, 10), b2Vec2(0, -1000));
+	start_time = std::clock();
 }
 
 GameField::~GameField() {
@@ -36,7 +37,7 @@ void GameField::add_bullet(Bullet* bullet) {
 	bullets.push_front(bullet);
 }
 void GameField::add_player(int cl_id) {
-	Player* pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0));
+	Player* pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), "stranger");
 	players.emplace(cl_id, pl);
 }
 
@@ -69,6 +70,16 @@ Player* GameField::get_player(int cl_id) {
 }
 
 void GameField::step() {
+	std::clock_t end = std::clock();
+	float secs = float(end - start_time) / CLOCKS_PER_SEC;
+	
+	borders[0]->set_pos(-1000 + secs*500, 0);
+	borders[1]->set_pos(1000 - secs*500, 0);
+	borders[2]->set_pos(0, 1000 + secs*500);
+	borders[3]->set_pos(0, -1000 + secs*500);
+	
+	state_packet << 7 << 0 << secs;
+
 	world->Step(1.0f / 60.0f, 8, 3);
 }
 
@@ -109,6 +120,7 @@ sf::Packet* GameField::get_objects() {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
+	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
 }
 
@@ -127,6 +139,7 @@ void GameField::delete_bullet(Bullet* b) {
 }
 
 void GameField::restart() {
+	start_time = std::clock();
 	state_packet << 104 << 0;
 	for (auto i = objects.begin(); i != objects.end();) {
 		delete i->second;

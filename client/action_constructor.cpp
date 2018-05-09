@@ -107,7 +107,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}
+		case 7: {
+			float sec = 0;
 
+			packet >> sec;
+			std::cout <<sec <<std::endl;
+			field->move_border(sec);
+			break;
+		}
 		case 14: {//Пули
 			float x = 0;
 			float y = 0;

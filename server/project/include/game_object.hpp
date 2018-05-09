@@ -6,8 +6,9 @@
 #include "physics_object.hpp"
 
 class Player : public StaticObject {
+	std::string nickname;
  public:
- 	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+ 	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick);
  	~Player();
 };
 

@@ -8,21 +8,10 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
-    StaticObject* left = new StaticObject(world, b2Vec2(10, 1000), b2Vec2(-500, 0));
-    StaticObject* right = new StaticObject(world, b2Vec2(10, 1000), b2Vec2(500, 0));
-    StaticObject* top = new StaticObject(world, b2Vec2(1000, 10), b2Vec2(0, 500));
-    StaticObject* bot = new StaticObject(world, b2Vec2(1000, 10), b2Vec2(0, -500));
-    (void)left;
-    (void)top;
-    (void)bot;
-    (void)right;
-    
-
-    /*for (int i = 1; i < 6; i++) {
-        TempObject* tmp_obj = new TempObject(t_cont.get_texture(i), i*20, i*50, 0);
-        tmp_a_cont.add(tmp_obj);
-    }*/
-
+    borders[0] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
+    borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
+    borders[2] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, 1000));
+    borders[3] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, -1000));
 
 }
 b2World* GameField::get_physics_world() {
@@ -78,27 +67,6 @@ bool GameField::render() {
     	if (last_shot < 100000) {
     		last_shot++;
     	}
-        
-       /* if(inv.inv[0]==NULL) {
-            Weapon* rifle = new Weapon(150, 5, 15, t_cont.get_texture(101), 101);
-            inv.put(rifle);
-        }
-        if(inv.inv[1]==NULL) {
-            Weapon* pistol = new Weapon(150, 10, 15, t_cont.get_texture(102), 102);
-            inv.put(pistol);
-        }
-        if(inv.inv[2]==NULL) {
-            Weapon* shotgun = new Weapon(150, 15, 15, t_cont.get_texture(103), 103);
-            inv.put(shotgun);
-        } 
-        if(inv.inv[3]==NULL) {
-            Weapon* grenade = new Weapon(150, 30, 15, t_cont.get_texture(104), 104);
-            inv.put(grenade);
-        }
-        if(inv.inv[4]==NULL) {
-           // Weapon* hp = new Weapon(150, 1000000, 15, t_cont.get_texture(105), 105);
-           // inv.put(hp);
-        } */
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -106,7 +74,7 @@ bool GameField::render() {
             if (event.type == sf::Event::Closed)
             window.close();
         }
-     window.clear();
+        window.clear();
         if (player != nullptr) {
             if (player->get_hp() > 0) {
                 b2Vec2 speed(0, 0);
@@ -140,6 +108,7 @@ bool GameField::render() {
       
         g_cam.draw(window);
 
+       
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
@@ -262,4 +231,11 @@ void GameField::delete_all() {
 
 RenderWindow* GameField::get_window() {
     return &window;
+}
+
+void GameField::move_border(float secs) {
+    borders[0]->set_pos(-1000 + secs*500, 0);
+    borders[1]->set_pos(1000 - secs*500, 0);
+    borders[2]->set_pos(0, 1000 + secs*500);
+    borders[3]->set_pos(0, -1000 + secs*500);
 }
