@@ -81,10 +81,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			packet >> hp;
 			if (obj_id >= 200) {
 				obj = field->get_object(obj_id);
-				if (hp <= 0 && obj != nullptr) {
-					field->delete_object(obj_id);
-					break;
-				}
 			}
 			else {
 				obj = field->find_player(obj_id);
@@ -95,18 +91,19 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			}
 			break;
 		}  
-		case 6: {
+		case 6: { //Подбор оружия
 			int wtype = 0;
 			Inventor* inv = field->get_inventor();
 			
 			packet >> wtype;
-
-			Weapon* w = inv->find(wtype);
-			if (w==nullptr) {
-				w = WeaponCreator::create(wtype, textures);
-				inv->put(w);
-			} else {
-				w->set_ammo(150);
+			if (obj_id == cl_id) {
+				Weapon* w = inv->find(wtype);
+				if (w==nullptr) {
+					w = WeaponCreator::create(wtype, textures);
+					inv->put(w);
+				} else {
+					w->set_ammo(150);
+				}
 			}
 			break;
 		}
@@ -149,6 +146,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 102: { //Удалить игрока
 			field->delete_player(obj_id);
+			break;
+		}
+		case 103: { //Удалить объект
+			field->delete_object(obj_id);
+			break;
+		}
+		case 104: {
+			field->delete_all();
 		}
 
 	}

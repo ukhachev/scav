@@ -249,6 +249,16 @@ PhysicsObject* GameField::get_object(int id) {
     return nullptr;
 }
 
+void GameField::delete_all() {
+    for (auto i = objects.begin(); i != objects.end();) {
+        delete i->second;
+        i = objects.erase(i);
+    }
+    for (auto i = players.begin(); i != players.end(); ++i) {
+        i->second->set_hp(100);
+    }
+}
+
 RenderWindow* GameField::get_window() {
     return &window;
 }

@@ -56,4 +56,5 @@ class PlayerLeftAction: public ClientAction {
  	~PlayerLeftAction();
  	void execute(GameField& gf);
 };
+
 #endif

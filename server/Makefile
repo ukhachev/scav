@@ -5,6 +5,7 @@ HDRS = \
 
 SRCS = \
 	project/src/game_field.cpp \
+	project/src/map_builder.cpp \
 	project/src/action_container.cpp \
 	project/src/client_action.cpp \
 	project/src/game_object.cpp \

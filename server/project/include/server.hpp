@@ -7,6 +7,7 @@
 #include "network.hpp"
 #include "physics_action.hpp"
 #include "contact_listener.hpp"
+#include "map_builder.hpp"
 
 #endif
 

@@ -30,7 +30,8 @@ class GameField {
 	
 	void step();
 	void reset();
-
+	void restart();
+	
 	sf::Packet* add_private_packet(int cl_id);
 	sf::Packet* get_objects();
 

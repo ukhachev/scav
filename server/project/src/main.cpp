@@ -4,6 +4,16 @@
 #include <string>
 
 bool online = true;
+bool need_restart = false;
+
+void restart_game(Network& net, GameField& gf) {
+	gf.restart();
+	need_restart = false;
+	MapBuilder::build(gf);
+	sf::Packet* obj_packet = gf.get_objects();
+	net.translate(obj_packet);
+	delete obj_packet;
+}
 
 void interact(Network& net, GameField& gf) {
 	b2World* world = gf.get_world();
@@ -19,10 +29,17 @@ void interact(Network& net, GameField& gf) {
 			delete act;
 			act = ac->pop();
 		}
-		l.execute_actions(gf);
-		gf.step();
+
+		if (need_restart) {
+			restart_game(net, gf);
+		}
+		else {
+			l.execute_actions(gf);
+			gf.step();
+			net.translate(gf.get_state_packet());
+		}
 		
-		net.translate(gf.get_state_packet());
+		
 		gf.reset();
 		delete ac;
 		usleep(19000);
@@ -38,39 +55,20 @@ int main()
 	int port = 55503;
 	GameField gf;
 
-	//Временно
-	for (int i = 0; i< 10; ++i) {
-		StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
-		gf.add_object(s);
-	}
-	AidKit* s = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 50));
-	gf.add_object(s);
-
-	AidKit* s1 = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-310, 121));
-	gf.add_object(s1);
-
-	LandingMine* l = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(204, -100));
-	gf.add_object(l);
-
-	BulletContainer* b = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-100, 30));
-	gf.add_object(b);
-
-	Weapon* w = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-300, 30), 102);
-	gf.add_object(w);
-
-	Weapon* w1 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-350, 30), 101);
-	gf.add_object(w1);
-
-	Weapon* w2 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-400, 30), 103);
-	gf.add_object(w2);
-	//----------------
+	MapBuilder::build(gf);
 	Network net(port, &gf);
 	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));
 	std::thread listen_thread(listen, std::ref(net));
 	
 	std::string cmd;
-	std::cin >> cmd;
+	while (cmd != "quit" && cmd != "q") {
+		std::cin >> cmd;
+		if (cmd == "reset") {
+			std::cout << "Reseting game..." << std::endl;
+			need_restart = true;
+		}
+	}
 	online = false;
 	net.stop();
 

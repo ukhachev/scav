@@ -54,6 +54,7 @@ class GameField {
 
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
+    void delete_all();
     
     Inventor* get_inventor();
     int add_object(PhysicsObject* obj, int new_id);

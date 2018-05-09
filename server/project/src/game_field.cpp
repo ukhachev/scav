@@ -47,7 +47,6 @@ b2World* GameField::get_world() {
 void GameField::delete_player(int cl_id) {
 	Player* player = get_player(cl_id);
 	players.erase(cl_id);
-	objects.erase(player->get_id());
 	delete player;
 }
 
@@ -127,10 +126,28 @@ void GameField::delete_bullet(Bullet* b) {
 	}
 }
 
+void GameField::restart() {
+	state_packet << 104 << 0;
+	for (auto i = objects.begin(); i != objects.end();) {
+		delete i->second;
+		i = objects.erase(i);
+	}
+
+	for (auto i = bullets.begin(); i != bullets.end();) {
+		delete *i;
+		i = bullets.erase(i);
+	}
+
+	for (auto i = players.begin(); i != players.end(); ++i) {
+		i->second->set_hp(100);
+	}
+}
+
 void GameField::delete_object(int id) {
 	auto i = objects.find(id);
-	//std::cout << "abc" << std::endl;
+
 	if (i != objects.end()) {
+		state_packet << 103 << i->second->get_id();
 		delete i->second;
 		objects.erase(i);
 	}
