@@ -250,6 +250,7 @@ PhysicsObject* GameField::get_object(int id) {
 }
 
 void GameField::delete_all() {
+    inv.clear();
     for (auto i = objects.begin(); i != objects.end();) {
         delete i->second;
         i = objects.erase(i);

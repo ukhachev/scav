@@ -153,6 +153,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			break;
 		}
 		case 104: {
+			std::cout << "reset game" << std::endl;
 			field->delete_all();
 		}
 

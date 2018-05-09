@@ -119,6 +119,14 @@ int Weapon::get_speed() {
     return speed;
 }
 
+void Inventor::clear() {
+	for(int i = 0; i < 5; ++i) {
+		if (inv[i]) {
+			delete inv[i];
+			inv[i] = NULL;
+		}
+	}
+}
 Weapon* WeaponCreator::create(int id, Textures* t_cont) {
 	switch(id) {
 		case 101: return new Weapon(150, 5, 15, t_cont->get_texture(101), 101);

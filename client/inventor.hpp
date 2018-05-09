@@ -38,6 +38,7 @@ class Inventor {
 		void set_current(int id);
 		void put(Weapon* weapon);
 		void remove(int id);
+		void clear();
 };
 
 class WeaponCreator
