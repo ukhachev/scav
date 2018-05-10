@@ -38,7 +38,11 @@ void render(GameField* field) {
 	online = false;
 }
 
-void send(Connector* connector, GameField* field) {
+void send(Connector* connector, GameField* field, std::string& nick) {
+	sf::Packet nick_packet;
+	nick_packet << 10 << nick;
+	connector->send(&nick_packet);
+
 	while (online) {
 		sf::Packet packet;
 		if (field->get_action(packet)) {
@@ -53,7 +57,7 @@ int main(int argc, char const *argv[])
 	textures = new Textures("textures.txt");
     animations = new Animations("animations.txt");
     GameField field;
-    std::string name;
+    std::string name = "stranger";
     std::string ip;
     int port = 55503;
 
@@ -84,7 +88,7 @@ int main(int argc, char const *argv[])
 	Connector connector(ip, port);
 
 	std::thread get_thread(get, &connector, &field);
-	std::thread send_thread(send, &connector, &field);
+	std::thread send_thread(send, &connector, &field, std::ref(name));
 	std::thread render_thread(render, &field);
 
 	get_thread.join();

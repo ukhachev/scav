@@ -115,6 +115,13 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			field->move_border(sec);
 			break;
 		}
+		case 10: {
+			std::string nickname;
+			packet >> nickname;
+			std::cout << "nickname" << std::endl;
+			field->find_player(obj_id)->set_nickname(nickname);
+			break;
+		}
 		case 14: {//Пули
 			float x = 0;
 			float y = 0;

@@ -10,6 +10,8 @@ ClientAction* ClientActionConstructor::construct(int cl_id, sf::Packet& packet) 
 			return new MoveAction(cl_id, packet);
 		case 14:
 			return new ShotAction(cl_id, packet);
+		case 10: 
+			return new SetNicknameAction(cl_id, packet);
 	}
 	return nullptr;
 }

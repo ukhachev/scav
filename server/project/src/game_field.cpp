@@ -125,6 +125,11 @@ sf::Packet* GameField::get_objects(bool reset) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
+	if (!reset) {
+		for (auto i = players.begin(); i != players.end(); ++i) {
+			*res << 10 << i->first << i->second->get_nickname();
+		}
+	}
 	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
 }

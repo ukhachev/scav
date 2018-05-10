@@ -103,3 +103,19 @@ void PlayerLeftAction::execute(GameField& gf) {
 	*(gf.get_state_packet()) << 102 << cl_id;
 	gf.delete_player(cl_id);
 }
+
+SetNicknameAction::SetNicknameAction(int cl_id, sf::Packet& packet): ClientAction(cl_id) {
+	packet >> nickname;
+}
+
+SetNicknameAction::~SetNicknameAction() {
+
+}
+
+void SetNicknameAction::execute(GameField& gf) {
+	Player* p = gf.get_player(cl_id);
+	if (p != nullptr) {
+		p->set_nickname(nickname);
+		*(gf.get_state_packet()) << 10 << cl_id << nickname;
+	}
+}

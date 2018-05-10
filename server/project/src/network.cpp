@@ -38,6 +38,7 @@ void Network::listen() {
 		if (i != sockets.rend()) {
 			cl_id = i->first + 1;
 		}
+		container.add_action(new PlayerJoinedAction(cl_id));
 		sf::Packet player_set;
 		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
 			player_set << 100 << i->first;
@@ -47,6 +48,8 @@ void Network::listen() {
 
 		sockets.emplace(cl_id, socket);
 
+
+
 		std::thread client_thread(receive, cl_id, socket, std::ref(container), &online, this);
 		client_thread.detach();
 		
@@ -55,8 +58,6 @@ void Network::listen() {
 		send_to_socket(socket, &player_set);
 		send_to_socket(socket, object_set);
 		delete object_set;
-
-		container.add_action(new PlayerJoinedAction(cl_id));
 
 		std::cout << "joined  " 
 		<< cl_id << " : " << socket->getRemoteAddress() << std::endl;

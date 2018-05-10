@@ -57,4 +57,12 @@ class PlayerLeftAction: public ClientAction {
  	void execute(GameField& gf);
 };
 
+class SetNicknameAction: public ClientAction {
+	std::string nickname;
+ public:
+ 	SetNicknameAction(int _cl_id, sf::Packet& packet);
+ 	~SetNicknameAction();
+ 	void execute(GameField& gf);
+};
+
 #endif

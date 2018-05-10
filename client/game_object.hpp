@@ -43,6 +43,7 @@ class Player: public DrawableObject, public KinematicObject {
     Sprite* dead;
     int timer;
     int ammo;
+    std::string nickname;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
@@ -61,6 +62,8 @@ class Player: public DrawableObject, public KinematicObject {
     float get_rotation();
     void draw(RenderWindow &window);
     void hit();
+    void set_nickname(const std::string& nickname);
+    const std::string& get_nickname();
     //void get_damage(int dmg);
 
     ~Player();

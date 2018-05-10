@@ -9,6 +9,8 @@ class Player : public StaticObject {
 	std::string nickname;
  public:
  	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick);
+ 	void set_nickname(const std::string& nick);
+ 	const std::string& get_nickname();
  	~Player();
 };
 

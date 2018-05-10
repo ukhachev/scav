@@ -48,6 +48,14 @@ void Player::set_rotation(float new_rot) {
     dead->setRotation(new_rot);
 }
 
+void Player::set_nickname(const std::string& nick) {
+    nickname = nick;
+}
+
+const std::string& Player::get_nickname() {
+    return nickname;
+}
+
 void Player::set_ammo(int val) {
     ammo = val;
 }
