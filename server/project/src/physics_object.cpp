@@ -36,7 +36,8 @@ void PhysicsObject::set_hp(int val) {
 }
 
 
-StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) : PhysicsObject(_id, _world) {
+StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, int t) 
+			: PhysicsObject(_id, _world), texture_id(t) {
 	b2BodyDef def;
 	def.position = b2Vec2(pos.x /100.f, pos.y / 100.f);
 	def.type = b2_staticBody;
@@ -61,6 +62,10 @@ StaticObject::~StaticObject() {
 
 int StaticObject::object_type() {
 	return 2;
+}
+
+int StaticObject::texture() {
+	return texture_id;
 }
 
 KinematicObject::KinematicObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): PhysicsObject(_id, _world) {

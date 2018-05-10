@@ -1,21 +1,58 @@
 #include "map_builder.hpp"
+#include <fstream>
 
-void MapBuilder::build(GameField& gf) {
-	for (int i = 0; i< 10; ++i) {
-		StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 100+i*20));
-		gf.add_object(s);
+void build_wall(GameField& gf, int x, int y, std::ifstream& fstream) {
+	int sx = 0;
+	int sy = 0;
+	int dir = 0;
+	int cnt = 0;
+	int txt = 0;
+
+	fstream >> sx >> sy >> dir >> cnt >> txt;
+
+	switch(dir) {
+		//По x
+		case 1: 
+		for (int i = 0; i < cnt; ++i) {
+			StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(sx, sy), b2Vec2(x + i * sx, y), txt);
+			gf.add_object(s);
+		}
+		break;
+		//По y
+		case 2: 
+		for (int i = 0; i < cnt; ++i) {
+			StaticObject* s = new StaticObject(200 + i, gf.get_physics_world(), b2Vec2(sx, sy), b2Vec2(x, y + i * sy), txt);
+			gf.add_object(s);
+		}
+		break;
 	}
-	AidKit* s = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(100, 50));
-	gf.add_object(s);
+}
+void MapBuilder::build(GameField& gf) {
+	std::ifstream f_stream("map.txt");
+    std::string type;
+    int x = 0;
+    int y = 0;
 
-	AidKit* s1 = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-310, 121));
-	gf.add_object(s1);
+    while(f_stream >> type >> x >> y) {
+        PhysicsObject* obj  = nullptr;
+        if (type == "wall") {
+        	build_wall(gf, x, y, f_stream);
+        }
+        if (type == "med") {
+        	obj = new AidKit(300, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
+        }
+        if (type == "mine") {
+        	obj = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
+        }
+        if (type == "bullet") {
+			obj = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-100, 30));
+        }
+        if (obj != nullptr) {
+        	gf.add_object(obj);
+        }
+    }
 
-	LandingMine* l = new LandingMine(301, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(204, -100));
-	gf.add_object(l);
-
-	BulletContainer* b = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-100, 30));
-	gf.add_object(b);
+    f_stream.close();
 
 	Weapon* w = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-300, 30), 102);
 	gf.add_object(w);

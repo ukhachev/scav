@@ -21,7 +21,7 @@ int GameObject::texture() {
 
 //Player
 Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick) 
-				: StaticObject(_id, _world, size, pos), nickname(nick) {
+				: StaticObject(_id, _world, size, pos, 1), nickname(nick) {
 }
 
 Player::~Player() {

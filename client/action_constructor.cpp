@@ -42,7 +42,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			switch (obj_type) {
 				case 2: {
 					Wall* w = new Wall(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
-					w->set_sprite(textures->get_texture(2));
+					w->set_sprite(textures->get_texture(texture_id));
 					w->set_damage_sprite(textures->get_texture(7));
 					field->add_object(w, obj_id);
 					std::cout << "wall " << obj_id << std::endl;
@@ -109,9 +109,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 7: {
 			float sec = 0;
-
 			packet >> sec;
-			std::cout <<sec <<std::endl;
 			field->move_border(sec);
 			break;
 		}
