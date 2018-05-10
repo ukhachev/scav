@@ -112,7 +112,8 @@ bool GameField::render() {
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
-            //std::cout << iter->second->get_id() << std::endl;
+            //const b2Vec2& pos = iter->second->get_pos();
+           // Interface::drawLine(&window, iter->second->get_nickname(), pos.x, pos.y - 60);
         }
         for (auto iter = objects.begin(); iter != objects.end(); iter++) {
             DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);

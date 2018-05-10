@@ -354,58 +354,15 @@ void Interface::dead_window()  { //Не нужно пока
 }
 
 
-/*
-Indicators::Indicators(int w, int h, int dx, int dy, std::string fontname, std::string txt, int size, RenderWindow* wnd, int dbg):MenuElement(w,h,dx,dy,wnd) {
-    font.loadFromFile(fontname);
-    text=Text(txt, font, size);
-    text.setColor(Color::Black);
-    text.setStyle(sf::Text::Regular);
-    bg=dbg;
-}
-
-void Indicators::draw() {
-    if(bg) {
-        sf::RectangleShape rectangle;
-        rectangle.setSize(sf::Vector2f(width, height));
-        rectangle.setOutlineColor(sf::Color::Black);
-        rectangle.setOutlineThickness(2);
-        rectangle.setPosition(x, y);
-        text.setColor(sf::Color(192,192,192));
-        rectangle.setFillColor(sf::Color(60,60,60));
-        window->draw(rectangle);
-    }
-    text.setPosition(x+5, y+2);
+void Interface::drawLine(RenderWindow* window,std::string str, float x, float y) {
+    sf::Font font;
+    font.loadFromFile("minecraft.otf");
+    sf::Text text;
+    text.setFont(font);
+    text.setString(str);
+    text.setCharacterSize(38);
+    text.setColor(sf::Color::Red);
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    text.setPosition(x,y);
     window->draw(text);
 }
-
-void Indicators::redraw() {
-    text.setPosition(x,y);
-}
-
-
-void Indicators::hide() {
-    text.setString("");
-}
-
-int Indicators::hover() {
-    if(MenuElement::hover()) {
-        return 1;
-    }
-    return 0;
-}
-
-int Indicators::pressed() {
-    if(MenuElement::pressed()) {
-        return 1;
-    }
-    return 0;
-}
-
-void Indicators::set_text(std::string str) {
-    text.setString(str);
-}
-
-std::string Indicators::get_text() {
-    return text.getString();
-}
-*/

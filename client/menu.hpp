@@ -106,7 +106,7 @@ class Interface {
 		void set_hp(int points);
 		void set_ammo(int points);
 		void dead_window();
-
+		static void drawLine(RenderWindow* wnd, std::string str, float x, float y);
 };
 
 
