@@ -47,19 +47,15 @@ void MapBuilder::build(GameField& gf) {
         if (type == "bullet") {
 			obj = new BulletContainer(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-100, 30));
         }
+        if (type == "weapon") {
+        	int id = 0;
+        	f_stream >> id;
+        	obj = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y), id);
+        }
         if (obj != nullptr) {
         	gf.add_object(obj);
         }
     }
 
     f_stream.close();
-
-	Weapon* w = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-300, 30), 102);
-	gf.add_object(w);
-
-	Weapon* w1 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-350, 30), 101);
-	gf.add_object(w1);
-
-	Weapon* w2 = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(-400, 30), 103);
-	gf.add_object(w2);
 }
