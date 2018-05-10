@@ -33,10 +33,12 @@ protected:
 };
 
 class StaticObject: public PhysicsObject {
+	int texture_id;
  public:
-	StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+	StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, int t);
 	~StaticObject();
 	int object_type();
+	virtual int texture();
 };
 
 class KinematicObject: public PhysicsObject {
