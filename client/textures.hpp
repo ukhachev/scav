@@ -7,6 +7,7 @@
 #include <map>
 #include "animation.hpp"
 
+
 using namespace sf;
 
 class Textures {
@@ -17,6 +18,8 @@ class Textures {
      Texture* get_texture(int _id);
      ~Textures();
 };
+
+
 
 class Animations {
  private:

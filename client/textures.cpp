@@ -1,6 +1,7 @@
 
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <iostream>
 #include <fstream>
 #include "textures.hpp"
 
@@ -33,8 +34,9 @@ Texture* Textures::get_texture(int _id) {
 Textures::~Textures() {
 	for (auto i = texture_container.begin(); i != texture_container.end(); ++i) {
 		delete i->second;
-	};
-}
+	}
+};
+
 
 Animations::Animations(const char* file_name) {
     std::ifstream f_stream(file_name);

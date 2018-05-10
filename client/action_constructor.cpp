@@ -5,7 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <mutex>
-//Animations a_cont("animations.txt");
+Animations a_cont("animations.txt");
 
 void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures, Animations* animations) {
 	static int cl_id = 0;
@@ -54,9 +54,9 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 					a->set_sprite(textures->get_texture(texture_id));
 					//Криво
 					if (texture_id == 10)
-                        a->set_dead_animation(animations->get_animation(1));
+                        a->set_dead_animation(a_cont.get_animation(1));
                     if (texture_id == 9) {
-                        a->set_dead_animation(animations->get_animation(2));
+                        a->set_dead_animation(a_cont.get_animation(2));
 
                     }
                     //------

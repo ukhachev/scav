@@ -36,7 +36,7 @@ class AnimationObject: public TempObject {
      int frames;
      int cur_frame;
  public:
-     AnimationObject(Sprite* new_sprite, int _frames);
+     AnimationObject(Sprite* new_sprite, int _frames /*int _timer*/);
      AnimationObject(AnimationObject* a_obj);
      int get_timer();
      void set_position(Vector2f new_pos);
