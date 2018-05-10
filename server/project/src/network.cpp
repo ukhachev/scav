@@ -43,7 +43,7 @@ void Network::listen() {
 			player_set << 100 << i->first;
 		}
 
-		sf::Packet* object_set = field->get_objects();
+		sf::Packet* object_set = field->get_objects(false);
 
 		sockets.emplace(cl_id, socket);
 
@@ -72,6 +72,7 @@ static void send(sf::TcpSocket* socket, sf::Packet* packet) {
 }
 
 void Network::send_to_socket(sf::TcpSocket* socket, sf::Packet* packet) {
+
 	sf::Packet* p = new sf::Packet(*packet);
 	std::thread send_thread(send, socket, p);
 	send_thread.detach();

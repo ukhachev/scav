@@ -36,7 +36,7 @@ class GameField {
 	void restart();
 	
 	sf::Packet* add_private_packet(int cl_id);
-	sf::Packet* get_objects();
+	sf::Packet* get_objects(bool reset);
 
 	std::map<int, sf::Packet*>::iterator p_packets_begin();
 	std::map<int, sf::Packet*>::iterator p_packets_end();

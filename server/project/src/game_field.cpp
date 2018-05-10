@@ -114,8 +114,13 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 	return private_packets.end();
 }
 
-sf::Packet* GameField::get_objects() {
+sf::Packet* GameField::get_objects(bool reset) {
 	sf::Packet* res = new sf::Packet();
+	
+	if (reset) {
+		*res << 104 << 0;
+	}
+
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
@@ -140,7 +145,7 @@ void GameField::delete_bullet(Bullet* b) {
 
 void GameField::restart() {
 	start_time = std::clock();
-	state_packet << 104 << 0;
+
 	for (auto i = objects.begin(); i != objects.end();) {
 		delete i->second;
 		i = objects.erase(i);
