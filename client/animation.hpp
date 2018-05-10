@@ -9,20 +9,15 @@
 using namespace sf;
 
 class TempObject {
-private:
+protected:
     Sprite* temp_sprite;
     int timer;
-
-    //Удалить или изменить
-    int frames;
-    int cur_frame;
-    //------
-
 public:
     TempObject(Texture* tenp_texture, int _timer, float x, float y);
     TempObject(Sprite* new_sprite, int _timer);
-    int get_timer();
-    void draw(RenderWindow& window);
+    TempObject();
+    virtual int get_timer();
+    virtual void draw(RenderWindow& window);
     ~TempObject();
 };
 
@@ -34,6 +29,19 @@ class TempContainer {
      void add(TempObject* tmp_obj);
      void draw(RenderWindow& window);
      ~TempContainer();
+};
+
+class AnimationObject: public TempObject {
+ private:
+     int frames;
+     int cur_frame;
+ public:
+     AnimationObject(Sprite* new_sprite, int _frames /*int _timer*/);
+     AnimationObject(AnimationObject* a_obj);
+     int get_timer();
+     void set_position(Vector2f new_pos);
+     void draw(RenderWindow& window);
+     ~AnimationObject();
 };
 
 

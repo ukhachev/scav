@@ -98,12 +98,14 @@ class Wall: public DrawableObject, public StaticObject {
 class AidKit : public DrawableObject, public Entity {
  private:
     Sprite* sprite;
-    Sprite* dead;
+    //Sprite* dead;
+    AnimationObject* dead;
  public:
     AidKit(int _id);
     void set_pos(Vector2f new_pos);
     void set_sprite(Texture* texture);
-    void set_dead_sprite(Texture* texture);
+    //void set_dead_sprite(Texture* texture);
+    void set_dead_animation(AnimationObject* a_obj);
     void get_delete_sprite(TempContainer& tmp_a_cont);
     void draw(RenderWindow& window);
     void set_rotation(float new_rot);

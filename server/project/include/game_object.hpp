@@ -6,8 +6,9 @@
 #include "physics_object.hpp"
 
 class Player : public StaticObject {
+	std::string nickname;
  public:
- 	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
+ 	Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick);
  	~Player();
 };
 
@@ -30,11 +31,21 @@ class LandingMine: public Entity {
 	int object_type();
 };
 
-
 class BulletContainer: public Entity {
  public:
 	BulletContainer(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
 	~BulletContainer();
+	int texture();
+	void interact(PhysicsObject* object, sf::Packet* packet);
+	int object_type();
+};
+
+class Weapon: public Entity {
+ private: 
+ 	int type;
+ public:
+	Weapon(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, int t);
+	~Weapon();
 	int texture();
 	void interact(PhysicsObject* object, sf::Packet* packet);
 	int object_type();

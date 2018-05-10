@@ -1,12 +1,13 @@
 #include "action.hpp"
 #include "game_object.hpp"
-
+#include "inventor.hpp"
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <math.h>
 #include <mutex>
+//Animations a_cont("animations.txt");
 
-void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures) {
+void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures, Animations* animations) {
 	static int cl_id = 0;
 	int id = 0;
 	int obj_id = 0;
@@ -53,9 +54,11 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 					a->set_sprite(textures->get_texture(texture_id));
 					//Криво
 					if (texture_id == 10)
-                    	a->set_dead_sprite(textures->get_texture(12));
+                    //	a->set_dead_sprite(textures->get_texture(12));
+                        a->set_dead_animation(animations->get_animation(1));
                     if (texture_id == 9) {
-                    	a->set_dead_sprite(textures->get_texture(15));
+                    	//a->set_dead_sprite(textures->get_texture(15));
+                        a->set_dead_animation(animations->get_animation(2));
                     }
                     //------
 					a->set_pos(Vector2f(x, y));
@@ -81,10 +84,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			packet >> hp;
 			if (obj_id >= 200) {
 				obj = field->get_object(obj_id);
-				if (hp <= 0 && obj != nullptr) {
-					field->delete_object(obj_id);
-					break;
-				}
 			}
 			else {
 				obj = field->find_player(obj_id);
@@ -94,8 +93,32 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			}
 			break;
-		}  //Пули
-		case 14: {
+		}
+		case 6: { //Подбор оружия
+			int wtype = 0;
+			Inventor* inv = field->get_inventor();
+
+			packet >> wtype;
+			if (obj_id == cl_id) {
+				Weapon* w = inv->find(wtype);
+				if (w==nullptr) {
+					w = WeaponCreator::create(wtype, textures);
+					inv->put(w);
+				} else {
+					w->set_ammo(150);
+				}
+			}
+			break;
+		}
+		case 7: {
+			float sec = 0;
+
+			packet >> sec;
+			std::cout <<sec <<std::endl;
+			field->move_border(sec);
+			break;
+		}
+		case 14: {//Пули
 			float x = 0;
 			float y = 0;
 			float angle = 0;
@@ -133,6 +156,15 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 102: { //Удалить игрока
 			field->delete_player(obj_id);
+			break;
+		}
+		case 103: { //Удалить объект
+			field->delete_object(obj_id);
+			break;
+		}
+		case 104: {
+			std::cout << "reset game" << std::endl;
+			field->delete_all();
 		}
 
 	}

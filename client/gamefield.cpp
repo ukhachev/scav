@@ -8,21 +8,10 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
-    StaticObject* left = new StaticObject(world, b2Vec2(10, 1000), b2Vec2(-500, 0));
-    StaticObject* right = new StaticObject(world, b2Vec2(10, 1000), b2Vec2(500, 0));
-    StaticObject* top = new StaticObject(world, b2Vec2(1000, 10), b2Vec2(0, 500));
-    StaticObject* bot = new StaticObject(world, b2Vec2(1000, 10), b2Vec2(0, -500));
-    (void)left;
-    (void)top;
-    (void)bot;
-    (void)right;
-    
-
-    /*for (int i = 1; i < 6; i++) {
-        TempObject* tmp_obj = new TempObject(t_cont.get_texture(i), i*20, i*50, 0);
-        tmp_a_cont.add(tmp_obj);
-    }*/
-
+    borders[0] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
+    borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
+    borders[2] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, 1000));
+    borders[3] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, -1000));
 
 }
 b2World* GameField::get_physics_world() {
@@ -46,7 +35,8 @@ bool GameField::get_action(sf::Packet& packet) {
     if (player != nullptr) {
         packet << 1 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
         if (was_shot) {
-            packet << 14 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
+            Weapon* w = inv.get_current();
+            packet << 14 << w->get_id() << player->get_pos().x <<player->get_pos().y << player->get_rotation();
             was_shot = false;
         }
         return true;
@@ -56,10 +46,15 @@ bool GameField::get_action(sf::Packet& packet) {
 
 void GameField::shoot() {
     Weapon* w = inv.get_current();
-	if (last_shot > w->get_speed()) {
+
+    if (!w) {
+    	return;
+    }
+    int ammo =  w->get_ammo();
+	if (last_shot > w->get_speed() && ammo > 0) {
 	    was_shot = true;
 	    last_shot = 0;
-        player->set_ammo(player->get_ammo() - 1);
+        w->set_ammo(ammo - 1);
 	}
 }
 
@@ -72,27 +67,6 @@ bool GameField::render() {
     	if (last_shot < 100000) {
     		last_shot++;
     	}
-        
-        if(Inventor::inv[0]==NULL) {
-            Weapon* rifle = new Weapon(150, 5, 15, std::string("rifle.png"));
-            inv.put(rifle);
-        }
-        if(Inventor::inv[1]==NULL) {
-            Weapon* pistol = new Weapon(150, 10, 15, std::string("pistol.png"));
-            inv.put(pistol);
-        }
-        if(Inventor::inv[2]==NULL) {
-            Weapon* shotgun = new Weapon(150, 15, 15, std::string("shotgun.png"));
-            inv.put(shotgun);
-        } 
-        if(Inventor::inv[3]==NULL) {
-            Weapon* grenade = new Weapon(150, 30, 15, std::string("grenade.png"));
-            inv.put(grenade);
-        }
-        if(Inventor::inv[4]==NULL) {
-            Weapon* hp = new Weapon(150, 1000000, 15, std::string("hp.png"));
-            inv.put(hp);
-        } 
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -100,7 +74,7 @@ bool GameField::render() {
             if (event.type == sf::Event::Closed)
             window.close();
         }
-     window.clear();
+        window.clear();
         if (player != nullptr) {
             if (player->get_hp() > 0) {
                 b2Vec2 speed(0, 0);
@@ -122,13 +96,11 @@ bool GameField::render() {
                 player->mouse_rotation(window);
 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
-                    if (player->get_ammo() > 0) {
-                        shoot();
-                    }
+                    shoot();  
                 }
             }
             interface.set_hp(player->get_hp());
-            interface.set_ammo(player->get_ammo());
+           
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
@@ -136,6 +108,7 @@ bool GameField::render() {
       
         g_cam.draw(window);
 
+       
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
@@ -152,6 +125,14 @@ bool GameField::render() {
         }
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
+            Weapon* w = inv.get_current();
+            if (w) {
+            	interface.set_ammo(w->get_ammo());
+            }
+            else {
+            	interface.set_ammo(0);
+            }
+            
             inv.check_key();
             inv.draw(player->get_pos().x, player->get_pos().y);
         }
@@ -165,6 +146,9 @@ bool GameField::render() {
     //delete player;
 }
 
+Inventor* GameField::get_inventor() {
+    return &inv;
+}
 
 std::mutex& GameField::get_mutex() {
 	return mtx;
@@ -234,6 +218,24 @@ PhysicsObject* GameField::get_object(int id) {
     return nullptr;
 }
 
+void GameField::delete_all() {
+    inv.clear();
+    for (auto i = objects.begin(); i != objects.end();) {
+        delete i->second;
+        i = objects.erase(i);
+    }
+    for (auto i = players.begin(); i != players.end(); ++i) {
+        i->second->set_hp(100);
+    }
+}
+
 RenderWindow* GameField::get_window() {
     return &window;
+}
+
+void GameField::move_border(float secs) {
+    borders[0]->set_pos(-1000 + secs*500, 0);
+    borders[1]->set_pos(1000 - secs*500, 0);
+    borders[2]->set_pos(0, 1000 + secs*500);
+    borders[3]->set_pos(0, -1000 + secs*500);
 }

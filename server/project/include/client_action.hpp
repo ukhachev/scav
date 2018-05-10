@@ -42,6 +42,8 @@ class ShotAction : public ClientAction {
  private:
  	b2Vec2 start_point;
  	float angle;
+ 	int weapon;
+ 	void create_bullet(float angle, GameField& gf, int dmg);
  public:
  	ShotAction(int _cl_id, sf::Packet& packet);
  	~ShotAction();
@@ -54,4 +56,5 @@ class PlayerLeftAction: public ClientAction {
  	~PlayerLeftAction();
  	void execute(GameField& gf);
 };
+
 #endif

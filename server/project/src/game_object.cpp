@@ -20,8 +20,8 @@ int GameObject::texture() {
 }
 
 //Player
-Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) 
-				: StaticObject(_id, _world, size, pos) {
+Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick) 
+				: StaticObject(_id, _world, size, pos), nickname(nick) {
 }
 
 Player::~Player() {
@@ -96,4 +96,26 @@ int BulletContainer::object_type() {
 void BulletContainer::interact(PhysicsObject* object, sf::Packet* packet) {
 	*packet << 3 << object->get_id() << 60;
 	printf("Bullet\n");
+}
+
+Weapon::Weapon(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, int t):
+	Entity(_id, _world, size, pos), type(t) {
+
+}
+
+Weapon::~Weapon() {
+
+}
+
+int Weapon::texture() {
+	return type + 10;
+}
+
+int Weapon::object_type() {
+	return 3;
+}
+
+void Weapon::interact(PhysicsObject* object, sf::Packet* packet) {
+	object->set_hp(object->get_hp() - 50);
+	*packet << 6 << object->get_id() << type;
 }

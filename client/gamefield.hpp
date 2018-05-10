@@ -16,9 +16,10 @@
 #include "menu.hpp"
 #include "animation.hpp"
 #include "cursor.hpp"
-
+#include "inventor.hpp"
 #include <map>
 #include <list>
+#include <ctime>
 using namespace sf;
 
 class GameField {
@@ -31,6 +32,7 @@ class GameField {
     TempContainer tmp_a_cont;
     Cursor g_curs;
 
+    StaticObject* borders[4];
  	std::map<int, Player*> players;
  	std::map<int, PhysicsObject*> objects;
     bool was_shot = false;
@@ -54,7 +56,9 @@ class GameField {
 
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
-
+    void delete_all();
+    
+    Inventor* get_inventor();
     int add_object(PhysicsObject* obj, int new_id);
 
     void delete_object(int id);
@@ -62,6 +66,7 @@ class GameField {
 
  	int add_bullet(DrawableBullet* obj);
     void delete_bullet(DrawableBullet* b);
+    void move_border(float secs);
     RenderWindow* get_window();
 };
 

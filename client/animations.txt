@@ -1,0 +1,2 @@
+1 explosion1.png 5
+2 healing1.png 5

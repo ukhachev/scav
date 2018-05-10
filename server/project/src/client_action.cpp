@@ -1,6 +1,8 @@
 #include <server.hpp>
 #include <iostream>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
 //Base class
 ClientAction::ClientAction(int _cl_id) : cl_id(_cl_id) {
 }
@@ -42,25 +44,51 @@ void MoveAction::execute(GameField& gf) {
 }
 
 ShotAction::ShotAction(int _cl_id, sf::Packet& packet): ClientAction(_cl_id) {
-	packet >> start_point.x >> start_point.y >> angle; 
+	packet >> weapon >> start_point.x >> start_point.y >> angle; 
 }
 
 ShotAction::~ShotAction() {
 
 }
 
-void ShotAction::execute(GameField& gf) {
+void ShotAction::create_bullet(float angle, GameField& gf, int dmg) {
 	b2World* world = gf.get_world();
-	angle = (angle - 90) * 3.1415 / 180;
 	b2Vec2 speed(700 * cos(angle) , 700 * sin(angle));
+	b2Vec2 delta_point(start_point.x + 40 * cos(angle), start_point.y + 40 * sin(angle));
 	
-	start_point.x += 50 * cos(angle);
-	start_point.y += 50 * sin(angle);
+	Bullet* bullet = new Bullet(cl_id, world, b2Vec2(4, 4), delta_point, speed, dmg);
 
-	Bullet* bullet = new Bullet(cl_id, world, b2Vec2(4, 4), start_point, speed, 10);
+	*(gf.get_state_packet()) << 14 << cl_id << delta_point.x << delta_point.y << angle;
+	
 	gf.add_bullet(bullet);
 
-	*(gf.get_state_packet()) << 14 << cl_id << start_point.x << start_point.y << angle;
+}
+
+void ShotAction::execute(GameField& gf) {
+
+	//srand(time(NULL));
+	angle = (angle - 90) * (3.1415 / 180);
+	int r = rand();
+	switch (weapon) {
+		case 103: {
+			float da = (r % 20)/60.f - 1.f/12.f;
+			create_bullet(angle + da, gf, 5);
+			create_bullet(angle + (1.f /6.f) + da, gf, 5);
+			create_bullet(angle -(1.f / 6.f) + da, gf, 5);
+		}
+		break;
+		case 102: {
+			float da = (r % 5)/60.f - 1.f/24.f;
+			create_bullet(angle + da, gf, 5);
+		}
+		break;
+
+		default: {
+			float da = (r % 15)/60.f - 1.f/8.f;
+			create_bullet(angle + da, gf, 10);
+		}
+	}
+	
 }
 
 PlayerLeftAction::PlayerLeftAction(int _cl_id): ClientAction(_cl_id) {

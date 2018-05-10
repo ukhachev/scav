@@ -6,12 +6,15 @@
 #include "physics_object.hpp"
 #include <map>
 #include <list>
+#include <ctime>
+
 class GameField {
  private:
 	std::map<int, Player*> players;
 	std::map<int, PhysicsObject*> objects;
 	std::list<Bullet*> bullets;
 	StaticObject* borders[4];
+	std::clock_t start_time;
 	
 	b2World* world;
 	sf::Packet state_packet;
@@ -30,7 +33,8 @@ class GameField {
 	
 	void step();
 	void reset();
-
+	void restart();
+	
 	sf::Packet* add_private_packet(int cl_id);
 	sf::Packet* get_objects();
 

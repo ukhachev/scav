@@ -7,13 +7,14 @@
 #include <SFML/Audio.hpp>
 bool online = true;
 Textures* textures;
+Animations* animations;
 
 void get(Connector* connector, GameField* field) {
 	while (online) {
 		sf::Packet* packet = connector->get();
 
 		while (!packet->endOfPacket()) {
-			ActionConstructor::execute_action(field, *packet, textures);
+			ActionConstructor::execute_action(field, *packet, textures, animations);
 		}
 		delete packet;
 	}
@@ -22,11 +23,11 @@ void get(Connector* connector, GameField* field) {
 void render(GameField* field) {
 	b2World* world = field->get_physics_world();
 	std::mutex& mtx = field->get_mutex();
-	
+
 
 	ContactListener l;
 	world->SetContactListener(&l);
-  		
+
 	while (field->render()) {
 		mtx.lock();
         l.execute_actions(*field);
@@ -50,6 +51,7 @@ void send(Connector* connector, GameField* field) {
 int main(int argc, char const *argv[])
 {
 	textures = new Textures("textures.txt");
+    animations = new Animations("animations.txt");
     GameField field;
     std::string name;
     std::string ip;
@@ -62,7 +64,7 @@ int main(int argc, char const *argv[])
     sound.setVolume(90);
     sound.setLoop(true);
     sound.play();
-    
+
 	if (argc < 3) {
 		std::cout << "Input ip and port" << std::endl;
 		Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
@@ -70,7 +72,7 @@ int main(int argc, char const *argv[])
 		name = menu.get_name();
 		ip = menu.get_ip();
 		port = menu.get_port();
-		
+
 	}
 	else {
 		ip = argv[1];
@@ -89,5 +91,6 @@ int main(int argc, char const *argv[])
 	send_thread.join();
 	render_thread.join();
 	delete textures;
+    delete animations;
 	return 0;
 }

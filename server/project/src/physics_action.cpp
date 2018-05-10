@@ -45,6 +45,4 @@ void EntityPhysicsAction::execute(GameField& field) {
 	int id = entity->get_id();
 	entity->interact(object, field.get_state_packet());
 	field.delete_object(id);
-
-	*(field.get_state_packet()) << 5 << id << 0;
 }

@@ -200,18 +200,24 @@ void AidKit::set_sprite(Texture* texture) {
     sprite->setScale(1.5, 1.5);
 }
 
-void AidKit::set_dead_sprite(Texture* texture) {
+/*void AidKit::set_dead_sprite(Texture* texture) {
     dead = new Sprite(*texture);
     dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
     dead->setScale(1.5, 1.5);
+}*/
+
+void AidKit::set_dead_animation(AnimationObject* a_obj) {
+    std::cout << "Animation added to object" << std::endl;
+    dead = new AnimationObject(a_obj);
 }
 
 void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
     if (dead!=nullptr) {
-        dead->setPosition(sprite->getPosition());
+        dead->set_position(sprite->getPosition());
+        //dead->setPosition(sprite->getPosition());
         //TempObject* tmp_obj = new TempObject(dead, 4);
-        TempObject* tmp_obj = new TempObject(dead, 20);
-        tmp_a_cont.add(tmp_obj);
+        //tmp_a_cont.add(tmp_obj);
+        tmp_a_cont.add(dead);
     }
 }
 
