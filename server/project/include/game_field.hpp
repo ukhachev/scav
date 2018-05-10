@@ -14,8 +14,9 @@ class GameField {
 	std::map<int, PhysicsObject*> objects;
 	std::list<Bullet*> bullets;
 	StaticObject* borders[4];
-	std::clock_t start_time;
-	
+	std::clock_t start_time;	
+	std::list<PhysicsObject*> objects_to_delete;
+
 	b2World* world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;

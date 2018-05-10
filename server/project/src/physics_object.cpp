@@ -56,8 +56,7 @@ StaticObject::StaticObject(int _id, b2World* _world, const b2Vec2& size,const b2
 }
 
 StaticObject::~StaticObject() {
-	//body->SetActive(false);
-	//this->body->GetWorld()->DestroyBody(body);
+
 }
 
 int StaticObject::object_type() {
@@ -88,7 +87,6 @@ KinematicObject::KinematicObject(int _id, b2World* _world, const b2Vec2& size,co
 }
 
 KinematicObject::~KinematicObject() {
-	//this->body->GetWorld()->DestroyBody(body);
 }
 
 void KinematicObject::set_speed(float sx, float sy) {
@@ -110,8 +108,6 @@ Bullet::Bullet(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos, c
 }
 
 Bullet::~Bullet() {
-	//body->SetActive(false);
-	//this->body->GetWorld()->DestroyBody(body);
 }
 
 int Bullet::object_type() {

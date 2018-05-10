@@ -10,17 +10,22 @@ GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
 
 GameField::~GameField() {
 	reset();
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		delete i->second;
-		objects.erase(i);
-	}
-	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
+
+	for (auto i = bullets.begin(); i != bullets.end();) {
 		delete *i;
-		bullets.erase(i);
+		i = bullets.erase(i);
 	}
+
+	for (auto i = objects.begin(); i != objects.end();) {
+		delete i->second;
+		i = objects.erase(i);
+		std::cout << i->first <<std::endl;
+	}
+
 	for (int i = 0; i < 4; ++i) {
 		delete borders[i];
 	}
+
 	delete world;
 }
 
@@ -70,8 +75,12 @@ Player* GameField::get_player(int cl_id) {
 }
 
 void GameField::step() {
-	std::clock_t end = std::clock();
-	float secs = float(end - start_time) / CLOCKS_PER_SEC;
+	for (auto i = objects_to_delete.begin(); i != objects_to_delete.end();) {
+		delete *i;
+		i = objects_to_delete.erase(i);
+	}
+	//std::clock_t end = std::clock();
+	float secs = 0;//float(end - start_time) / CLOCKS_PER_SEC;
 	
 	borders[0]->set_pos(-1000 + secs*500, 0);
 	borders[1]->set_pos(1000 - secs*500, 0);
@@ -125,11 +134,11 @@ sf::Packet* GameField::get_objects(bool reset) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
-	if (!reset) {
+	/*if (!reset) {
 		for (auto i = players.begin(); i != players.end(); ++i) {
 			*res << 10 << i->first << i->second->get_nickname();
 		}
-	}
+	}*/
 	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
 }
@@ -141,8 +150,9 @@ b2World* GameField::get_physics_world() {
 void GameField::delete_bullet(Bullet* b) {
 	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
 		if (*i == b) {
+			objects_to_delete.push_front(*i);
 			bullets.erase(i);
-			delete b;
+			//delete b;
 			return;
 		}
 	}
@@ -171,7 +181,7 @@ void GameField::delete_object(int id) {
 
 	if (i != objects.end()) {
 		state_packet << 103 << i->second->get_id();
-		delete i->second;
+		objects_to_delete.push_front(i->second);
 		objects.erase(i);
 	}
 }

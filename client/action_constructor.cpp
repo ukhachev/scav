@@ -119,7 +119,10 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			std::string nickname;
 			packet >> nickname;
 			std::cout << "nickname" << std::endl;
-			field->find_player(obj_id)->set_nickname(nickname);
+			Player* p = field->find_player(obj_id);
+			if (p != nullptr) {
+				field->find_player(obj_id)->set_nickname(nickname);
+			}
 			break;
 		}
 		case 14: {//Пули

@@ -39,9 +39,9 @@ void render(GameField* field) {
 }
 
 void send(Connector* connector, GameField* field, std::string& nick) {
-	sf::Packet nick_packet;
+	/*sf::Packet nick_packet;
 	nick_packet << 10 << nick;
-	connector->send(&nick_packet);
+	connector->send(&nick_packet);*/
 
 	while (online) {
 		sf::Packet packet;
