@@ -3,6 +3,13 @@
 #include "gamefield.hpp"
 #include <iostream>
 
+void GameField::draw_border(float x, float y) {
+    Vector2f size(x, y);
+    field_border.setSize(size);
+    field_border.setOrigin(field_border.getLocalBounds().width / 2, field_border.getLocalBounds().height / 2);
+    window.draw(field_border);
+}
+
 
 GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)) {
     player = nullptr;
@@ -12,6 +19,11 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
     borders[2] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, 1000));
     borders[3] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, -1000));
+    field_border.setSize(Vector2f(1000.f, 1000.f));
+    field_border.setFillColor(Color::Transparent);
+    field_border.setOutlineColor(Color::Red);
+    field_border.setOutlineThickness(10);
+    field_border.setOrigin(field_border.getLocalBounds().width / 2, field_border.getLocalBounds().height / 2);
 
 }
 b2World* GameField::get_physics_world() {
@@ -96,19 +108,19 @@ bool GameField::render() {
                 player->mouse_rotation(window);
 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
-                    shoot();  
+                    shoot();
                 }
             }
             interface.set_hp(player->get_hp());
-           
+
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
         }
-      
+
         g_cam.draw(window);
 
-       
+
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
@@ -124,6 +136,7 @@ bool GameField::render() {
         for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
             (*iter)->draw(window);
         }
+        draw_border(2*borders[1]->get_pos().x, 2*borders[1]->get_pos().x);
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
             Weapon* w = inv.get_current();
@@ -133,7 +146,7 @@ bool GameField::render() {
             else {
             	interface.set_ammo(0);
             }
-            
+
             inv.check_key();
             inv.draw(player->get_pos().x, player->get_pos().y);
         }

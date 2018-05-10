@@ -31,6 +31,7 @@ class GameField {
     MapConst g_map;
     TempContainer tmp_a_cont;
     Cursor g_curs;
+    RectangleShape field_border;
 
     StaticObject* borders[4];
  	std::map<int, Player*> players;
@@ -42,6 +43,7 @@ class GameField {
     int last_shot = 0;
     Interface interface;
     Inventor inv;
+    void draw_border(float x, float y);
  public:
     GameField();
     b2World* get_physics_world();
@@ -57,7 +59,7 @@ class GameField {
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
     void delete_all();
-    
+
     Inventor* get_inventor();
     int add_object(PhysicsObject* obj, int new_id);
 
