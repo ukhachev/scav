@@ -12,7 +12,11 @@ MenuElement::MenuElement(int w, int h, int dx, int dy, RenderWindow* wnd) {
 }
 
 int MenuElement::hover() {
-    if (IntRect(x, y, width, height).contains(Mouse::getPosition(*window))) {
+    float dx = (float)window->getSize().x/(float)640;
+    float dy = (float)window->getSize().y/(float)480;
+    float mouse_x=(float)Mouse::getPosition(*window).x;
+    float mouse_y=(float)Mouse::getPosition(*window).y;
+    if (FloatRect(dx*x, dy*y, dx*width, dy*height).contains(mouse_x,mouse_y)) {
         return 1;
     }
     return 0;
@@ -234,16 +238,16 @@ std::string Menu::get_input_value(std::list<MenuElement*>::iterator ptr) {
                             if(s.size() == 0) {
                                 (*ptr)->set_text("");
                             }
-                            if(event.type==sf::Event::TextEntered) {
-                                if(Keyboard::isKeyPressed(Keyboard::BackSpace) && s.size() != 0) {
-                                    s.pop_back();
-                                    (*ptr)->set_text(s);
-                                }
-                                else if(Keyboard::isKeyPressed(Keyboard::Return) && s.size() != 0) {
+                            if(  (Mouse::isButtonPressed(Mouse::Left) && !((*ptr)->hover())) && s.size() != 0) {
                                     std::string ip_addr=(*ptr)->get_text();
                                     //std::cout<<"returned ip: "<<ip_addr<<std::endl;
                                     return s;
                                     isInput=0;
+                                }
+                            if(event.type==sf::Event::TextEntered) {
+                                if(Keyboard::isKeyPressed(Keyboard::BackSpace) && s.size() != 0) {
+                                    s.pop_back();
+                                    (*ptr)->set_text(s);
                                 }
                                 else if (event.text.unicode <128) {
                                     s.push_back((char)event.text.unicode);

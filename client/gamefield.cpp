@@ -14,7 +14,7 @@ void GameField::draw_border(float x, float y) {
 
 GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false) {
     player = nullptr;
-    window.create(sf::VideoMode(640, 480), "SCAV", sf::Style::Titlebar | sf::Style::Close);
+    window.create(sf::VideoMode(640, 480), "SCAV");
     window.setFramerateLimit(60);
     borders[0] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
     borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
