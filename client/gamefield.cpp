@@ -130,12 +130,12 @@ bool GameField::render() {
             }
             interface.set_hp(player->get_hp());
 
-            g_cam.set_center(player);
+            g_cam.setCenter(player->get_pos().x, player->get_pos().y);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
         }
-
-        g_cam.draw(window);
+        
+        window.setView(g_cam);
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);

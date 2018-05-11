@@ -12,7 +12,6 @@
 
 #include "textures.hpp"
 #include "map_constructor.hpp"
-#include "camera.hpp"
 #include "menu.hpp"
 #include "animation.hpp"
 #include "cursor.hpp"
@@ -35,7 +34,7 @@ class GameField {
 
     Player* player;
     RenderWindow window;
-    Camera g_cam;
+    View g_cam;
 
     TempContainer tmp_a_cont;
 
