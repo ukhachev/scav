@@ -14,7 +14,7 @@ void GameField::draw_border(float x, float y) {
 
 GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false) {
     player = nullptr;
-    window.create(sf::VideoMode(640, 480), "project");
+    window.create(sf::VideoMode(640, 480), "SCAV", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(60);
     borders[0] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
     borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
@@ -85,6 +85,7 @@ bool GameField::render() {
     //Textures t_cont("textures.txt");
     //Texture* t = t_cont.get_texture(4);
    // MapConst g_map(20, 20, t_cont);
+    static int escapeUp=1;
     if (window.isOpen())
     {
     	if (last_shot < 100000) {
@@ -107,7 +108,11 @@ bool GameField::render() {
         if (player != nullptr) {
             if (player->get_hp() > 0) {
                 b2Vec2 speed(0, 0);
-
+                if (event.type == sf::Event::KeyReleased) {
+                    if (event.key.code == sf::Keyboard::Escape) {
+                        escapeUp=1;
+                    }
+                }
     	        if(Keyboard::isKeyPressed(Keyboard::A)) {
     	            speed += b2Vec2(-200.f, 0.f);
     	        }
@@ -120,6 +125,29 @@ bool GameField::render() {
     	        if(Keyboard::isKeyPressed(Keyboard::S)) {
     	            speed += b2Vec2(0.f, 200.f);
     	        }
+                if(Keyboard::isKeyPressed(Keyboard::Escape) && escapeUp) {
+                    escapeUp=0;
+                    window.setKeyRepeatEnabled(false);
+                    g_cam.setSize(640,480);
+                    g_cam.setCenter(320, 240);
+                    window.setView(g_cam);
+                    Menu menu(&window, "scav_bg.jpg", "minecraft.otf");
+                    menu.draw();
+                    std::string name = menu.get_name();
+                    std::string ip = menu.get_ip();
+                    int port = menu.get_port();
+                    g_cam.setSize(1000,1000);
+
+                }
+                if(Keyboard::isKeyPressed(Keyboard::Tab)) {
+                    while(true) {
+                        g_cam.setSize(640,480);
+                        g_cam.setCenter(320, 240);
+                        window.setView(g_cam);
+                        interface.showMessage(std::string(""), std::string("dead_back.jpg"), sf::Color(158, 236, 255, 255),sf::Color(0, 0, 0, 255));
+                        g_cam.setSize(1000,1000);
+                    }
+                }
     	        player->set_speed(speed.x, speed.y);
 
                 player->mouse_rotation(window);
