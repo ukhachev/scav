@@ -25,7 +25,7 @@ PlayerJoinedAction::~PlayerJoinedAction() {
 
 void PlayerJoinedAction::execute(GameField& gf) {
 	gf.add_player(cl_id);
-	*(gf.get_state_packet()) << 100 << cl_id << cl_id;
+	*(gf.get_state_packet()) << 100 << cl_id;
 }
 
 //Moves player
@@ -102,4 +102,20 @@ PlayerLeftAction::~PlayerLeftAction() {
 void PlayerLeftAction::execute(GameField& gf) {
 	*(gf.get_state_packet()) << 102 << cl_id;
 	gf.delete_player(cl_id);
+}
+
+SetNicknameAction::SetNicknameAction(int cl_id, sf::Packet& packet): ClientAction(cl_id) {
+	packet >> nickname;
+}
+
+SetNicknameAction::~SetNicknameAction() {
+
+}
+
+void SetNicknameAction::execute(GameField& gf) {
+	Player* p = gf.get_player(cl_id);
+	if (p != nullptr) {
+		p->set_nickname(nickname);
+		*(gf.get_state_packet()) << 10 << cl_id << nickname;
+	}
 }

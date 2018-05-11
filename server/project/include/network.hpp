@@ -14,14 +14,16 @@ class Network {
  	GameField* field;
  	bool online;
 
+ 	size_t min_count;
  	std::map<int, sf::TcpSocket*> sockets;
 	SafeActionContainer container;
 
 	void delete_client(int cl_id);
 	static void receive(int cl_id, sf::TcpSocket* socket, SafeActionContainer& container, const bool* online, Network* net);
 	void send_to_socket(sf::TcpSocket* socket, sf::Packet* packet);
+	void start_game();
  public:
-	Network(int _port, GameField* _field);
+	Network(int _port, GameField* _field, size_t _min_count);
 	~Network();
 
 	ActionContainer* get_actions();

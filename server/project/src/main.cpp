@@ -11,8 +11,7 @@ void restart_game(Network& net, GameField& gf) {
 	gf.restart();
 	need_restart = false;
 	MapBuilder::build(gf);
-	sf::Packet* obj_packet = gf.get_objects();
-	net.translate(gf.get_state_packet());
+	sf::Packet* obj_packet = gf.get_objects(true);
 	net.translate(obj_packet);
 	delete obj_packet;
 }
@@ -58,7 +57,7 @@ int main()
 	GameField gf;
 
 	MapBuilder::build(gf);
-	Network net(port, &gf);
+	Network net(port, &gf, 2);
 	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));
 	std::thread listen_thread(listen, std::ref(net));

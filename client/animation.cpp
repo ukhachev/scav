@@ -17,6 +17,8 @@ TempObject::TempObject(Sprite* new_sprite, int _timer): timer(_timer) {
     //temp_sprite->setScale(0.25, 0.25);
 }
 
+TempObject::TempObject() {}
+
 
 int TempObject::get_timer() {
     return timer;
@@ -65,4 +67,47 @@ TempContainer::~TempContainer() {
     for (auto iter = tmp_list.begin(); iter != tmp_list.end(); iter++) {
         tmp_list.erase(iter);
     }
+}
+
+AnimationObject::AnimationObject(Sprite* new_sprite, int _frames/*int _timer*/): TempObject(new_sprite, 20/*_timer*/) {
+    frames = _frames;
+    cur_frame = 0;
+    temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
+    temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
+    temp_sprite->setScale(3, 3);
+    //temp_sprite = new_sprite;
+    //temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
+    //temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
+}
+
+AnimationObject::AnimationObject(AnimationObject* a_obj) {
+    frames = a_obj->frames;
+    timer = a_obj->timer;
+    temp_sprite = new Sprite(*(a_obj->temp_sprite));
+}
+
+void AnimationObject::set_position(Vector2f new_pos) {
+    temp_sprite->setPosition(new_pos);
+}
+
+int AnimationObject::get_timer() {
+    return timer;
+}
+
+
+void AnimationObject::draw(RenderWindow& window) {
+    static int cur_frame = 0;
+    if ((timer % 4) == 0) {
+        if (cur_frame < frames) {
+            temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
+            cur_frame++;
+        }
+    }
+    window.draw(*temp_sprite);
+    timer--;
+}
+
+AnimationObject::~AnimationObject() {
+    std::cout << "deleted" << std::endl;
+    delete temp_sprite;
 }

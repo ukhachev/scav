@@ -27,11 +27,19 @@ void DrawableObject::hit() {
 
 }
 
+void Player::interpolate(float x, float y) {
+    b2Vec2 cur_pos = get_pos();
+    b2Vec2 dpos = b2Vec2(x, y) - cur_pos;
+    set_speed(20*dpos.x, 20*dpos.y);
+}
+
 void Player::set_pos(Vector2f new_pos) {
     pos = new_pos;
-    b2Vec2 cur_pos = get_pos();
-    b2Vec2 dpos = b2Vec2(new_pos.x, new_pos.y) - cur_pos;
-    set_speed(20*dpos.x, 20*dpos.y);
+
+    //b2Vec2 cur_pos = get_pos();
+    //b2Vec2 dpos = b2Vec2(new_pos.x, new_pos.y) - cur_pos;
+    body->SetTransform(b2Vec2(new_pos.x /100.f, new_pos.y /100.f), 0);
+    //set_speed(20*dpos.x, 20*dpos.y);
 }
 
 void Player::mouse_rotation(RenderWindow& window) {
@@ -46,6 +54,14 @@ void Player::set_rotation(float new_rot) {
     player_rotation = new_rot;
     skin->setRotation(new_rot);
     dead->setRotation(new_rot);
+}
+
+void Player::set_nickname(const std::string& nick) {
+    nickname = nick;
+}
+
+const std::string& Player::get_nickname() {
+    return nickname;
 }
 
 void Player::set_ammo(int val) {
@@ -200,17 +216,21 @@ void AidKit::set_sprite(Texture* texture) {
     sprite->setScale(1.5, 1.5);
 }
 
-void AidKit::set_dead_sprite(Texture* texture) {
+/*void AidKit::set_dead_sprite(Texture* texture) {
     dead = new Sprite(*texture);
     dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
     dead->setScale(1.5, 1.5);
+}*/
+
+void AidKit::set_dead_animation(AnimationObject* a_obj) {
+    std::cout << "Animation added to object" << std::endl;
+    dead = new AnimationObject(a_obj);
 }
 
 void AidKit::get_delete_sprite(TempContainer& tmp_a_cont) {
     if (dead!=nullptr) {
-        dead->setPosition(sprite->getPosition());
-        TempObject* tmp_obj = new TempObject(dead, 4);
-        tmp_a_cont.add(tmp_obj);
+        dead->set_position(sprite->getPosition());
+        tmp_a_cont.add(dead);
     }
 }
 

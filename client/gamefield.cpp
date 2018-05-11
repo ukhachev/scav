@@ -2,9 +2,17 @@
 //#include "view.hpp"
 #include "gamefield.hpp"
 #include <iostream>
+#include <unistd.h>
+
+void GameField::draw_border(float x, float y) {
+    Vector2f size(x, y);
+    field_border.setSize(size);
+    field_border.setOrigin(field_border.getLocalBounds().width / 2, field_border.getLocalBounds().height / 2);
+    window.draw(field_border);
+}
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -12,6 +20,11 @@ GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt")
     borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
     borders[2] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, 1000));
     borders[3] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, -1000));
+    field_border.setSize(Vector2f(1000.f, 1000.f));
+    field_border.setFillColor(Color::Transparent);
+    field_border.setOutlineColor(Color::Red);
+    field_border.setOutlineThickness(10);
+    field_border.setOrigin(field_border.getLocalBounds().width / 2, field_border.getLocalBounds().height / 2);
 
 }
 b2World* GameField::get_physics_world() {
@@ -31,6 +44,9 @@ Player* GameField::find_player(int obj_id) {
 
 
 bool GameField::get_action(sf::Packet& packet) {
+    if (!start) {
+        return true;
+    }
 
     if (player != nullptr) {
         packet << 1 << player->get_pos().x <<player->get_pos().y << player->get_rotation();
@@ -42,6 +58,13 @@ bool GameField::get_action(sf::Packet& packet) {
         return true;
     }
     return false;
+}
+void GameField::set_start(bool _s) {
+    start = _s;
+}
+
+bool GameField::get_start() {
+    return start;
 }
 
 void GameField::shoot() {
@@ -74,7 +97,13 @@ bool GameField::render() {
             if (event.type == sf::Event::Closed)
             window.close();
         }
+
         window.clear();
+        if (!start) {
+            usleep(20000);
+            return true;
+        }
+
         if (player != nullptr) {
             if (player->get_hp() > 0) {
                 b2Vec2 speed(0, 0);
@@ -96,24 +125,22 @@ bool GameField::render() {
                 player->mouse_rotation(window);
 
                 if (Mouse::isButtonPressed(Mouse::Left)) {
-                    shoot();  
+                    shoot();
                 }
             }
             interface.set_hp(player->get_hp());
-           
+
             g_cam.set_center(player);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
         }
-      
-        g_cam.draw(window);
 
-       
+        g_cam.draw(window);
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
-            //std::cout << iter->second->get_id() << std::endl;
         }
+
         for (auto iter = objects.begin(); iter != objects.end(); iter++) {
             DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
             if (obj != nullptr) {
@@ -123,6 +150,7 @@ bool GameField::render() {
         for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
             (*iter)->draw(window);
         }
+        draw_border(2*borders[1]->get_pos().x, 2*borders[1]->get_pos().x);
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
             Weapon* w = inv.get_current();
@@ -132,7 +160,7 @@ bool GameField::render() {
             else {
             	interface.set_ammo(0);
             }
-            
+
             inv.check_key();
             inv.draw(player->get_pos().x, player->get_pos().y);
         }
@@ -224,9 +252,11 @@ void GameField::delete_all() {
         delete i->second;
         i = objects.erase(i);
     }
-    for (auto i = players.begin(); i != players.end(); ++i) {
-        i->second->set_hp(100);
+    for (auto i = players.begin(); i != players.end();) {
+        delete i->second;
+        i = players.erase(i);
     }
+    player = nullptr;
 }
 
 RenderWindow* GameField::get_window() {

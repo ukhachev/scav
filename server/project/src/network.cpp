@@ -3,7 +3,8 @@
 #include "client_action.hpp"
 #include <iostream>
 #include <unistd.h>
-Network::Network(int _port, GameField* _field): port(_port), field(_field), online(false) {
+Network::Network(int _port, GameField* _field, size_t _min_count): 
+			port(_port), field(_field), online(false), min_count(_min_count) {
 }
 
 Network::~Network() {
@@ -14,10 +15,25 @@ Network::~Network() {
 	std::cout << "all resources are cleaned" << std::endl;
 }
 
+static void send(sf::TcpSocket* socket, sf::Packet* packet) {
+	socket->send(*packet);
+	delete packet;
+}
+
 void Network::stop() {
 	online = false;
 }
+void Network::start_game() {
+		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
+			container.add_action(new PlayerJoinedAction(i->first));
+		}
 
+		field->set_start(true);
+		sf::Packet start_game_packet;
+		start_game_packet << 50 << 1;
+		std::cout << "Game started" << std::endl;
+		translate(&start_game_packet);
+}
 void Network::listen() {
 	sf::TcpListener listener;
 	listener.setBlocking(false);
@@ -28,6 +44,9 @@ void Network::listen() {
 
 	while (online) {
 		if (listener.accept(*socket) != sf::Socket::Done) {
+			if (!field->get_start() && sockets.size() >= min_count) {
+				start_game();
+			}
 			usleep(20000);
 			continue;
 		}
@@ -38,25 +57,24 @@ void Network::listen() {
 		if (i != sockets.rend()) {
 			cl_id = i->first + 1;
 		}
+
 		sf::Packet player_set;
 		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
 			player_set << 100 << i->first;
 		}
 
-		sf::Packet* object_set = field->get_objects();
+		sf::Packet* object_set = field->get_objects(false);
 
 		sockets.emplace(cl_id, socket);
 
 		std::thread client_thread(receive, cl_id, socket, std::ref(container), &online, this);
 		client_thread.detach();
-		
+
 		player_set << 101 << cl_id;
 		
 		send_to_socket(socket, &player_set);
 		send_to_socket(socket, object_set);
 		delete object_set;
-
-		container.add_action(new PlayerJoinedAction(cl_id));
 
 		std::cout << "joined  " 
 		<< cl_id << " : " << socket->getRemoteAddress() << std::endl;
@@ -66,10 +84,7 @@ void Network::listen() {
 	delete socket;
 }
 
-static void send(sf::TcpSocket* socket, sf::Packet* packet) {
-	socket->send(*packet);
-	delete packet;
-}
+
 
 void Network::send_to_socket(sf::TcpSocket* socket, sf::Packet* packet) {
 	sf::Packet* p = new sf::Packet(*packet);

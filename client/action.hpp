@@ -30,7 +30,7 @@ public:
 
 class ActionConstructor {
  public:
-	static void execute_action(GameField* field, sf::Packet& packet, Textures* textures);
+	static void execute_action(GameField* field, sf::Packet& packet, Textures* textures, Animations* animations);
 	static Action* get_action(sf::Packet& packet, Textures* textures);
 };
 

@@ -28,6 +28,13 @@ Player::~Player() {
 	
 }
 
+void Player::set_nickname(const std::string& nick) {
+	nickname = nick;
+}
+
+const std::string& Player::get_nickname() {
+	return nickname;
+}
 
 AidKit::AidKit(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos) :
 			Entity(_id, _world, size, pos) {

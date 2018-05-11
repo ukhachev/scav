@@ -5,8 +5,9 @@
 #include <iostream>
 #include <math.h>
 #include <mutex>
+Animations a_cont("animations.txt");
 
-void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures) {
+void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Textures* textures, Animations* animations) {
 	static int cl_id = 0;
 	int id = 0;
 	int obj_id = 0;
@@ -20,13 +21,12 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float x = 0;
 			float y = 0;
 			float angle = 0;
-
+			std::cout << "pos" <<std::endl;
 			packet >> x >> y >> angle;
 			Player* obj = field->find_player(obj_id);
 			if (obj != nullptr)
 			if (obj != field->get_player()) {
-				Vector2f pos(x, y);
-                obj->set_pos(pos);
+                obj->interpolate(x, y);
 				obj->set_rotation(angle);
 			}
 			break;
@@ -36,6 +36,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float y = 0;
 			int obj_type = 0;
 			int texture_id = 0;
+			
 
 			packet >> obj_type >> x >> y >> texture_id;
 
@@ -53,9 +54,10 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 					a->set_sprite(textures->get_texture(texture_id));
 					//Криво
 					if (texture_id == 10)
-                    	a->set_dead_sprite(textures->get_texture(12));
+                        a->set_dead_animation(a_cont.get_animation(1));
                     if (texture_id == 9) {
-                    	a->set_dead_sprite(textures->get_texture(15));
+                        a->set_dead_animation(a_cont.get_animation(2));
+
                     }
                     //------
 					a->set_pos(Vector2f(x, y));
@@ -90,11 +92,11 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			}
 			break;
-		}  
+		}
 		case 6: { //Подбор оружия
 			int wtype = 0;
 			Inventor* inv = field->get_inventor();
-			
+
 			packet >> wtype;
 			if (obj_id == cl_id) {
 				Weapon* w = inv->find(wtype);
@@ -111,6 +113,16 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float sec = 0;
 			packet >> sec;
 			field->move_border(sec);
+			break;
+		}
+		case 10: {
+			std::string nickname;
+			packet >> nickname;
+			std::cout << "nickname" << std::endl;
+			Player* p = field->find_player(obj_id);
+			if (p != nullptr) {
+				field->find_player(obj_id)->set_nickname(nickname);
+			}
 			break;
 		}
 		case 14: {//Пули
@@ -142,6 +154,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 			if (obj_id == cl_id) {
 				field->set_player(obj_id);
+			}
+			break;
+		}
+		case 50: { // Запуск / завершение игры
+			if (obj_id == 1) {
+				field->set_start(true);
+			} else {
+				field->set_start(false);
 			}
 			break;
 		}

@@ -14,8 +14,11 @@ class GameField {
 	std::map<int, PhysicsObject*> objects;
 	std::list<Bullet*> bullets;
 	StaticObject* borders[4];
-	std::clock_t start_time;
-	
+	std::clock_t start_time;	
+	std::list<PhysicsObject*> objects_to_delete;
+
+	bool start;
+
 	b2World* world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;
@@ -31,12 +34,15 @@ class GameField {
 	void delete_bullet(Bullet* b);
 	void delete_object(int id);
 	
+	void set_start(bool _s);
+	bool get_start();
+	
 	void step();
 	void reset();
 	void restart();
 	
 	sf::Packet* add_private_packet(int cl_id);
-	sf::Packet* get_objects();
+	sf::Packet* get_objects(bool reset);
 
 	std::map<int, sf::Packet*>::iterator p_packets_begin();
 	std::map<int, sf::Packet*>::iterator p_packets_end();

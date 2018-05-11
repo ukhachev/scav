@@ -28,7 +28,7 @@ class DrawableObject: public GameObject {
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
     virtual void set_pos(Vector2f new_pos);
- 	virtual void draw(RenderWindow &window);
+ 	  virtual void draw(RenderWindow &window);
     virtual void hit();
     virtual void get_delete_sprite(TempContainer& tmp_a_cont);
     virtual ~DrawableObject();
@@ -43,6 +43,7 @@ class Player: public DrawableObject, public KinematicObject {
     Sprite* dead;
     int timer;
     int ammo;
+    std::string nickname;
  public:
     Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
     void set_pos(Vector2f new_pos);
@@ -61,6 +62,9 @@ class Player: public DrawableObject, public KinematicObject {
     float get_rotation();
     void draw(RenderWindow &window);
     void hit();
+    void set_nickname(const std::string& nickname);
+    void interpolate(float x, float y);
+    const std::string& get_nickname();
     //void get_damage(int dmg);
 
     ~Player();
@@ -98,12 +102,14 @@ class Wall: public DrawableObject, public StaticObject {
 class AidKit : public DrawableObject, public Entity {
  private:
     Sprite* sprite;
-    Sprite* dead;
+    //Sprite* dead;
+    AnimationObject* dead;
  public:
     AidKit(int _id);
     void set_pos(Vector2f new_pos);
     void set_sprite(Texture* texture);
-    void set_dead_sprite(Texture* texture);
+    //void set_dead_sprite(Texture* texture);
+    void set_dead_animation(AnimationObject* a_obj);
     void get_delete_sprite(TempContainer& tmp_a_cont);
     void draw(RenderWindow& window);
     void set_rotation(float new_rot);

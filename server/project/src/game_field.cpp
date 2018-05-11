@@ -1,27 +1,41 @@
 #include "game_field.hpp"
 #include <iostream>
-GameField::GameField() : world(new b2World(b2Vec2(0, 0))) {
+GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))) {
 	borders[0] = new StaticObject(-1, world, b2Vec2(10, 2000), b2Vec2(-1000, 0), 0);
 	borders[1]  = new StaticObject(-2, world, b2Vec2(10, 2000), b2Vec2(1000, 0), 0);
 	borders[2]  = new StaticObject(-3, world, b2Vec2(2000, 10), b2Vec2(0, 1000), 0);
 	borders[3]  = new StaticObject(-4, world, b2Vec2(2000, 10), b2Vec2(0, -1000), 0);
-	start_time = std::clock();
 }
 
 GameField::~GameField() {
 	reset();
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		delete i->second;
-		objects.erase(i);
-	}
-	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
+
+	for (auto i = bullets.begin(); i != bullets.end();) {
 		delete *i;
-		bullets.erase(i);
+		i = bullets.erase(i);
 	}
+
+	for (auto i = objects.begin(); i != objects.end();) {
+		delete i->second;
+		i = objects.erase(i);
+	}
+
 	for (int i = 0; i < 4; ++i) {
 		delete borders[i];
 	}
+
 	delete world;
+}
+
+void GameField::set_start(bool _s) {
+	start = _s;
+	if (_s) {
+		start_time = std::clock();
+	}
+}
+
+bool GameField::get_start() {
+	return start;
 }
 
 void GameField::add_object(PhysicsObject* obj) {
@@ -70,21 +84,26 @@ Player* GameField::get_player(int cl_id) {
 }
 
 void GameField::step() {
-	std::clock_t end = std::clock();
-	float secs = float(end - start_time) / CLOCKS_PER_SEC;
+	if (start) {
+		for (auto i = objects_to_delete.begin(); i != objects_to_delete.end();) {
+			delete *i;
+			i = objects_to_delete.erase(i);
+		}
+		//std::clock_t end = std::clock();
+		float secs = 0;//float(end - start_time) / CLOCKS_PER_SEC;
 	
-	borders[0]->set_pos(-1000 + secs*500, 0);
-	borders[1]->set_pos(1000 - secs*500, 0);
-	borders[2]->set_pos(0, 1000 + secs*500);
-	borders[3]->set_pos(0, -1000 + secs*500);
+		borders[0]->set_pos(-1000 + secs*500, 0);
+		borders[1]->set_pos(1000 - secs*500, 0);
+		borders[2]->set_pos(0, 1000 + secs*500);
+		borders[3]->set_pos(0, -1000 + secs*500);
 	
-	state_packet << 7 << 0 << secs;
+		state_packet << 7 << 0 << secs;
 
-	world->Step(1.0f / 60.0f, 8, 3);
+		world->Step(1.0f / 60.0f, 8, 3);
+	}
 }
 
 sf::Packet* GameField::get_state_packet() {
-
 	return &state_packet;
 }
 
@@ -114,12 +133,22 @@ std::map<int, sf::Packet*>::iterator GameField::p_packets_end() {
 	return private_packets.end();
 }
 
-sf::Packet* GameField::get_objects() {
+sf::Packet* GameField::get_objects(bool reset) {
 	sf::Packet* res = new sf::Packet();
+	
+	if (reset) {
+		*res << 104 << 0;
+	}
+
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
+	/*if (!reset) {
+		for (auto i = players.begin(); i != players.end(); ++i) {
+			*res << 10 << i->first << i->second->get_nickname();
+		}
+	}*/
 	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
 }
@@ -131,8 +160,9 @@ b2World* GameField::get_physics_world() {
 void GameField::delete_bullet(Bullet* b) {
 	for (auto i = bullets.begin(); i != bullets.end(); ++i) {
 		if (*i == b) {
+			objects_to_delete.push_front(*i);
 			bullets.erase(i);
-			delete b;
+			//delete b;
 			return;
 		}
 	}
@@ -140,7 +170,7 @@ void GameField::delete_bullet(Bullet* b) {
 
 void GameField::restart() {
 	start_time = std::clock();
-	state_packet << 104 << 0;
+
 	for (auto i = objects.begin(); i != objects.end();) {
 		delete i->second;
 		i = objects.erase(i);
@@ -151,9 +181,11 @@ void GameField::restart() {
 		i = bullets.erase(i);
 	}
 
-	for (auto i = players.begin(); i != players.end(); ++i) {
-		i->second->set_hp(100);
+	for (auto i = players.begin(); i != players.end();) {
+		delete i->second;
+		i = players.erase(i);
 	}
+	set_start(false);
 }
 
 void GameField::delete_object(int id) {
@@ -161,7 +193,7 @@ void GameField::delete_object(int id) {
 
 	if (i != objects.end()) {
 		state_packet << 103 << i->second->get_id();
-		delete i->second;
+		objects_to_delete.push_front(i->second);
 		objects.erase(i);
 	}
 }
