@@ -31,7 +31,8 @@ class GameField {
     Cursor g_curs;
     Inventor inv;
     bool start;
-
+    float border_pos;
+    
     Player* player;
     RenderWindow window;
     View g_cam;

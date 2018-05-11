@@ -19,8 +19,9 @@ class ClientAction {
 
 //100 action
 class PlayerJoinedAction: public ClientAction {
+	std::string name;
  public:
- 	PlayerJoinedAction(int _cl_id);
+ 	PlayerJoinedAction(int _cl_id, const std::string& _name);
  	~PlayerJoinedAction();
  	void execute(GameField& gf);
 };

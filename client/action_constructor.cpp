@@ -115,16 +115,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			field->move_border(sec);
 			break;
 		}
-		case 10: {
-			std::string nickname;
-			packet >> nickname;
-			std::cout << "nickname" << std::endl;
-			Player* p = field->find_player(obj_id);
-			if (p != nullptr) {
-				field->find_player(obj_id)->set_nickname(nickname);
-			}
-			break;
-		}
 		case 14: {//Пули
 			float x = 0;
 			float y = 0;
@@ -143,10 +133,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			break;
 		}
 		case 100: { //Создать игрока
-			std::cout << "player "<<obj_id << std::endl;
+			std::string name;
+			packet >> name;
 
+			std::cout << "player "<< name << std::endl;
+			
+			
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
-
+			p->set_nickname(name);
 			p->set_player_sprite(textures->get_texture(1));
 			p->set_damage_sprite(textures->get_texture(6));
 			p->set_dead_sprite(textures->get_texture(8));

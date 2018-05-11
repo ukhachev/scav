@@ -86,6 +86,56 @@ void Button::set_color(int r, int g, int b) {
     buttonText.setColor(sf::Color(r,g,b));
 }
 
+
+SpriteButton::SpriteButton(int w, int h, int dx, int dy, RenderWindow* wnd, std::string spritefile, float sx, float sy):MenuElement(w,h,dx,dy,wnd) {
+    txt = Texture();
+    txt.loadFromFile(spritefile);
+    spr=Sprite(txt);
+    spr.setPosition(x,y);
+    spr.setScale(sx,sy);
+}
+
+int SpriteButton::hover() {
+    if(MenuElement::hover()) {
+        return 1;
+    }
+    return 0;
+}
+
+int SpriteButton::pressed() {
+    if(MenuElement::pressed()) {
+        return 1;
+    }
+    return 0;
+}
+
+void SpriteButton::draw() {
+    window->draw(spr);
+}
+
+void SpriteButton::redraw() {
+    spr.setPosition(x,y);
+}
+
+
+void SpriteButton::hide() {
+    
+}
+void SpriteButton::set_text(std::string str) {
+    
+}
+
+std::string SpriteButton::get_text() {
+    
+}
+
+void SpriteButton::set_color(int r, int g, int b) {
+    
+}
+
+
+
+
 TextInput::TextInput(int w, int h, int dx, int dy, std::string fontname, std::string txt, int size, RenderWindow* wnd, int dbg):MenuElement(w,h,dx,dy,wnd) {
     font.loadFromFile(fontname);
     text=Text(txt, font, size);
@@ -213,12 +263,18 @@ void Menu::draw() {
     bg.setPosition(1,1);
     int isMenu = 1;
     sf::Event event;
+    int escapeUp=0;
     while(isMenu && window->isOpen()) {
         int menuAction=0;
         while (window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
             window->close();
+        }
+        if (event.type == sf::Event::KeyReleased) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                escapeUp=1;
+            }
         }
         window->draw(bg);
         for(std::list<MenuElement*>::iterator ptr = elements.begin(); ptr != elements.end(); ptr++) {
@@ -253,7 +309,7 @@ void Menu::draw() {
 
         }
         window->display();
-        if(Keyboard::isKeyPressed(Keyboard::Escape)) {
+        if(Keyboard::isKeyPressed(Keyboard::Escape) && escapeUp) {
                 printf("close menu\n");
                 isMenu=0;
                 window->clear();
@@ -276,12 +332,20 @@ int Menu::get_port() {
 
 Interface::Interface(RenderWindow* wnd) {
     window=wnd;
+    font.loadFromFile("minecraft.otf");
+    text.setFont(font);
+    text.setCharacterSize(38);
+    text.setColor(sf::Color::Red);
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
     hp=100;
     ammo=100;
+    menuButton=new SpriteButton(200,30, 1, 400, window, "arrow.png", 0.2, 0.2);
     add_element(new TextInput(200,30,1,1, "minecraft.otf",std::string("HP:") +std::to_string(hp), 50, window,0));
     elements.front()->set_color(51,255,0);
     add_element(new TextInput(200,30,1,100, "minecraft.otf",std::string("AM:") +std::to_string(ammo), 50, window,0));
     elements.back()->set_color(255,255,255);
+    //add_element(menuButton);
 
 }
 
@@ -301,7 +365,7 @@ void Interface::draw(float cx, float cy) {
 void Interface::set_hp(int points) {
     hp=points;
     elements.front()->set_text(std::string("HP:")+std::to_string(hp));
-    if(hp<80 && hp>40) {
+    if(hp < 80 && hp > 40) {
         elements.front()->set_color(255,222,0);
     }
     else if(hp<40 && hp>0) {
@@ -354,15 +418,57 @@ void Interface::dead_window()  { //Не нужно пока
 }
 
 
-void Interface::drawLine(RenderWindow* window,std::string str, float x, float y) {
-    sf::Font font;
-    font.loadFromFile("minecraft.otf");
-    sf::Text text;
-    text.setFont(font);
+void Interface::showMessage(std::string text, const std::string filename = std::string(""),const sf::Color &bg=sf::Color(158, 236, 255, 255),const sf::Color &color=sf::Color(0, 0, 0, 255))  { //Не нужно пока
+    if( !(filename == "") && text == "" ) {
+        window->clear();
+        Texture backtxt;
+        backtxt.loadFromFile(filename);
+        Sprite back(backtxt);  
+        back.setPosition(1,1);
+        window->draw(back);
+        window->display();
+    }
+    if( (filename == "") && !(text == "") ) {
+        window->clear(bg);
+        sf::Text txt;
+        FloatRect bounds = txt.getGlobalBounds();
+        txt.setFont(font);
+        txt.setString(text);
+        txt.setCharacterSize(55);
+        txt.setColor(color);
+        txt.setStyle(sf::Text::Bold);
+        txt.setPosition( 40, 180);
+        window->draw(txt);
+        window->display();
+    }
+    if( !(filename == "") && !(text == "") ) {
+        window->clear();
+        Texture backtxt;
+        backtxt.loadFromFile("dead_back.jpg");
+        Sprite back(backtxt);  
+        back.setPosition(2,2);
+        window->draw(back);
+
+        sf::Text txt;
+        FloatRect bounds = txt.getLocalBounds();
+        txt.setFont(font);
+        txt.setString(text);
+        txt.setCharacterSize(55);
+        txt.setColor(color);
+        txt.setStyle(sf::Text::Bold);
+        txt.setPosition( 40, 180);
+        window->draw(txt);
+        window->display();
+    }
+}
+
+void Interface::drawLine(std::string str, float x, float y) {
     text.setString(str);
-    text.setCharacterSize(38);
-    text.setColor(sf::Color::Red);
-    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setPosition(x,y);
     window->draw(text);
+}
+
+
+int Interface::showMenu() {
+    return menuButton->pressed();
 }

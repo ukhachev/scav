@@ -35,11 +35,7 @@ void Player::interpolate(float x, float y) {
 
 void Player::set_pos(Vector2f new_pos) {
     pos = new_pos;
-
-    //b2Vec2 cur_pos = get_pos();
-    //b2Vec2 dpos = b2Vec2(new_pos.x, new_pos.y) - cur_pos;
     body->SetTransform(b2Vec2(new_pos.x /100.f, new_pos.y /100.f), 0);
-    //set_speed(20*dpos.x, 20*dpos.y);
 }
 
 void Player::mouse_rotation(RenderWindow& window) {
@@ -141,7 +137,7 @@ void Wall::set_pos(Vector2f new_pos) {
 void Wall::set_sprite(Texture* player_texture) {
 	wall_sprite = new Sprite(*player_texture);
     wall_sprite->setOrigin(wall_sprite->getLocalBounds().width / 2, wall_sprite->getLocalBounds().height / 2);
-    wall_sprite->setScale(0.05, 0.05);
+    wall_sprite->setScale(1.25, 1.25);
 }
 
 void Wall::set_damage_sprite(Texture* damage_texture) {
@@ -216,14 +212,7 @@ void AidKit::set_sprite(Texture* texture) {
     sprite->setScale(1.5, 1.5);
 }
 
-/*void AidKit::set_dead_sprite(Texture* texture) {
-    dead = new Sprite(*texture);
-    dead->setOrigin(dead->getLocalBounds().width / 2, dead->getLocalBounds().height / 2);
-    dead->setScale(1.5, 1.5);
-}*/
-
 void AidKit::set_dead_animation(AnimationObject* a_obj) {
-    std::cout << "Animation added to object" << std::endl;
     dead = new AnimationObject(a_obj);
 }
 

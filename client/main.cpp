@@ -39,14 +39,16 @@ void render(GameField* field) {
 }
 
 void send(Connector* connector, GameField* field, std::string& nick) {
-	/*sf::Packet nick_packet;
+	sf::Packet nick_packet;
 	nick_packet << 10 << nick;
-	connector->send(&nick_packet);*/
+	connector->send(&nick_packet);
 
 	while (online) {
 		sf::Packet packet;
 		if (field->get_action(packet)) {
-			connector->send(&packet);
+			if (!connector->send(&packet)) {
+				online =false;
+			}
 		}
 		usleep(20000);
 	}
@@ -57,7 +59,7 @@ int main(int argc, char const *argv[])
 	textures = new Textures("textures.txt");
     animations = new Animations("animations.txt");
     GameField field;
-    std::string name = "stranger";
+    std::string name = "client";
     std::string ip;
     int port = 55503;
 
@@ -76,7 +78,6 @@ int main(int argc, char const *argv[])
 		name = menu.get_name();
 		ip = menu.get_ip();
 		port = menu.get_port();
-
 	}
 	else {
 		ip = argv[1];

@@ -1,12 +1,25 @@
 #include "game_field.hpp"
 #include <iostream>
-GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))) {
-	borders[0] = new StaticObject(-1, world, b2Vec2(10, 2000), b2Vec2(-1000, 0), 0);
-	borders[1]  = new StaticObject(-2, world, b2Vec2(10, 2000), b2Vec2(1000, 0), 0);
-	borders[2]  = new StaticObject(-3, world, b2Vec2(2000, 10), b2Vec2(0, 1000), 0);
-	borders[3]  = new StaticObject(-4, world, b2Vec2(2000, 10), b2Vec2(0, -1000), 0);
+#include <math.h>
+GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))), size(1000) {
+	borders[0] = new StaticObject(-1, world, b2Vec2(20, 2 * size), b2Vec2(-size, 0), 0);
+	borders[1]  = new StaticObject(-2, world, b2Vec2(20, 2 * size), b2Vec2(size, 0), 0);
+	borders[2]  = new StaticObject(-3, world, b2Vec2(2 * size, 20), b2Vec2(0, size), 0);
+	borders[3]  = new StaticObject(-4, world, b2Vec2(2 * size, 20), b2Vec2(0, -size), 0);
 }
 
+void GameField::add_nickname(int cl_id, const std::string& nick) {
+	nicknames.emplace(cl_id, nick);
+}
+std::string GameField::get_nickname(int cl_id) {
+	auto f = nicknames.find(cl_id);
+	if (f == nicknames.end()) {
+		return std::string("stranger");
+	}
+	else {
+		return f->second;
+	}
+}
 GameField::~GameField() {
 	reset();
 
@@ -51,7 +64,14 @@ void GameField::add_bullet(Bullet* bullet) {
 	bullets.push_front(bullet);
 }
 void GameField::add_player(int cl_id) {
-	Player* pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), "stranger");
+	auto f = nicknames.find(cl_id);
+	Player* pl = nullptr;
+
+	if (f != nicknames.end()) {
+		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), f->second);
+	} else {
+		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), "stranger");
+	}
 	players.emplace(cl_id, pl);
 }
 
@@ -63,6 +83,7 @@ void GameField::delete_player(int cl_id) {
 	Player* player = get_player(cl_id);
 	players.erase(cl_id);
 	delete player;
+	nicknames.erase(cl_id);
 }
 
 PhysicsObject* GameField::get_object(int id) {
@@ -85,19 +106,32 @@ Player* GameField::get_player(int cl_id) {
 
 void GameField::step() {
 	if (start) {
+		static int last_step = 30;
+
 		for (auto i = objects_to_delete.begin(); i != objects_to_delete.end();) {
 			delete *i;
 			i = objects_to_delete.erase(i);
 		}
-		//std::clock_t end = std::clock();
-		float secs = 0;//float(end - start_time) / CLOCKS_PER_SEC;
-	
-		borders[0]->set_pos(-1000 + secs*500, 0);
-		borders[1]->set_pos(1000 - secs*500, 0);
-		borders[2]->set_pos(0, 1000 + secs*500);
-		borders[3]->set_pos(0, -1000 + secs*500);
-	
-		state_packet << 7 << 0 << secs;
+		
+		if (last_step == 0) {
+			std::clock_t end = std::clock();
+			float secs = float(end - start_time) / CLOCKS_PER_SEC;
+
+			last_step = 30;
+			float dead_zone = size - secs * 100;
+			state_packet << 7 << 0 << dead_zone;
+
+			for (auto i = players.begin(); i != players.end(); ++i) {
+				const b2Vec2& pos = i->second->get_pos();
+
+				if (abs(pos.x) > dead_zone || abs(pos.y) > dead_zone) {
+					int hp = i->second->get_hp();
+					i->second->set_hp(hp - 10);
+					state_packet << 5 << i->first << hp - 10;
+				}
+			}
+		}
+		last_step--;
 
 		world->Step(1.0f / 60.0f, 8, 3);
 	}

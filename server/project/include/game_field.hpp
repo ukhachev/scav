@@ -12,16 +12,18 @@ class GameField {
  private:
 	std::map<int, Player*> players;
 	std::map<int, PhysicsObject*> objects;
+	std::map<int, std::string> nicknames;
+
 	std::list<Bullet*> bullets;
 	StaticObject* borders[4];
 	std::clock_t start_time;	
 	std::list<PhysicsObject*> objects_to_delete;
-
 	bool start;
 
 	b2World* world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;
+	float size;
  public:
 	GameField();
 	~GameField();
@@ -41,6 +43,9 @@ class GameField {
 	void reset();
 	void restart();
 	
+	void add_nickname(int cl_id, const std::string& nick);
+	std::string get_nickname(int cl_id);
+
 	sf::Packet* add_private_packet(int cl_id);
 	sf::Packet* get_objects(bool reset);
 

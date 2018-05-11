@@ -16,7 +16,7 @@ public:
 	Connector(const std::string& address, int prt);
 	~Connector();
 	sf::Packet* get();
-	void send(sf::Packet* packet);
+	bool send(sf::Packet* packet);
 };
 
 #endif

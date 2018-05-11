@@ -12,14 +12,14 @@ void GameField::draw_border(float x, float y) {
 }
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(1000) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
-    borders[0] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(-1000, 0));
-    borders[1] = new StaticObject(world, b2Vec2(10, 2000), b2Vec2(1000, 0));
-    borders[2] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, 1000));
-    borders[3] = new StaticObject(world, b2Vec2(2000, 10), b2Vec2(0, -1000));
+    borders[0] = new StaticObject(world, b2Vec2(20, 2000), b2Vec2(-1000, 0));
+    borders[1] = new StaticObject(world, b2Vec2(20, 2000), b2Vec2(1000, 0));
+    borders[2] = new StaticObject(world, b2Vec2(2000, 20), b2Vec2(0, 1000));
+    borders[3] = new StaticObject(world, b2Vec2(2000, 20), b2Vec2(0, -1000));
     field_border.setSize(Vector2f(1000.f, 1000.f));
     field_border.setFillColor(Color::Transparent);
     field_border.setOutlineColor(Color::Red);
@@ -82,9 +82,6 @@ void GameField::shoot() {
 }
 
 bool GameField::render() {
-    //Textures t_cont("textures.txt");
-    //Texture* t = t_cont.get_texture(4);
-   // MapConst g_map(20, 20, t_cont);
     if (window.isOpen())
     {
     	if (last_shot < 100000) {
@@ -100,7 +97,11 @@ bool GameField::render() {
 
         window.clear();
         if (!start) {
-            usleep(20000);
+        	g_cam.setSize(640,480);
+			g_cam.setCenter(320, 240);
+            window.setView(g_cam);
+            interface.showMessage(std::string("Waiting for players"), std::string(""), sf::Color(158, 236, 255, 255),sf::Color(0, 0, 0, 255));
+            g_cam.setSize(1000,1000);
             return true;
         }
         mtx.lock();
@@ -139,6 +140,8 @@ bool GameField::render() {
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
             iter->second->draw(window);
+            b2Vec2 pos = iter->second->get_pos();
+            interface.drawLine(iter->second->get_nickname(), pos.x, pos.y);
         }
 
         for (auto iter = objects.begin(); iter != objects.end(); iter++) {
@@ -150,7 +153,7 @@ bool GameField::render() {
         for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
             (*iter)->draw(window);
         }
-        draw_border(2*borders[1]->get_pos().x, 2*borders[1]->get_pos().x);
+        draw_border(2 * border_pos, 2 * border_pos);
         if (player!=nullptr) {
             interface.draw(player->get_pos().x, player->get_pos().y);
             Weapon* w = inv.get_current();
@@ -183,7 +186,6 @@ std::mutex& GameField::get_mutex() {
 	return mtx;
 }
 int GameField::add_player(Player* obj, int new_id) {
-
     players.emplace(new_id, obj);
     return 0;
 }
@@ -218,8 +220,10 @@ void GameField::delete_bullet(DrawableBullet* b) {
 
 void GameField::delete_player(int cl_id) {
     auto p = players.find(cl_id);
-    delete p->second;
-    players.erase(p);
+    if (p!=players.end()) {
+    	delete p->second;
+    	players.erase(p);
+	}
 }
 
 void GameField::delete_object(int id) {
@@ -265,9 +269,6 @@ RenderWindow* GameField::get_window() {
     return &window;
 }
 
-void GameField::move_border(float secs) {
-    borders[0]->set_pos(-1000 + secs*500, 0);
-    borders[1]->set_pos(1000 - secs*500, 0);
-    borders[2]->set_pos(0, 1000 + secs*500);
-    borders[3]->set_pos(0, -1000 + secs*500);
+void GameField::move_border(float pos) {
+    border_pos = pos;
 }

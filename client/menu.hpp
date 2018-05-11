@@ -47,6 +47,22 @@ class Button: public MenuElement {
 		void set_color(int r, int g, int b);
 };
 
+class SpriteButton: public MenuElement {
+	private:
+		sf::Texture txt;
+		sf::Sprite spr;
+	public:
+		SpriteButton(int w, int h, int dx, int dy, RenderWindow* wnd, std::string spritefile, float sx, float sy);
+		void draw();
+		void hide();
+		int hover();
+		int pressed();
+		void redraw();
+		void set_text(std::string str);
+		std::string get_text();
+		void set_color(int r, int g, int b);
+};
+
 class TextInput : public MenuElement {
 	private:
 		int bg;
@@ -98,7 +114,10 @@ class Interface {
 		int hp;
 		int ammo;
 		std::list<MenuElement*> elements;
+		MenuElement* menuButton;
 		RenderWindow* window;
+		sf::Font font;
+		sf::Text text;
 	public:
 		Interface(RenderWindow* wnd);
 		void add_element(MenuElement* el);
@@ -106,30 +125,9 @@ class Interface {
 		void set_hp(int points);
 		void set_ammo(int points);
 		void dead_window();
-		static void drawLine(RenderWindow* wnd, std::string str, float x, float y);
+		int showMenu();
+		void drawLine(std::string str, float x, float y);
+		void showMessage(std::string text, const std::string filename, const sf::Color &bg, const sf::Color &color);
 };
-
-
-
-/*
-class Indicators : public MenuElement {
-	private:
-		int bg;
-		sf::Text text;
-		std::string defaultValue;
-		sf::Font font;
-		int fontSize;
-	public:
-		Indicators(int w, int h, int dx, int dy, std::string fontname, std::string txt, int size, RenderWindow* wnd, int dbg);
-		void draw();
-		void redraw();
-		void hide();
-		int hover();
-		int pressed();
-		void set_text(std::string str);
-		std::string get_text();
-};*/
-
-
 
 #endif  // SCAV_MENU_HPP_

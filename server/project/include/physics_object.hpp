@@ -67,7 +67,4 @@ class Entity: public PhysicsObject {
 	virtual ~Entity();
 	virtual void interact(PhysicsObject* object, sf::Packet* packet) = 0;
 };
-
-
-
 #endif

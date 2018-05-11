@@ -12,7 +12,7 @@ Network::~Network() {
 	while(!sockets.empty()) {
 		usleep(10000);
 	}
-	std::cout << "all resources are cleaned" << std::endl;
+	std::cout << "Server stoped" << std::endl;
 }
 
 static void send(sf::TcpSocket* socket, sf::Packet* packet) {
@@ -25,7 +25,8 @@ void Network::stop() {
 }
 void Network::start_game() {
 		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
-			container.add_action(new PlayerJoinedAction(i->first));
+			std::string name = field->get_nickname(i->first);
+			container.add_action(new PlayerJoinedAction(i->first, name));
 		}
 
 		field->set_start(true);
@@ -59,9 +60,6 @@ void Network::listen() {
 		}
 
 		sf::Packet player_set;
-		for (auto i = sockets.begin(); i != sockets.end(); ++i) {
-			player_set << 100 << i->first;
-		}
 
 		sf::Packet* object_set = field->get_objects(false);
 

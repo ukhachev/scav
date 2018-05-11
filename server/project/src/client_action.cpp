@@ -17,7 +17,8 @@ int ClientAction::get_client_id() {
 
 //When new player joins
 
-PlayerJoinedAction::PlayerJoinedAction(int _cl_id) : ClientAction(_cl_id) {
+PlayerJoinedAction::PlayerJoinedAction(int _cl_id, const std::string& _name) : 
+					ClientAction(_cl_id), name(_name) {
 }
 
 PlayerJoinedAction::~PlayerJoinedAction() {
@@ -25,7 +26,7 @@ PlayerJoinedAction::~PlayerJoinedAction() {
 
 void PlayerJoinedAction::execute(GameField& gf) {
 	gf.add_player(cl_id);
-	*(gf.get_state_packet()) << 100 << cl_id;
+	*(gf.get_state_packet()) << 100 << cl_id << name;
 }
 
 //Moves player
@@ -56,7 +57,7 @@ ShotAction::~ShotAction() {
 void ShotAction::create_bullet(float angle, GameField& gf, int dmg) {
 	b2World* world = gf.get_world();
 	b2Vec2 speed(700 * cos(angle) , 700 * sin(angle));
-	b2Vec2 delta_point(start_point.x + 40 * cos(angle), start_point.y + 40 * sin(angle));
+	b2Vec2 delta_point(start_point.x + 50 * cos(angle), start_point.y + 50 * sin(angle));
 	
 	Bullet* bullet = new Bullet(cl_id, world, b2Vec2(4, 4), delta_point, speed, dmg);
 
@@ -68,7 +69,6 @@ void ShotAction::create_bullet(float angle, GameField& gf, int dmg) {
 
 void ShotAction::execute(GameField& gf) {
 
-	//srand(time(NULL));
 	angle = (angle - 90) * (3.1415 / 180);
 	int r = rand();
 	switch (weapon) {
@@ -115,9 +115,6 @@ SetNicknameAction::~SetNicknameAction() {
 }
 
 void SetNicknameAction::execute(GameField& gf) {
-	Player* p = gf.get_player(cl_id);
-	if (p != nullptr) {
-		p->set_nickname(nickname);
-		*(gf.get_state_packet()) << 10 << cl_id << nickname;
-	}
+	gf.add_nickname(cl_id, nickname);
+	
 }
