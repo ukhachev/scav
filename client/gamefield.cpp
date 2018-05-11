@@ -103,7 +103,7 @@ bool GameField::render() {
             usleep(20000);
             return true;
         }
-
+        mtx.lock();
         if (player != nullptr) {
             if (player->get_hp() > 0) {
                 b2Vec2 speed(0, 0);
@@ -134,7 +134,7 @@ bool GameField::render() {
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
             g_curs.draw(window);
         }
-        
+
         window.setView(g_cam);
 
         for (auto iter = players.begin(); iter != players.end(); iter++) {
@@ -166,6 +166,7 @@ bool GameField::render() {
         }
         tmp_a_cont.draw(window);
         window.display();
+        mtx.unlock();
     }
     else {
     	return false;
@@ -188,15 +189,12 @@ int GameField::add_player(Player* obj, int new_id) {
 }
 
 int GameField::add_object(PhysicsObject* obj, int new_id) {
-
     objects.emplace(new_id, obj);
     return 0;
 }
 
 int GameField::add_bullet(DrawableBullet* obj) {
-
     bullets.push_front(obj);
-
     return 0;
 }
 
@@ -225,6 +223,7 @@ void GameField::delete_player(int cl_id) {
 }
 
 void GameField::delete_object(int id) {
+    
     auto w = objects.find(id);
     if (w == objects.end()) {
         return;
@@ -233,6 +232,7 @@ void GameField::delete_object(int id) {
     if (d_obj != nullptr) {
         d_obj->get_delete_sprite(tmp_a_cont);
     }
+
     delete w->second;
     objects.erase(w);
 }
@@ -247,6 +247,7 @@ PhysicsObject* GameField::get_object(int id) {
 }
 
 void GameField::delete_all() {
+   
     inv.clear();
     for (auto i = objects.begin(); i != objects.end();) {
         delete i->second;
@@ -257,6 +258,7 @@ void GameField::delete_all() {
         i = players.erase(i);
     }
     player = nullptr;
+
 }
 
 RenderWindow* GameField::get_window() {

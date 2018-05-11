@@ -45,7 +45,10 @@ class GameField {
  	std::map<int, PhysicsObject*> objects;
     bool was_shot;
  	std::list<DrawableBullet*> bullets;
- 	std::mutex mtx;
+ 	
+    std::mutex mtx;
+    std::mutex render_mtx;
+
     int last_shot;
 
     void draw_border(float x, float y);

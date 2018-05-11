@@ -39,8 +39,10 @@ MoveAction::~MoveAction() {
 
 void MoveAction::execute(GameField& gf) {
 	Player* player = gf.get_player(cl_id);
-	player->set_pos(x, y);
-	*(gf.get_state_packet()) << 1 << cl_id << x << y << angle;
+	if (player != nullptr) {
+		player->set_pos(x, y);
+		*(gf.get_state_packet()) << 1 << cl_id << x << y << angle;
+	}
 }
 
 ShotAction::ShotAction(int _cl_id, sf::Packet& packet): ClientAction(_cl_id) {

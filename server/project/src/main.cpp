@@ -7,9 +7,8 @@ bool online = true;
 bool need_restart = false;
 
 void restart_game(Network& net, GameField& gf) {
-	gf.reset();
-	gf.restart();
 	need_restart = false;
+	gf.restart();
 	MapBuilder::build(gf);
 	sf::Packet* obj_packet = gf.get_objects(true);
 	net.translate(obj_packet);
@@ -30,19 +29,18 @@ void interact(Network& net, GameField& gf) {
 			delete act;
 			act = ac->pop();
 		}
+		delete ac;
+
+		l.execute_actions(gf);
+		gf.step();
+		net.translate(gf.get_state_packet());	
+
+		gf.reset();
 
 		if (need_restart) {
 			restart_game(net, gf);
 		}
-		else {
-			l.execute_actions(gf);
-			gf.step();
-			net.translate(gf.get_state_packet());
-		}
 		
-		
-		gf.reset();
-		delete ac;
 		usleep(19000);
 	}
 }
@@ -57,7 +55,7 @@ int main()
 	GameField gf;
 
 	MapBuilder::build(gf);
-	Network net(port, &gf, 2);
+	Network net(port, &gf, 1);
 	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));
 	std::thread listen_thread(listen, std::ref(net));
