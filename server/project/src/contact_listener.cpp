@@ -25,7 +25,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
     if (dynamic_cast<Bullet*>(bodyUserData)) {
         bullet = dynamic_cast<Bullet*>(bodyUserData);
-    }
+    } else if (dynamic_cast<Entity*>(bodyUserData)) {
+        e = dynamic_cast<Entity*>(bodyUserData);
+    } 
     else {
       obj = dynamic_cast<PhysicsObject*>(bodyUserData);
     }
