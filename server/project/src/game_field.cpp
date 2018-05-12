@@ -143,7 +143,7 @@ bool GameField::step() {
 				}
 			}
 
-			if (alive_count == 1) {
+			if (alive_count < 2) {
 				last_step = 200;
 				pause = true;
 				state_packet << 51 << winner;
