@@ -117,7 +117,4 @@ void AnimationObject::draw(RenderWindow& window) {
 }
 
 AnimationObject::~AnimationObject() {
-    std::cout << "anim_obj delete 1" << std::endl;
-    //delete anim_texture;
-    std::cout << "anim_obj delete 2" << std::endl;
 }

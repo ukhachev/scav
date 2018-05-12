@@ -362,7 +362,7 @@ void Interface::draw(float cx, float cy) {
     int i = 0;
     for(auto ptr = elements.begin(); ptr != elements.end(); ptr++) {
             ++i;
-            (*ptr)->setPos(cx - 450, cy + i*75 - 450);
+            (*ptr)->setPos(cx - 900, cy + i*75 - 540);
             (*ptr)->draw();
         }
 }
@@ -387,12 +387,6 @@ void Interface::set_hp(int points) {
 void Interface::set_ammo(int points) {
     ammo=points;
     elements.back()->set_text(std::string("AM:")+std::to_string(ammo));
-    //sf::SoundBuffer buffer;
-    //buffer.loadFromFile("gun.wav");
-    //sf::Sound sound;
-    //sound.setBuffer(buffer);
-   // sound.setVolume(80);
-    //sound.play();
 }
 
 

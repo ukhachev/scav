@@ -1,25 +1,9 @@
 
-
 #include "map_constructor.hpp"
 #include <time.h>
 #include <cstdlib>
 
 using namespace std;
-
-
-
-/*MapBlock::MapBlock(Texture* texture, int x, int y) {
-    Sprite* block = new Sprite(*texture);
-    block->setPosition(x * block->getTextureRect().width, y * block->getTextureRect().height);
-}
-
-void MapBlock::draw(RenderWindow& window) {
-    window.draw(*block);
-}
-
-MapBlock::~MapBlock() {
-    delete block;
-}*/
 
 MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
     srand(time(NULL));
@@ -38,7 +22,7 @@ MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
 void MapConst::draw(RenderWindow& window, float px, float py) {
     for (auto iter = game_map.begin(); iter != game_map.end(); iter++) {
         sf::Vector2f pos = (*iter)->getPosition();
-        if (px + 500 > pos.x && px - 750 < pos.x && py + 500 > pos.y && py -750 < pos.y)
+        if (px + 1500 > pos.x && px - 1500 < pos.x && py + 800 > pos.y && py -750 < pos.y)
             window.draw(**iter);
         //*iter->draw(window);
     }

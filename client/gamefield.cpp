@@ -12,7 +12,7 @@ void GameField::draw_border(float x, float y) {
 }
 
 
-GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(5, 5, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(1000) {
+GameField::GameField(): world(new b2World(b2Vec2(0, 0))), t_cont("textures.txt"), g_map(10, 8, t_cont.get_texture(4)), interface(Interface(&window)), g_curs(t_cont.get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(1000) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "project");
     window.setFramerateLimit(60);
@@ -101,7 +101,7 @@ bool GameField::render() {
 			g_cam.setCenter(320, 240);
             window.setView(g_cam);
             interface.showMessage(std::string("Waiting for players"), std::string(""), sf::Color(158, 236, 255, 255),sf::Color(0, 0, 0, 255));
-            g_cam.setSize(1000,1000);
+            g_cam.setSize(1920,1080);
             return true;
         }
         mtx.lock();
