@@ -1,2 +1,3 @@
 1 explosion1.png 5
 2 healing1.png 5
+3 player_blood_a.png 3

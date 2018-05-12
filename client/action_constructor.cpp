@@ -36,7 +36,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float y = 0;
 			int obj_type = 0;
 			int texture_id = 0;
-			
+
 
 			packet >> obj_type >> x >> y >> texture_id;
 
@@ -137,12 +137,13 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			packet >> name;
 
 			std::cout << "player "<< name << std::endl;
-			
-			
+
+
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
 			p->set_nickname(name);
 			p->set_player_sprite(textures->get_texture(1));
-			p->set_damage_sprite(textures->get_texture(6));
+			//p->set_damage_sprite(textures->get_texture(6));
+            p->set_damage_animation(a_cont.get_animation(3));
 			p->set_dead_sprite(textures->get_texture(8));
 			field->add_player(p, obj_id);
 

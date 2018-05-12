@@ -18,7 +18,7 @@ public:
     TempObject();
     virtual int get_timer();
     virtual void draw(RenderWindow& window);
-    ~TempObject();
+    virtual ~TempObject();
 };
 
 class TempContainer {
@@ -33,13 +33,17 @@ class TempContainer {
 
 class AnimationObject: public TempObject {
  private:
+     Texture* anim_texture;
      int frames;
      int cur_frame;
  public:
      AnimationObject(Sprite* new_sprite, int _frames /*int _timer*/);
+     AnimationObject(Texture* texture, int _frames);
+     //AnimationObject(std::string text_name, int _frames);
      AnimationObject(AnimationObject* a_obj);
      int get_timer();
      void set_position(Vector2f new_pos);
+     void repeat();
      void draw(RenderWindow& window);
      ~AnimationObject();
 };

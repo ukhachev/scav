@@ -39,7 +39,8 @@ class Player: public DrawableObject, public KinematicObject {
  private:
     float player_rotation;
     Sprite* skin;
-    Sprite* damage;
+    //Sprite* damage;
+    AnimationObject* damage;
     Sprite* dead;
     int timer;
     int ammo;
@@ -52,10 +53,10 @@ class Player: public DrawableObject, public KinematicObject {
     void set_ammo(int val);
 
     void set_player_sprite(Texture* player_texture);
-    void set_damage_sprite(Texture* damage_texture);
+    //void set_damage_sprite(Texture* damage_texture);
     void set_dead_sprite(Texture* dead_texture);
     void get_delete_sprite(TempContainer& tmp_a_cont);
-
+    void set_damage_animation(AnimationObject* damage_animation);
     //void set_position();
     void mouse_rotation(RenderWindow &window);
     void set_rotation(float new_rot);
