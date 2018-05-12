@@ -32,12 +32,12 @@ void interact(Network& net, GameField& gf) {
 		delete ac;
 
 		l.execute_actions(gf);
-		gf.step();
+		bool res = gf.step();
 		net.translate(gf.get_state_packet());	
 
 		gf.reset();
 
-		if (need_restart) {
+		if (need_restart || res) {
 			restart_game(net, gf);
 		}
 		

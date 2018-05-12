@@ -15,9 +15,8 @@ HitPhysicsAction::~HitPhysicsAction() {
 }
 
 void HitPhysicsAction::execute(GameField& field) {
-	object->hit(bullet->get_dmg());
-	
 	int hp = object->get_hp();
+	object->hit(bullet->get_dmg());
 	int id = object->get_id();
 
 	if (id >= 0) {

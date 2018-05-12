@@ -39,7 +39,7 @@ class GameField {
 	void set_start(bool _s);
 	bool get_start();
 	
-	void step();
+	bool step();
 	void reset();
 	void restart();
 	

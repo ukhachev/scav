@@ -22,6 +22,7 @@ int GameObject::texture() {
 //Player
 Player::Player(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos,const std::string& nick) 
 				: KinematicObject(_id, _world, size, pos), nickname(nick) {
+					hp = 100;
 }
 
 Player::~Player() {
@@ -123,6 +124,5 @@ int Weapon::object_type() {
 }
 
 void Weapon::interact(PhysicsObject* object, sf::Packet* packet) {
-	object->set_hp(object->get_hp() - 50);
 	*packet << 6 << object->get_id() << type;
 }

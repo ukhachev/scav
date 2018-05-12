@@ -72,6 +72,7 @@ void GameField::add_player(int cl_id) {
 	} else {
 		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), "stranger");
 	}
+	pl->set_hp(100);
 	players.emplace(cl_id, pl);
 }
 
@@ -104,7 +105,7 @@ Player* GameField::get_player(int cl_id) {
 	return nullptr;
 }
 
-void GameField::step() {
+bool GameField::step() {
 	if (start) {
 		static int last_step = 30;
 
@@ -115,8 +116,19 @@ void GameField::step() {
 		
 		if (last_step == 0) {
 			std::clock_t end = std::clock();
+			
 			float secs = float(end - start_time) / CLOCKS_PER_SEC;
+			int alive_count = 0;
 
+			for (auto i = players.begin(); i != players.end(); ++i) {
+				if (i->second->get_hp() > 0) {
+					alive_count++;
+				}
+			}
+
+			if (alive_count < 1) {
+				return true;
+			}
 			last_step = 30;
 			float dead_zone = size - secs * 100;
 			state_packet << 7 << 0 << dead_zone;
@@ -125,16 +137,15 @@ void GameField::step() {
 				const b2Vec2& pos = i->second->get_pos();
 
 				if (abs(pos.x) > dead_zone || abs(pos.y) > dead_zone) {
-					int hp = i->second->get_hp();
-					i->second->set_hp(hp - 10);
-					state_packet << 5 << i->first << hp - 10;
+					i->second->hit(10);
+					state_packet << 5 << i->first << i->second->get_hp() ;
 				}
 			}
 		}
 		last_step--;
-
 		world->Step(1.0f / 60.0f, 8, 3);
 	}
+	return false;
 }
 
 sf::Packet* GameField::get_state_packet() {
@@ -178,11 +189,7 @@ sf::Packet* GameField::get_objects(bool reset) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
-	/*if (!reset) {
-		for (auto i = players.begin(); i != players.end(); ++i) {
-			*res << 10 << i->first << i->second->get_nickname();
-		}
-	}*/
+
 	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
 }

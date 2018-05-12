@@ -20,8 +20,18 @@ wall 400 160 20 20 2 2 2
 wall 400 480 20 20 2 2 2
 med 200 70
 med 90 50
+med -200 70
+med -90 50
+med 500 70
+med 900 50
 mine 200 250
 mine 400 50
 weapon 100 330 101
 weapon 50 330 102
 weapon 0 330 103
+weapon 500 330 101
+weapon 550 330 102
+weapon 600 330 103
+weapon -500 330 101
+weapon -550 330 102
+weapon -600 330 103
