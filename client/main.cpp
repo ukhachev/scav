@@ -71,8 +71,8 @@ int main(int argc, char const *argv[])
     sound.setLoop(true);
     sound.play();
 
-	if (argc < 3) {
-		std::cout << "Input ip and port" << std::endl;
+	if (argc < 4) {
+		std::cout << "Input ip, port and nickname" << std::endl;
 		Menu menu(field.get_window(), "scav_bg.jpg", "minecraft.otf");
 		menu.draw();
 		name = menu.get_name();
@@ -82,6 +82,7 @@ int main(int argc, char const *argv[])
 	else {
 		ip = argv[1];
 		port = std::stoi(argv[2]);
+		name = argv[3];
 	}
 
 
