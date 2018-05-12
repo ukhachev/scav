@@ -25,8 +25,10 @@ PlayerJoinedAction::~PlayerJoinedAction() {
 }
 
 void PlayerJoinedAction::execute(GameField& gf) {
-	gf.add_player(cl_id);
-	*(gf.get_state_packet()) << 100 << cl_id << name;
+	float x = rand() % int(gf.get_size());
+	float y = rand() % int(gf.get_size());
+	gf.add_player(cl_id, x, y);
+	*(gf.get_state_packet()) << 100 << cl_id << name << x << y;
 }
 
 //Moves player

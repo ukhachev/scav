@@ -32,7 +32,8 @@ class GameField {
     Inventor inv;
     bool start;
     float border_pos;
-
+    bool pause;
+    int winner;
     
     Player* player;
     RenderWindow window;
@@ -54,6 +55,7 @@ class GameField {
     int last_shot;
 
     void draw_border(float x, float y);
+    void show_message(const std::string& msg);
  public:
     GameField(Textures* txt);
     b2World* get_physics_world();
@@ -69,6 +71,8 @@ class GameField {
  	int add_player(Player* obj, int new_id);
     void delete_player(int cl_id);
     void delete_all();
+    void set_winner(int w);
+    void resume();
 
     Inventor* get_inventor();
     int add_object(PhysicsObject* obj, int new_id);

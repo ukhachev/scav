@@ -49,13 +49,22 @@ void listen(Network& net) {
 	net.listen();
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc < 2) {
+		std::cout << "Input minimum player count" << std::endl;
+		return -1;
+	}
 	int port = 55503;
+	int min_players = std::stoi(argv[1]);
+	if (min_players < 2) {
+		std::cout << "Minimum player count should be >= 2" << std::endl;
+		return -1;
+	}
 	GameField gf;
 
 	MapBuilder::build(gf);
-	Network net(port, &gf, 1);
+	Network net(port, &gf, min_players);
 	
 	std::thread interact_thread(interact, std::ref(net), std::ref(gf));
 	std::thread listen_thread(listen, std::ref(net));

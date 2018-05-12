@@ -1,7 +1,7 @@
 #include "game_field.hpp"
 #include <iostream>
 #include <math.h>
-GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))), size(2000) {
+GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))), size(2000), pause(false) {
 	borders[0] = new StaticObject(-1, world, b2Vec2(20, 2 * size), b2Vec2(-size, 0), 0);
 	borders[1]  = new StaticObject(-2, world, b2Vec2(20, 2 * size), b2Vec2(size, 0), 0);
 	borders[2]  = new StaticObject(-3, world, b2Vec2(2 * size, 20), b2Vec2(0, size), 0);
@@ -63,14 +63,14 @@ void GameField::add_object(PhysicsObject* obj) {
 void GameField::add_bullet(Bullet* bullet) {
 	bullets.push_front(bullet);
 }
-void GameField::add_player(int cl_id) {
+void GameField::add_player(int cl_id, float x, float y) {
 	auto f = nicknames.find(cl_id);
 	Player* pl = nullptr;
 
 	if (f != nicknames.end()) {
-		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), f->second);
+		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(x, y), f->second);
 	} else {
-		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(0, 0), "stranger");
+		pl = new Player(cl_id, world, b2Vec2(20 , 20), b2Vec2(x, y), "stranger");
 	}
 	pl->set_hp(100);
 	players.emplace(cl_id, pl);
@@ -96,6 +96,10 @@ PhysicsObject* GameField::get_object(int id) {
 	return nullptr;
 }
 
+float GameField::get_size() {
+	return size;
+}
+
 Player* GameField::get_player(int cl_id) {
 	auto i = players.find(cl_id);
 
@@ -106,28 +110,45 @@ Player* GameField::get_player(int cl_id) {
 }
 
 bool GameField::step() {
-	if (start) {
-		static int last_step = 30;
+	static int last_step = 30;
+	
+	if (pause) {
+		if (last_step == 0) {
+			pause = false;
+			state_packet << 52 << 0;
+			return true;
+		}
+		last_step--;
+		return false;
+	}
 
+	if (start) {
 		for (auto i = objects_to_delete.begin(); i != objects_to_delete.end();) {
 			delete *i;
 			i = objects_to_delete.erase(i);
 		}
 		
 		if (last_step == 0) {
+			pause = false;
 			std::clock_t end = std::clock();
 			
 			float secs = float(end - start_time) / CLOCKS_PER_SEC;
 			int alive_count = 0;
+			int winner;
 
 			for (auto i = players.begin(); i != players.end(); ++i) {
 				if (i->second->get_hp() > 0) {
 					alive_count++;
+					winner = i->first;
 				}
 			}
 
-			if (alive_count < 1) {
-				return true;
+			if (alive_count == 1) {
+				last_step = 200;
+				pause = true;
+				state_packet << 51 << winner;
+				std::cout << "winner " << winner << std::endl;
+				return false;
 			}
 			last_step = 30;
 			float dead_zone = size - secs * 100;

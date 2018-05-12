@@ -12,7 +12,7 @@ void GameField::draw_border(float x, float y) {
 }
 
 
-GameField::GameField(Textures* txt): size(2000), world(new b2World(b2Vec2(0, 0))), t_cont(txt), g_map(size / 100, size / 100, t_cont->get_texture(4)), interface(Interface(&window)), g_curs(t_cont->get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(size) {
+GameField::GameField(Textures* txt): size(2000), world(new b2World(b2Vec2(0, 0))), t_cont(txt), g_map(size / 100, size / 100, t_cont->get_texture(4)), interface(Interface(&window)), g_curs(t_cont->get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(size), pause(false) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "S.C.A.V.");
     window.setFramerateLimit(60);
@@ -41,8 +41,13 @@ Player* GameField::find_player(int obj_id) {
     return nullptr;
 
 }
-
-
+void GameField::set_winner(int w) {
+    winner = w;
+    pause = true;
+}
+void GameField::resume() {
+    pause = false;
+}
 bool GameField::get_action(sf::Packet& packet) {
     if (!start) {
         return true;
@@ -80,7 +85,14 @@ void GameField::shoot() {
         w->set_ammo(ammo - 1);
 	}
 }
-
+void GameField::show_message(const std::string& msg) {
+    g_cam.setSize(640,480);
+    g_cam.setCenter(320, 240);
+    window.setView(g_cam);
+    interface.showMessage(std::string(msg), std::string(""), sf::Color(158, 236, 255, 255),sf::Color(0, 0, 0, 255));
+    g_cam.setSize(1920,1080);
+            
+}
 bool GameField::render() {
     if (window.isOpen())
     {
@@ -97,11 +109,18 @@ bool GameField::render() {
 
         window.clear();
         if (!start) {
-        	g_cam.setSize(640,480);
-			g_cam.setCenter(320, 240);
-            window.setView(g_cam);
-            interface.showMessage(std::string("Waiting for players"), std::string(""), sf::Color(158, 236, 255, 255),sf::Color(0, 0, 0, 255));
-            g_cam.setSize(1920,1080);
+            show_message("Waiting for players");
+        	return true;
+        }
+
+        if (pause) {
+            auto i = players.find(winner);
+            if (i != players.end()) {
+                show_message(std::string("Winner: ") + i->second->get_nickname());
+            }
+            else {
+                show_message("Winner left");
+            }
             return true;
         }
         mtx.lock();

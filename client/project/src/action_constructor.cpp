@@ -133,12 +133,13 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 		}
 		case 100: { //Создать игрока
 			std::string name;
-			packet >> name;
+			float x = 0;
+			float y = 0;
+			packet >> name >> x >> y;
 
 			std::cout << "player "<< name << std::endl;
 
-
-			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(0, 0));
+			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
 			p->set_nickname(name);
 			p->set_player_sprite(textures->get_texture(1));
             p->set_damage_animation(animations->get_animation(3));
@@ -156,6 +157,15 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			} else {
 				field->set_start(false);
 			}
+			break;
+		}
+		case 51: {
+			field->set_winner(obj_id);
+			break;
+		}
+		case 52: {
+			field->resume();
+			field->set_start(false);
 			break;
 		}
 		case 101: { //Привязать игрока
