@@ -1,7 +1,7 @@
 #include "game_field.hpp"
 #include <iostream>
 #include <math.h>
-GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))), size(1000) {
+GameField::GameField() : start(false), world(new b2World(b2Vec2(0, 0))), size(2000) {
 	borders[0] = new StaticObject(-1, world, b2Vec2(20, 2 * size), b2Vec2(-size, 0), 0);
 	borders[1]  = new StaticObject(-2, world, b2Vec2(20, 2 * size), b2Vec2(size, 0), 0);
 	borders[2]  = new StaticObject(-3, world, b2Vec2(2 * size, 20), b2Vec2(0, size), 0);

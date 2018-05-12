@@ -23,7 +23,7 @@ using namespace sf;
 
 class GameField {
  private:
-
+     float size;
     b2World* world;
     Textures* t_cont;
     MapConst g_map;
@@ -32,6 +32,7 @@ class GameField {
     Inventor inv;
     bool start;
     float border_pos;
+
     
     Player* player;
     RenderWindow window;

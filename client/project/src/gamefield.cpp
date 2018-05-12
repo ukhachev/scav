@@ -12,14 +12,14 @@ void GameField::draw_border(float x, float y) {
 }
 
 
-GameField::GameField(Textures* txt): world(new b2World(b2Vec2(0, 0))), t_cont(txt), g_map(10, 8, t_cont->get_texture(4)), interface(Interface(&window)), g_curs(t_cont->get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(1000) {
+GameField::GameField(Textures* txt): size(2000), world(new b2World(b2Vec2(0, 0))), t_cont(txt), g_map(size / 100, size / 100, t_cont->get_texture(4)), interface(Interface(&window)), g_curs(t_cont->get_texture(14)), inv(Inventor(&window)), was_shot(false), last_shot(0), start(false), border_pos(size) {
     player = nullptr;
     window.create(sf::VideoMode(640, 480), "S.C.A.V.");
     window.setFramerateLimit(60);
-    borders[0] = new StaticObject(world, b2Vec2(20, 2000), b2Vec2(-1000, 0));
-    borders[1] = new StaticObject(world, b2Vec2(20, 2000), b2Vec2(1000, 0));
-    borders[2] = new StaticObject(world, b2Vec2(2000, 20), b2Vec2(0, 1000));
-    borders[3] = new StaticObject(world, b2Vec2(2000, 20), b2Vec2(0, -1000));
+    borders[0] = new StaticObject(world, b2Vec2(20, 2* size), b2Vec2(-size, 0));
+    borders[1] = new StaticObject(world, b2Vec2(20, 2* size), b2Vec2(size, 0));
+    borders[2] = new StaticObject(world, b2Vec2(2* size, 20), b2Vec2(0, size));
+    borders[3] = new StaticObject(world, b2Vec2(2* size, 20), b2Vec2(0, -size));
     field_border.setSize(Vector2f(1000.f, 1000.f));
     field_border.setFillColor(Color::Transparent);
     field_border.setOutlineColor(Color::Red);

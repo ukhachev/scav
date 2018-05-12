@@ -19,7 +19,8 @@ class GameField {
 	std::clock_t start_time;	
 	std::list<PhysicsObject*> objects_to_delete;
 	bool start;
-
+	bool pause;
+	
 	b2World* world;
 	sf::Packet state_packet;
 	std::map<int, sf::Packet*> private_packets;
