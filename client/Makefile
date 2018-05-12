@@ -3,25 +3,24 @@ TARGET = main.out
 # XXX: Don't forget backslash at the end of any line except the last one
 
 SRCS = \
-       action.cpp \
-       connector.cpp \
-       gamefield.cpp \
-       game_object.cpp\
-       action_constructor.cpp\
-       box2d.cpp \
-       physics_object.cpp \
-       textures.cpp \
-       map_constructor.cpp \
-       camera.cpp \
-       physics_action.cpp \
-       contact_listener.cpp \
-       menu.cpp \
-       animation.cpp \
-       cursor.cpp \
-       inventor.cpp \
-       main.cpp
+       project/src/action.cpp \
+       project/src/connector.cpp \
+       project/src/gamefield.cpp \
+       project/src/game_object.cpp\
+       project/src/action_constructor.cpp\
+       project/src/box2d.cpp \
+       project/src/physics_object.cpp \
+       project/src/textures.cpp \
+       project/src/map_constructor.cpp \
+       project/src/physics_action.cpp \
+       project/src/contact_listener.cpp \
+       project/src/menu.cpp \
+       project/src/animation.cpp \
+       project/src/cursor.cpp \
+       project/src/inventor.cpp \
+       project/src/main.cpp
 HDRS = \
-	   .
+	   ./project/include
 
 CFLAGS =  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread -lsfml-audio
 
