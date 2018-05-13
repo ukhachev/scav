@@ -21,13 +21,13 @@ protected:
 class StaticObject: public PhysicsObject {
  public:
 	StaticObject(b2World* _world, const b2Vec2& size,const b2Vec2& pos);
-	~StaticObject();
+	virtual ~StaticObject();
 };
 
 class KinematicObject: public PhysicsObject {
  public:
  	KinematicObject(b2World* _world, const b2Vec2& size,const b2Vec2& pos);
- 	~KinematicObject();
+ 	virtual ~KinematicObject();
  	void set_speed(float sx, float sy);
  	const b2Vec2& get_speed() const;
 };
@@ -38,7 +38,7 @@ class Bullet: public PhysicsObject {
  	int dmg;
  public:
 	Bullet(b2World* _world, const b2Vec2& size,const b2Vec2& pos, const b2Vec2& speed, int _dmg);
-	~Bullet();
+	virtual ~Bullet();
 	void set_speed(float sx, float sy);
  	const b2Vec2& get_speed() const;
  	

@@ -27,6 +27,24 @@ GameField::GameField(Textures* txt): size(2000), world(new b2World(b2Vec2(0, 0))
     field_border.setOrigin(field_border.getLocalBounds().width / 2, field_border.getLocalBounds().height / 2);
 
 }
+
+GameField::~GameField() {
+    for (int i = 0; i < 4; ++i) {
+        delete borders[i];
+    }
+    
+    for (auto i = players.begin(); i != players.end(); ++i) {
+        delete i->second;
+    }
+    for (auto i = objects.begin(); i != objects.end(); ++i) {
+        delete i->second;
+    }
+    for (auto i = bullets.begin(); i != bullets.end(); ++i) {
+        delete *i;
+    }
+    delete world;
+}
+
 b2World* GameField::get_physics_world() {
     return world;
 }
@@ -110,7 +128,12 @@ bool GameField::render() {
         window.clear();
         if (!start) {
             show_message("Waiting for players");
-        	return true;
+            if (window.isOpen()) {
+               return true;
+            }
+            else {
+                return false;
+            }
         }
 
         if (pause) {
@@ -121,7 +144,12 @@ bool GameField::render() {
             else {
                 show_message("Winner left");
             }
-            return true;
+            if (window.isOpen()) {
+               return true;
+            }
+            else {
+                return false;
+            }
         }
         mtx.lock();
         if (player != nullptr) {
@@ -279,6 +307,10 @@ void GameField::delete_all() {
     for (auto i = players.begin(); i != players.end();) {
         delete i->second;
         i = players.erase(i);
+    }
+    for (auto i = bullets.begin(); i != bullets.end();) {
+        delete *i;
+        i = bullets.erase(i);
     }
     player = nullptr;
 

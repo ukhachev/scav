@@ -58,6 +58,7 @@ class GameField {
     void show_message(const std::string& msg);
  public:
     GameField(Textures* txt);
+    ~GameField();
     b2World* get_physics_world();
     void set_player(int player_id);
     bool get_action(sf::Packet& packet);

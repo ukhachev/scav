@@ -10,14 +10,31 @@ Textures* textures;
 Animations* animations;
 
 void get(Connector* connector, GameField* field) {
+	sf::TcpSocket* socket = connector->get_socket();
 	while (online) {
-		sf::Packet* packet = connector->get();
+		sf::Packet packet;
+		auto status = socket->receive(packet);
 
-		while (!packet->endOfPacket()) {
-			ActionConstructor::execute_action(field, *packet, textures, animations);
+		if (status == sf::Socket::Done) {
+
+			while (!packet.endOfPacket()) {
+				ActionConstructor::execute_action(field, packet, textures, animations);
+			}
+		} else
+		if (status == sf::Socket::Disconnected) {
+			online = false;
+			return;
 		}
-		delete packet;
+		else {
+			usleep(16000);
+			if (!online) {
+				return;
+			}
+			continue;
+		}
 	}
+
+	std::cout << "Disconnected get thread" << std::endl;
 }
 
 void render(GameField* field) {
@@ -34,7 +51,7 @@ void render(GameField* field) {
         world->Step(1/60.f, 8, 3);
         mtx.unlock();
 	}
-
+	std::cout << "Close window" << std::endl;
 	online = false;
 }
 
@@ -52,6 +69,7 @@ void send(Connector* connector, GameField* field, std::string& nick) {
 		}
 		usleep(20000);
 	}
+	std::cout << "Stoped send thread" << std::endl;
 }
 
 int main(int argc, char const *argv[])

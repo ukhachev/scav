@@ -17,6 +17,7 @@ public:
 	~Connector();
 	sf::Packet* get();
 	bool send(sf::Packet* packet);
+	sf::TcpSocket* get_socket();
 };
 
 #endif
