@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
 {
 	textures = new Textures("content/textures.txt");
     animations = new Animations("content/animations.txt");
-    GameField field(textures);
+    GameField* field = new GameField(textures);
     std::string name = "client";
     std::string ip;
     int port = 55503;
@@ -91,7 +91,7 @@ int main(int argc, char const *argv[])
 
 	if (argc < 4) {
 		std::cout << "Input ip, port and nickname" << std::endl;
-		Menu menu(field.get_window(), "content/image/scav_bg.jpg", "content/minecraft.otf");
+		Menu menu(field->get_window(), "content/image/scav_bg.jpg", "content/minecraft.otf");
 		menu.draw();
 		name = menu.get_name();
 		ip = menu.get_ip();
@@ -104,16 +104,17 @@ int main(int argc, char const *argv[])
 	}
 
 
-	field.get_window()->setMouseCursorVisible(0);
+	field->get_window()->setMouseCursorVisible(0);
 	Connector connector(ip, port);
 
-	std::thread get_thread(get, &connector, &field);
-	std::thread send_thread(send, &connector, &field, std::ref(name));
-	std::thread render_thread(render, &field);
+	std::thread get_thread(get, &connector, field);
+	std::thread send_thread(send, &connector, field, std::ref(name));
+	std::thread render_thread(render, field);
 
 	get_thread.join();
 	send_thread.join();
 	render_thread.join();
+	delete field;
 	delete textures;
     delete animations;
 	return 0;

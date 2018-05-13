@@ -33,15 +33,7 @@ GameField::~GameField() {
         delete borders[i];
     }
     
-    for (auto i = players.begin(); i != players.end(); ++i) {
-        delete i->second;
-    }
-    for (auto i = objects.begin(); i != objects.end(); ++i) {
-        delete i->second;
-    }
-    for (auto i = bullets.begin(); i != bullets.end(); ++i) {
-        delete *i;
-    }
+    delete_all();
     delete world;
 }
 
@@ -139,11 +131,7 @@ void GameField::check_key() {
 }
 
 void GameField::draw() {
-    for (auto iter = players.begin(); iter != players.end(); iter++) {
-        iter->second->draw(window);
-        b2Vec2 pos = iter->second->get_pos();
-        interface.drawLine(iter->second->get_nickname(), pos.x, pos.y);
-    }
+ 
 
     for (auto iter = objects.begin(); iter != objects.end(); iter++) {
         DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
@@ -154,6 +142,12 @@ void GameField::draw() {
     for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
         (*iter)->draw(window);
     }
+    for (auto iter = players.begin(); iter != players.end(); iter++) {
+        iter->second->draw(window);
+        b2Vec2 pos = iter->second->get_pos();
+        interface.drawLine(iter->second->get_nickname(), pos.x, pos.y);
+    }
+    g_curs.draw(window);
     draw_border(2 * border_pos, 2 * border_pos);
 }
 
@@ -220,7 +214,7 @@ bool GameField::render() {
 
             g_cam.setCenter(player->get_pos().x, player->get_pos().y);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
-            g_curs.draw(window);
+            
         }
 
         window.setView(g_cam);
