@@ -305,7 +305,6 @@ void Menu::draw() {
                     }
                     case 7: {
                         isMenu=0;
-                        //sound.stop();
                         break;
                     }
                     default : 
@@ -370,15 +369,13 @@ void Interface::draw(float cx, float cy) {
 void Interface::set_hp(int points) {
     hp=points;
     elements.front()->set_text(std::string("HP:")+std::to_string(hp));
-    if(hp < 80 && hp > 40) {
+    if(hp <= 80 && hp > 40) {
         elements.front()->set_color(255,222,0);
     }
-    else if(hp<40 && hp>0) {
+    else if(hp <= 40) {
         elements.front()->set_color(255,0,0);
     }
-    /*else if(hp<1) {
-        dead_window();
-    }*/
+
     else {
         elements.front()->set_color(51,255,0);
     }
@@ -390,7 +387,7 @@ void Interface::set_ammo(int points) {
 }
 
 
-void Interface::dead_window()  { //Не нужно пока
+void Interface::dead_window()  {
     Texture backtxt;
     backtxt.loadFromFile("content/image/dead_back.jpg");
     Sprite back(backtxt);

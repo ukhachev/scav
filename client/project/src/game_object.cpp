@@ -77,12 +77,6 @@ void Player::set_player_sprite(Texture* player_texture) {
     skin->setScale(0.05, 0.05);
 }
 
-/*void Player::set_damage_sprite(Texture* damage_texture) {
-    damage = new Sprite(*damage_texture);
-    damage->setOrigin(damage->getLocalBounds().width / 2, damage->getLocalBounds().height / 2);
-    damage->setScale(1.5, 1.5);
-}*/
-
 void Player::set_damage_animation(AnimationObject* damage_animation) {
     damage = new AnimationObject(damage_animation);
 }
@@ -104,21 +98,7 @@ float Player::get_rotation() {
     return player_rotation;
 }
 
-/*void Player::draw(RenderWindow& window) {
-    b2Vec2 p = get_pos();
-    if (hp > 0) {
-        skin->setPosition(p.x, p.y);
-        window.draw(*skin);
-    } else {
-        dead->setPosition(p.x, p.y);
-        window.draw(*dead);
-    }
-    if (timer != 0) {
-        damage->setPosition(p.x, p.y);
-        window.draw(*damage);
-        timer--;
-    }
-}*/
+
 
 void Player::draw(RenderWindow& window) {
     b2Vec2 p = get_pos();
@@ -130,13 +110,9 @@ void Player::draw(RenderWindow& window) {
         window.draw(*dead);
     }
     if (timer != 0) {
-        //damage->setPosition(p.x, p.y);
-        std::cout << "bepis" << std::endl;
         damage->set_position(Vector2f(p.x, p.y));
-        std::cout << "gondola" << std::endl;
-        //window.draw(*damage);
         damage->draw(window);
-        //timer--;
+
         timer = damage->get_timer();
     } else {
         timer = 0;
@@ -145,14 +121,9 @@ void Player::draw(RenderWindow& window) {
 }
 
 
-/*void Player::hit() {
-    timer = 4;
-}*/
-
 void Player::hit() {
     timer = damage->get_timer();
     damage->repeat();
-    //timer = damage->get_timer();
 }
 
 

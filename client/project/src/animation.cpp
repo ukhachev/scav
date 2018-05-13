@@ -27,7 +27,6 @@ void TempObject::draw(RenderWindow& window) {
 }
 
 TempObject::~TempObject() {
-    std::cout << "kekery kok kok" << std::endl;
     delete temp_sprite;
 }
 
@@ -48,7 +47,6 @@ void TempContainer::draw(RenderWindow& window) {
         } else {
             delete *iter;
             iter = tmp_list.erase(iter);
-            std::cout << "kek" << std::endl;
         }
     }
 }
@@ -60,23 +58,15 @@ TempContainer::~TempContainer() {
     }
 }
 
-//AnimationObject::AnimationObject(Sprite* new_sprite, int _frames/*int _timer*/): TempObject(new_sprite, 20/*_timer*/) {
-/*    frames = _frames;
-    cur_frame = 0;
-    temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
-    temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
-    temp_sprite->setScale(3, 3);
-}*/
 
 
 AnimationObject::AnimationObject(Texture* texture, int _frames) {
-//AnimationObject::AnimationObject(std::string text_name, int _frames) {
+
     timer = 20;
     frames = _frames;
     cur_frame = 0;
     anim_texture = new Texture();
     *anim_texture = *texture;
-    //anim_texture->loadFromFile(text_name);
     temp_sprite = new Sprite(*anim_texture);
     temp_sprite->setTextureRect(IntRect(96 * cur_frame, 0, 96, 96));
     temp_sprite->setOrigin(temp_sprite->getLocalBounds().width / 2, temp_sprite->getLocalBounds().height / 2);
@@ -113,7 +103,6 @@ void AnimationObject::draw(RenderWindow& window) {
     }
     window.draw(*temp_sprite);
     timer--;
-    std::cout << "--------" << cur_frame << std::endl;
 }
 
 AnimationObject::~AnimationObject() {

@@ -56,6 +56,9 @@ class GameField {
 
     void draw_border(float x, float y);
     void show_message(const std::string& msg);
+    void check_key();
+    void draw();
+    void inventor_interact();
  public:
     GameField(Textures* txt);
     ~GameField();

@@ -46,10 +46,8 @@ Animations::Animations(const char* file_name) {
     while(f_stream >> id >> str >> frames) {
         Texture* texture  = new Texture();
         texture->loadFromFile(str);
-        //Sprite* anim_sprite = new Sprite(*texture);
-        //AnimationObject* a_obj = new AnimationObject(anim_sprite, frames);
         AnimationObject* a_obj = new AnimationObject(texture, frames);
-        //AnimationObject* a_obj = new AnimationObject(str, frames);
+        
         animation_container.emplace(id, a_obj);
     }
     f_stream.close();
@@ -66,8 +64,6 @@ AnimationObject* Animations::get_animation(int _id) {
 
 Animations::~Animations() {
 	for (auto i = animation_container.begin(); i != animation_container.end(); i++) {
-        std::cout << "anim delete 1" << std::endl;
 		delete i->second;
-        std::cout << "anim delete 2" << std::endl;
 	}
 };

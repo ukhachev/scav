@@ -111,6 +111,67 @@ void GameField::show_message(const std::string& msg) {
     g_cam.setSize(1920,1080);
             
 }
+
+void GameField::check_key() {
+    if (player->get_hp() > 0) {
+        b2Vec2 speed(0, 0);
+
+        if(Keyboard::isKeyPressed(Keyboard::A)) {
+            speed += b2Vec2(-200.f, 0.f);
+        }
+        if(Keyboard::isKeyPressed(Keyboard::D)) {
+            speed += b2Vec2(200.f, 0.f);
+        }
+        if(Keyboard::isKeyPressed(Keyboard::W)) {
+            speed += b2Vec2(0.f, -200.f);
+        }
+        if(Keyboard::isKeyPressed(Keyboard::S)) {
+            speed += b2Vec2(0.f, 200.f);
+        }
+        player->set_speed(speed.x, speed.y);
+
+        player->mouse_rotation(window);
+
+        if (Mouse::isButtonPressed(Mouse::Left)) {
+            shoot();
+        }
+    }
+}
+
+void GameField::draw() {
+    for (auto iter = players.begin(); iter != players.end(); iter++) {
+        iter->second->draw(window);
+        b2Vec2 pos = iter->second->get_pos();
+        interface.drawLine(iter->second->get_nickname(), pos.x, pos.y);
+    }
+
+    for (auto iter = objects.begin(); iter != objects.end(); iter++) {
+        DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
+        if (obj != nullptr) {
+            obj->draw(window);
+        }
+    }
+    for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
+        (*iter)->draw(window);
+    }
+    draw_border(2 * border_pos, 2 * border_pos);
+}
+
+void GameField::inventor_interact() {
+    if (player!=nullptr) {
+        interface.draw(player->get_pos().x, player->get_pos().y);
+        Weapon* w = inv.get_current();
+        if (w) {
+            interface.set_ammo(w->get_ammo());
+        }
+        else {
+            interface.set_ammo(0);
+        }
+
+        inv.check_key();
+        inv.draw(player->get_pos().x, player->get_pos().y);
+    }
+}
 bool GameField::render() {
     if (window.isOpen())
     {
@@ -151,31 +212,10 @@ bool GameField::render() {
                 return false;
             }
         }
+
         mtx.lock();
         if (player != nullptr) {
-            if (player->get_hp() > 0) {
-                b2Vec2 speed(0, 0);
-
-    	        if(Keyboard::isKeyPressed(Keyboard::A)) {
-    	            speed += b2Vec2(-200.f, 0.f);
-    	        }
-    	        if(Keyboard::isKeyPressed(Keyboard::D)) {
-    	            speed += b2Vec2(200.f, 0.f);
-    	        }
-    	        if(Keyboard::isKeyPressed(Keyboard::W)) {
-    	            speed += b2Vec2(0.f, -200.f);
-    	        }
-    	        if(Keyboard::isKeyPressed(Keyboard::S)) {
-    	            speed += b2Vec2(0.f, 200.f);
-    	        }
-    	        player->set_speed(speed.x, speed.y);
-
-                player->mouse_rotation(window);
-
-                if (Mouse::isButtonPressed(Mouse::Left)) {
-                    shoot();
-                }
-            }
+            check_key();
             interface.set_hp(player->get_hp());
 
             g_cam.setCenter(player->get_pos().x, player->get_pos().y);
@@ -185,35 +225,8 @@ bool GameField::render() {
 
         window.setView(g_cam);
 
-        for (auto iter = players.begin(); iter != players.end(); iter++) {
-            iter->second->draw(window);
-            b2Vec2 pos = iter->second->get_pos();
-            interface.drawLine(iter->second->get_nickname(), pos.x, pos.y);
-        }
-
-        for (auto iter = objects.begin(); iter != objects.end(); iter++) {
-            DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
-            if (obj != nullptr) {
-                obj->draw(window);
-            }
-        }
-        for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
-            (*iter)->draw(window);
-        }
-        draw_border(2 * border_pos, 2 * border_pos);
-        if (player!=nullptr) {
-            interface.draw(player->get_pos().x, player->get_pos().y);
-            Weapon* w = inv.get_current();
-            if (w) {
-            	interface.set_ammo(w->get_ammo());
-            }
-            else {
-            	interface.set_ammo(0);
-            }
-
-            inv.check_key();
-            inv.draw(player->get_pos().x, player->get_pos().y);
-        }
+        draw();
+        inventor_interact();
         tmp_a_cont.draw(window);
         window.display();
         mtx.unlock();
@@ -222,7 +235,6 @@ bool GameField::render() {
     	return false;
     }
     return true;
-    //delete player;
 }
 
 Inventor* GameField::get_inventor() {

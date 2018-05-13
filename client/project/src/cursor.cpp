@@ -9,16 +9,6 @@ Cursor::Cursor(Texture* cursor_texture) {
 }
 
 
-/*void Cursor::set_pos(RenderWindow& window) {
-    sf::Vector2f cursor_pos =  window.mapPixelToCoords(Mouse::getPosition(window));
-    cursor->setPosition(cursor_pos);
-}*/
-
-
-/*Vector2f Cursor::get_pos() {
-    return cursor->getPosition();
-}*/
-
 void Cursor::draw(RenderWindow& window) {
     sf::Vector2f cursor_pos =  window.mapPixelToCoords(Mouse::getPosition(window));
     cursor->setPosition(cursor_pos);

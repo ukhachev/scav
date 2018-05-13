@@ -22,5 +22,4 @@ void HitPhysicsAction::execute(GameField& field) {
 	if (d_obj) {
 		d_obj->hit();
 	}
-	//Реализовать удаление пули и смерть игрока
 }

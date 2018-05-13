@@ -20,7 +20,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float x = 0;
 			float y = 0;
 			float angle = 0;
-			std::cout << "pos" <<std::endl;
+
 			packet >> x >> y >> angle;
 			Player* obj = field->find_player(obj_id);
 			if (obj != nullptr)
@@ -45,7 +45,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 					w->set_sprite(textures->get_texture(texture_id));
 					w->set_damage_sprite(textures->get_texture(7));
 					field->add_object(w, obj_id);
-					std::cout << "wall " << obj_id << std::endl;
 					break;
 				}
 				case 3: {
@@ -61,7 +60,6 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 
 					a->set_pos(Vector2f(x, y));
 					field->add_object(a, obj_id);
-					std::cout << "entity " << obj_id << std::endl;
 					break;
 				}
 			}
@@ -136,9 +134,7 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 			float x = 0;
 			float y = 0;
 			packet >> name >> x >> y;
-
 			std::cout << "player "<< name << std::endl;
-
 			Player* p = new Player(obj_id, field->get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y));
 			p->set_nickname(name);
 			p->set_player_sprite(textures->get_texture(1));

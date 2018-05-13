@@ -34,22 +34,6 @@ void ContactListener::EndContact(b2Contact* contact) {
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
     (void) impulse;
     (void) contact;
-    /*
-    PhysicsObject* bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureA()->GetBody()->GetUserData());
-    Bullet* bullet = NULL;
-
-    if (dynamic_cast<Bullet*>(bodyUserData)) {
-        bullet = dynamic_cast<Bullet*>(bodyUserData);
-    }
-
-    bodyUserData = static_cast<PhysicsObject*>(contact->GetFixtureB()->GetBody()->GetUserData());
-
-    if (dynamic_cast<Bullet*>(bodyUserData)) {
-        bullet = dynamic_cast<Bullet*>(bodyUserData);
-    }
-    if (bullet) {
-        delete bullet;
-    }*/
 }
 
 void ContactListener::execute_actions(GameField& field) {
