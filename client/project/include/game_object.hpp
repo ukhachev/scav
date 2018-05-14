@@ -23,7 +23,7 @@ class GameObject {
 class DrawableObject: public GameObject {
  protected:
     int id;
- 	sf::Vector2f pos;
+ 	  sf::Vector2f pos;
  public:
     virtual void set_rotation(float new_rot) = 0;
     DrawableObject(int _id);
@@ -31,6 +31,7 @@ class DrawableObject: public GameObject {
  	  virtual void draw(RenderWindow &window);
     virtual void hit();
     virtual void get_delete_sprite(TempContainer& tmp_a_cont);
+    const sf::Vector2f& get_sprite_pos();
     virtual ~DrawableObject();
 };
 

@@ -62,6 +62,14 @@ void ActionConstructor::execute_action(GameField* field, sf::Packet& packet, Tex
 					field->add_object(a, obj_id);
 					break;
 				}
+				case 4:
+				{
+					float sx = 0;
+					float sy = 0;
+					packet >> sx >> sy;
+					field->get_map().add_tile(obj_id, x, y, int(sx), int(sy), textures->get_texture(texture_id));
+					break;
+				}
 			}
 			break;
 		}

@@ -23,7 +23,7 @@ using namespace sf;
 
 class GameField {
  private:
-     float size;
+    float size;
     b2World* world;
     Textures* t_cont;
     MapConst g_map;
@@ -67,7 +67,7 @@ class GameField {
     bool get_action(sf::Packet& packet);
     void shoot();
     bool render();
-
+    MapConst& get_map();
     std::mutex& get_mutex();
     Player* get_player();
     Player* find_player(int obj_id);

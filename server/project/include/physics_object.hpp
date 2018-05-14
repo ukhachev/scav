@@ -11,7 +11,7 @@ class GameObject {
 	GameObject(int _id);
 	void set_id(int _id);
 	virtual ~GameObject();
-	virtual int object_type() = 0; //1 игрок, 2 статика, 3 аптечка
+	virtual int object_type() = 0; //1 игрок, 2 статика, 3 аптечка, 4 тайл
 	virtual int texture();
 	int get_id();
 };

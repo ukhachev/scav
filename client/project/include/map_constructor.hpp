@@ -6,28 +6,17 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <list>
-
-
-
-/*class MapBlock {
-private:
-    Sprite* block;
-public:
-    MapBlock(Texture* texture, int x, int y);
-    void draw(RenderWindow& window);
-    ~MapBlock();
-};*/
-
-
+#include <map>
 class MapConst {
  private:
     int m;
     int n;
-    //std::list<MapBlock*> game_map;
     std::list<Sprite*> game_map;
+    std::map<int, Sprite*> tiles;
  public:
      MapConst(int w, int h, Texture* m_texture);
      void draw(sf::RenderWindow& window, float px, float py);
+     void add_tile(int id, float x, float y, int sx, int sy, Texture* txt);
      ~MapConst();
 };
 

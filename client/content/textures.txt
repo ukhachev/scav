@@ -1,5 +1,6 @@
 1 content/image/solder.png
 2 content/image/wall.png
+3 content/image/broken-wood.png
 4 content/image/sand.png
 5 content/image/Bullet.png
 7 content/image/wall_destruction.png
