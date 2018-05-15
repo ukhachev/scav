@@ -24,5 +24,10 @@
 23 content/image/black_wooden_floor.png
 24 content/image/brick_wall.png
 25 content/image/bush.png
-
+26 content/image/carpet.png
+27 content/image/carpet1.png
+28 content/image/carpet2.png
+29 content/image/carpet3.png
+30 content/image/road.png
+31 content/image/can.png
 
