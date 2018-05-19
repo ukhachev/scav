@@ -52,6 +52,15 @@ void MapBuilder::build(GameField& gf) {
         	f_stream >> id;
         	obj = new Weapon(302, gf.get_physics_world(), b2Vec2(20, 20), b2Vec2(x, y), id);
         }
+        if (type == "tile") {
+            float sx = 0;
+            float sy = 0;
+            int txt = 0;
+            f_stream >> sx >> sy >> txt;
+
+            Tile* tile = new Tile(x, y, sx, sy, txt);
+            gf.add_tile(tile);
+        }
         if (obj != nullptr) {
         	gf.add_object(obj);
         }

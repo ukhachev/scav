@@ -13,6 +13,7 @@ class GameField {
 	std::map<int, Player*> players;
 	std::map<int, PhysicsObject*> objects;
 	std::map<int, std::string> nicknames;
+	std::map<int, Tile*> tiles;
 
 	std::list<Bullet*> bullets;
 	StaticObject* borders[4];
@@ -34,7 +35,8 @@ class GameField {
 
 	void add_bullet(Bullet* bullet);
 	void add_object(PhysicsObject* obj);
-
+	void add_tile(Tile* tile);
+	
 	void delete_player(int cl_id);
 	void delete_bullet(Bullet* b);
 	void delete_object(int id);

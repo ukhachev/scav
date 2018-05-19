@@ -53,4 +53,18 @@ class Weapon: public Entity {
 	int object_type();
 };
 
+class Tile: public GameObject {
+ private:
+ 	b2Vec2 pos;
+	b2Vec2 size;
+ 	int texture_id;
+
+ public:
+ 	Tile(float x, float y, float sx, float sy, int t);
+	const b2Vec2& get_size();
+	const b2Vec2& get_pos();
+	int object_type();
+	int texture();
+};
+
 #endif

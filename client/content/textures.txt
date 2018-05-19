@@ -1,5 +1,6 @@
 1 content/image/solder.png
 2 content/image/wall.png
+3 content/image/broken-wood.png
 4 content/image/sand.png
 5 content/image/Bullet.png
 7 content/image/wall_destruction.png
@@ -18,3 +19,15 @@
 113 content/image/shotgun_gnd.png
 114 content/image/grenade_gnd.png
 115 content/image/hp_gnd.png
+21 content/image/wood_floor.png
+22 content/image/wooden_floor.png
+23 content/image/black_wooden_floor.png
+24 content/image/brick_wall.png
+25 content/image/bush.png
+26 content/image/carpet.png
+27 content/image/carpet1.png
+28 content/image/carpet2.png
+29 content/image/carpet3.png
+30 content/image/road.png
+31 content/image/can.png
+

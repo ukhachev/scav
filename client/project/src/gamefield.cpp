@@ -28,6 +28,10 @@ GameField::GameField(Textures* txt): size(2000), world(new b2World(b2Vec2(0, 0))
 
 }
 
+MapConst& GameField::get_map() {
+    return g_map;
+}
+
 GameField::~GameField() {
     for (int i = 0; i < 4; ++i) {
         delete borders[i];
@@ -131,12 +135,19 @@ void GameField::check_key() {
 }
 
 void GameField::draw() {
- 
+    if (player == nullptr) {
+        return;
+    }
+    b2Vec2 p_pos = player->get_pos();
 
     for (auto iter = objects.begin(); iter != objects.end(); iter++) {
+        
         DrawableObject* obj = dynamic_cast<DrawableObject*>(iter->second);
         if (obj != nullptr) {
-            obj->draw(window);
+            const Vector2f& pos = obj->get_sprite_pos(); 
+            if (pos.x > p_pos.x - 1000 && pos.x < p_pos.x + 1000 && pos.y > p_pos.y - 700 && pos.y < p_pos.y + 700) {
+                obj->draw(window);
+            }
         }
     }
     for (auto iter = bullets.begin(); iter != bullets.end(); iter++) {
@@ -214,12 +225,13 @@ bool GameField::render() {
 
             g_cam.setCenter(player->get_pos().x, player->get_pos().y);
             g_map.draw(window, player->get_pos().x, player->get_pos().y);
+            draw();
             
         }
 
         window.setView(g_cam);
 
-        draw();
+        
         inventor_interact();
         tmp_a_cont.draw(window);
         window.display();

@@ -126,3 +126,24 @@ int Weapon::object_type() {
 void Weapon::interact(PhysicsObject* object, sf::Packet* packet) {
 	*packet << 6 << object->get_id() << type;
 }
+
+Tile::Tile(float x, float y, float sx, float sy, int t):
+	GameObject(0), pos(x, y), size(sx, sy), texture_id(t) {
+
+}
+
+const b2Vec2& Tile::get_size() {
+	return size;
+}
+
+const b2Vec2& Tile::get_pos() {
+	return pos;
+}
+
+int Tile::object_type() {
+	return 4;
+}
+
+int Tile::texture() {
+	return texture_id;
+}

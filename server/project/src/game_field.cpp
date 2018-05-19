@@ -22,20 +22,7 @@ std::string GameField::get_nickname(int cl_id) {
 }
 GameField::~GameField() {
 	reset();
-
-	for (auto i = bullets.begin(); i != bullets.end();) {
-		delete *i;
-		i = bullets.erase(i);
-	}
-
-	for (auto i = objects.begin(); i != objects.end();) {
-		delete i->second;
-		i = objects.erase(i);
-	}
-
-	for (int i = 0; i < 4; ++i) {
-		delete borders[i];
-	}
+	restart();
 
 	delete world;
 }
@@ -210,6 +197,11 @@ sf::Packet* GameField::get_objects(bool reset) {
 		b2Vec2 pos = i->second->get_pos();
 		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture();
 	}
+	for (auto i = tiles.begin(); i != tiles.end(); ++i) {
+		const b2Vec2& pos = i->second->get_pos();
+		const b2Vec2& size = i->second->get_size();
+		*res << 2 << i->first << i->second->object_type() << pos.x << pos.y << i->second->texture() << size.x << size.y;
+	}
 
 	*res << 7 << 1 << borders[1]->get_pos().x;
 	return res;
@@ -230,6 +222,15 @@ void GameField::delete_bullet(Bullet* b) {
 	}
 }
 
+void GameField::add_tile(Tile* tile) {
+	int id = 1;
+	if (tiles.rbegin() != tiles.rend()) {
+		id = tiles.rbegin()->first + 1;
+	}
+	tiles.emplace(id, tile);
+	tile->set_id(id);
+}
+
 void GameField::restart() {
 	start_time = std::clock();
 
@@ -246,6 +247,11 @@ void GameField::restart() {
 	for (auto i = players.begin(); i != players.end();) {
 		delete i->second;
 		i = players.erase(i);
+	}
+
+	for (auto i = tiles.begin(); i != tiles.end();) {
+		delete i->second;
+		i = tiles.erase(i);
 	}
 	set_start(false);
 }

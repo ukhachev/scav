@@ -25,8 +25,9 @@ PlayerJoinedAction::~PlayerJoinedAction() {
 }
 
 void PlayerJoinedAction::execute(GameField& gf) {
-	float x = rand() % int(gf.get_size());
-	float y = rand() % int(gf.get_size());
+	float size = gf.get_size();
+	float x = size - rand() % int(2 * size);
+	float y = size - rand() % int(2 * size);
 	gf.add_player(cl_id, x, y);
 	*(gf.get_state_packet()) << 100 << cl_id << name << x << y;
 }

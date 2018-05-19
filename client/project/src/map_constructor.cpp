@@ -21,15 +21,34 @@ MapConst::MapConst(int w, int h, Texture* m_texture): n(w), m(h) {
 
 void MapConst::draw(RenderWindow& window, float px, float py) {
     for (auto iter = game_map.begin(); iter != game_map.end(); iter++) {
-        sf::Vector2f pos = (*iter)->getPosition();
+        const sf::Vector2f& pos = (*iter)->getPosition();
         if (px + 1500 > pos.x && px - 1500 < pos.x && py + 800 > pos.y && py -750 < pos.y)
             window.draw(**iter);
-        //*iter->draw(window);
     }
+     for (auto iter = tiles.begin(); iter != tiles.end(); iter++) {
+        //const sf::Vector2f& pos = iter->second->getPosition();
+        //if (px + 1500 > pos.x && px - 1500 < pos.x && py + 800 > pos.y && py -750 < pos.y)
+            window.draw(*(iter->second));
+    }
+}
+
+void MapConst::add_tile(int id, float x, float y, int sx, int sy, Texture* txt) {
+    if (tiles.find(id) == tiles.end()) {
+        txt->setRepeated(true);
+        Sprite* tile = new Sprite();
+        tile->setTexture(*txt);
+        tile->setTextureRect({ 0, 0, sx, sy });
+        tile->setPosition(x, y);
+        tiles.emplace(id, tile);
+    }
+
 }
 
 MapConst::~MapConst() {
     for (auto iter = game_map.begin(); iter != game_map.end(); iter++) {
         delete *iter;
+    }
+    for (auto iter = tiles.begin(); iter != tiles.end(); iter++) {
+        delete iter->second;
     }
 }

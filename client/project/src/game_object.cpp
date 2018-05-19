@@ -27,8 +27,15 @@ void DrawableObject::hit() {
 
 }
 
+const sf::Vector2f& DrawableObject::get_sprite_pos() {
+    return pos;
+}
+
 void Player::interpolate(float x, float y) {
+
     b2Vec2 cur_pos = get_pos();
+    pos.x = cur_pos.x;
+    pos.y = cur_pos.y;
     b2Vec2 dpos = b2Vec2(x, y) - cur_pos;
     set_speed(20*dpos.x, 20*dpos.y);
 }
@@ -134,10 +141,13 @@ Player::~Player() {
 }
 
 
-Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos), timer(0) {}
+Wall::Wall(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos): DrawableObject(_id), StaticObject(_world, size, pos), timer(0) {
+    this->pos.x = pos.x;
+    this->pos.y = pos.y;
+}
 
 void Wall::set_pos(Vector2f new_pos) {
-	(void) new_pos;
+
 }
 
 void Wall::set_sprite(Texture* player_texture) {
@@ -209,6 +219,8 @@ AidKit::~AidKit() {
 }
 
 void AidKit::set_pos(sf::Vector2f new_pos) {
+    pos.x = new_pos.x;
+    pos.y = new_pos.y;
     sprite->setPosition(new_pos.x, new_pos.y);
 }
 
