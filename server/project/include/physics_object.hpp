@@ -44,7 +44,7 @@ class StaticObject: public PhysicsObject {
 class KinematicObject: public PhysicsObject {
  public:
  	KinematicObject(int _id, b2World* _world, const b2Vec2& size,const b2Vec2& pos);
- 	~KinematicObject();
+ 	virtual ~KinematicObject();
  	void set_speed(float sx, float sy);
  	const b2Vec2& get_speed() const;
  	int object_type();
